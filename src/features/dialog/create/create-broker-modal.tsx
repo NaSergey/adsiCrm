@@ -1,0 +1,72 @@
+"use client";
+
+import { useState } from "react";
+import { useTranslations } from "next-intl";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { fetchClient } from "@/shared/api";
+import { brokersQueryKey } from "@/entities";
+import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
+
+interface CreateBrokerModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  onSuccess?: () => void;
+}
+
+export function CreateBrokerModal({
+  open,
+  onOpenChange,
+  onSuccess,
+}: CreateBrokerModalProps) {
+  const t = useTranslations("createModals");
+  const [name, setName] = useState("");
+  const [comment, setComment] = useState("");
+  const [managerId, setManagerId] = useState("");
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: (body: { name: string; comment: string; brandManagerId?: number | null }) =>
+      fetchClient.POST("/brokers", { body }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: brokersQueryKey });
+      setName("");
+      setComment("");
+      setManagerId("");
+      onOpenChange(false);
+      onSuccess?.();
+    },
+  });
+
+  return (
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="bg-white dark:bg-gray-1100 border-gray-200 dark:border-gray-1000 max-w-md">
+        <DialogTitle></DialogTitle>
+        <SectionHeading title={t("createBroker")} />
+
+        <div className="flex flex-col gap-4 py-4">
+          <Input label={t("name")} placeholder={t("brokerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
+          <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
+          <SelectBrandManager label={t("brandManager")} value={managerId} onChange={setManagerId} />
+          {error && (
+            <p className="text-sm text-red-500">{t("error")}</p>
+          )}
+        </div>
+
+        <DialogFooter>
+          <Button
+            className="w-full"
+            onClick={() => mutate({ name, comment, brandManagerId: managerId ? Number(managerId) : null })}
+            disabled={!name || isPending}
+          >
+            {isPending ? t("creating") : t("create")}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
+  );
+}

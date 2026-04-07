@@ -1,22 +1,63 @@
 @import "tailwindcss";
 
+/* Class-based dark mode for Tailwind dark: variants */
+@variant dark (&:where(.dark, .dark *));
+
+/* ─── Light theme (default) ─── */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #F4F4F4;
+  --foreground: #1a1d1f;
+  /* Surface hierarchy: elevated → deeper */
+  --surface-primary:   #f5f6f8;   /* gray-1000: cards, inputs */
+  --surface-secondary: #eaecef;   /* gray-1100: header       */
+  --surface-tertiary:  #dee1e5;   /* gray-1200: nav strip    */
+  /* ThemeSwitch thumb position — controlled by html.dark class (no JS needed) */
+  --theme-thumb-pos: calc(100% - 1.375rem - 7px); /* light: sun side */
 }
 
-@theme inline {
+/* ─── Dark theme ─── */
+html.dark {
+  --background: #111315;
+  --foreground: #ededed;
+  --surface-primary:   #272b30;
+  --surface-secondary: #1a1d1f;
+  --surface-tertiary:  #111315;
+  --theme-thumb-pos: 7px; /* dark: moon side */
+}
+
+/* System preference fallback (no saved preference) */
+@media (prefers-color-scheme: dark) {
+  html:not(.light) {
+    --background: #111315;
+    --foreground: #ededed;
+    --surface-primary:   #272b30;
+    --surface-secondary: #1a1d1f;
+    --surface-tertiary:  #111315;
+  }
+}
+
+/*
+  @theme WITHOUT "inline" — utilities become var(--color-gray-*) at runtime,
+  so overriding --surface-* is enough to switch the entire UI.
+*/
+@theme {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-gray-1000:  var(--surface-primary);
+  --color-gray-1100:  var(--surface-secondary);
+  --color-gray-1200:  var(--surface-tertiary);
+  --color-green-1000: #00C59C;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+
+*::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 
 body {
@@ -24,3 +65,32 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* ─── Dialog animations ─── */
+[data-slot="dialog-overlay"] {
+  transition: opacity 0.2s ease;
+}
+[data-slot="dialog-overlay"][data-state="open"]  { opacity: 1; }
+[data-slot="dialog-overlay"][data-state="closed"] { opacity: 0; }
+@starting-style {
+  [data-slot="dialog-overlay"][data-state="open"] { opacity: 0; }
+}
+
+[data-slot="dialog-content"] {
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+[data-slot="dialog-content"][data-state="open"] {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+}
+[data-slot="dialog-content"][data-state="closed"] {
+  opacity: 0;
+  transform: translate(-50%, calc(-50% + 8px)) scale(0.96);
+}
+@starting-style {
+  [data-slot="dialog-content"][data-state="open"] {
+    opacity: 0;
+    transform: translate(-50%, calc(-50% + 8px)) scale(0.96);
+  }
+}
+

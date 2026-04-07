@@ -1,0 +1,119 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useTranslations } from "next-intl";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/dialog";
+import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
+import { SectionHeading } from "@/shared/ui/section-heading";
+import { EditIntegCodeModal } from "./edit-integ-code-modal";
+import { fetchClient } from "@/shared/api";
+import { brokersQueryKey } from "@/entities";
+import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
+
+export interface BrokerData {
+  id: string;
+  name: string;
+  comment: string;
+  managerId: string;
+}
+
+interface EditBrokerModalProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  broker: BrokerData;
+  onSuccess?: () => void;
+  onDelete: () => void;
+}
+
+export function EditBrokerModal({
+  open,
+  onOpenChange,
+  broker,
+  onSuccess,
+  onDelete,
+}: EditBrokerModalProps) {
+  const t = useTranslations("editModals");
+  const [name, setName] = useState(broker.name);
+  const [comment, setComment] = useState(broker.comment);
+  const [managerId, setManagerId] = useState(broker.managerId);
+  const [integType, setIntegType] = useState<"add" | "update" | null>(null);
+
+  useEffect(() => {
+    setName(broker.name);
+    setComment(broker.comment);
+    setManagerId(broker.managerId);
+  }, [broker]);
+
+  const queryClient = useQueryClient();
+
+  const { mutate, isPending, error } = useMutation({
+    mutationFn: () =>
+      fetchClient.PATCH("/brokers/{id}", {
+        params: { path: { id: Number(broker.id) } },
+        body: {
+          name,
+          comment,
+          brandManagerId: managerId ? Number(managerId) : null,
+        },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: brokersQueryKey });
+      onOpenChange(false);
+      onSuccess?.();
+    },
+  });
+
+  const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
+    mutationFn: () =>
+      fetchClient.DELETE("/brokers/{id}", {
+        params: { path: { id: Number(broker.id) } },
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: brokersQueryKey });
+      onOpenChange(false);
+      onDelete();
+    },
+  });
+
+  return (
+    <>
+      <Dialog open={open} onOpenChange={onOpenChange}>
+        <DialogContent className="bg-white dark:bg-gray-1100 border-gray-200 dark:border-gray-1000 max-w-2xl">
+          <DialogTitle></DialogTitle>
+          <SectionHeading title={t("editBroker")} />
+
+          <div className="grid grid-cols-2 gap-6 pb-6 pt-4">
+            <Input label={t("id")} value={broker.id} readOnly />
+            <Input label={t("name")} placeholder={t("brokerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
+            <SelectBrandManager label={t("brandManager")} value={managerId} onChange={setManagerId} />
+            {error && <p className="col-span-2 text-sm text-red-500">{t("error")}</p>}
+          </div>
+
+          <DialogFooter className="grid grid-cols-4 gap-3 sm:grid-cols-4">
+            <Button onClick={() => mutate()} disabled={isPending}>
+              {isPending ? t("saving") : t("save")}
+            </Button>
+            <Button variant="secondary" onClick={() => setIntegType("add")}>{t("addLeads")}</Button>
+            <Button variant="secondary" onClick={() => setIntegType("update")}>{t("updateLeads")}</Button>
+            <Button variant="destructive" onClick={() => deleteMutate()} disabled={isDeleting}>
+              {isDeleting ? t("deleting") : t("delete")}
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
+
+      {integType && (
+        <EditIntegCodeModal
+          open={integType !== null}
+          onOpenChange={(o) => { if (!o) setIntegType(null); }}
+          brokerId={broker.id}
+          brokerName={broker.name}
+          type={integType}
+        />
+      )}
+    </>
+  );
+}

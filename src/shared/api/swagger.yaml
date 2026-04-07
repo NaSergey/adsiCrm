@@ -1,0 +1,3640 @@
+
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DopamineMockServer",
+    "description": "Production-ready Mock API server for **DopamineCoreAPI**.\n\nServes static data to unblock Frontend development.\n\n## Features\n- 📊 **129 Programs** (Bittensor subnets) from `subnets_data_s3.json`\n- 🏆 **250+ Yappers** (leaderboard) from `top_yappers.json`\n- 🏗️ **Clean Architecture** (API → Services → Repositories)\n- 📝 **Pydantic V2** validation\n- 📖 **OpenAPI 3.1** documentation\n\n## API Versions\n- **V1**: Page-optimized endpoints (`/api/v1/*`)",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/health": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Health check",
+        "description": "Health check endpoint for container orchestration.",
+        "operationId": "health_check_health_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/ready": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Readiness check",
+        "description": "Readiness check endpoint.",
+        "operationId": "ready_check_ready_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "tags": [
+          "health"
+        ],
+        "summary": "Root",
+        "description": "Root endpoint.",
+        "operationId": "root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/common/running_line": {
+      "get": {
+        "tags": [
+          "v1-common"
+        ],
+        "summary": "Get running line data",
+        "description": "Returns programs data for the animated running line on main page.",
+        "operationId": "get_running_line_api_v1_common_running_line_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/RunningLineItemResponse"
+                  },
+                  "type": "array",
+                  "title": "Response Get Running Line Api V1 Common Running Line Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/common/search": {
+      "get": {
+        "tags": [
+          "v1-common"
+        ],
+        "summary": "Global search",
+        "description": "Search across programs and yappers.",
+        "operationId": "global_search_api_v1_common_search_get",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 1,
+              "description": "Search query",
+              "title": "Query"
+            },
+            "description": "Search query"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Max results",
+              "default": 10,
+              "title": "Limit"
+            },
+            "description": "Max results"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "anyOf": [
+                      {
+                        "$ref": "#/components/schemas/ProgramSearchResponse"
+                      },
+                      {
+                        "$ref": "#/components/schemas/YapperSearchResponse"
+                      }
+                    ]
+                  },
+                  "title": "Response Global Search Api V1 Common Search Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/featured_programs": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Top Programs",
+        "description": "Get top programs",
+        "operationId": "get_featured_programs_api_v1_main_page_featured_programs_get",
+        "parameters": [
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort by field",
+              "default": "yap_price",
+              "title": "Sort By"
+            },
+            "description": "Sort by field"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Limit",
+              "default": 100,
+              "title": "Limit"
+            },
+            "description": "Limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopProgramResponse"
+                  },
+                  "title": "Response Get Featured Programs Api V1 Main Page Featured Programs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/programs_leaderboard": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Programs Leaderboard",
+        "description": "Get programs leaderboard (sorted and ranked by yap_price only)",
+        "operationId": "get_programs_leaderboard_api_v1_main_page_programs_leaderboard_get",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProgramsMainLeaderboardResponse"
+                  },
+                  "title": "Response Get Programs Leaderboard Api V1 Main Page Programs Leaderboard Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/yappers_leaderboard": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Yappers Leaderboard",
+        "description": "Get yappers leaderboard",
+        "operationId": "get_yappers_leaderboard_api_v1_main_page_yappers_leaderboard_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Program ID to filter the yapper leaderboard",
+              "title": "Program Id"
+            },
+            "description": "Program ID to filter the yapper leaderboard"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "Page number for pagination",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number for pagination"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Items per page"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Field to sort the yapper leaderboard by",
+              "default": "rank",
+              "title": "Sort By"
+            },
+            "description": "Field to sort the yapper leaderboard by"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sorting direction",
+              "default": "asc",
+              "title": "Direction"
+            },
+            "description": "Sorting direction"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YappersMainLeaderboardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/top_tweets": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get top tweets",
+        "description": "Returns top performing tweets.",
+        "operationId": "get_top_tweets_api_v1_main_page_top_tweets_get",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 10,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TopTweetResponse"
+                  },
+                  "title": "Response Get Top Tweets Api V1 Main Page Top Tweets Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/pool_share_graph": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Pool Share Graph",
+        "description": "Get pool share graph data with historical distribution.",
+        "operationId": "get_pool_share_graph_api_v1_main_page_pool_share_graph_get",
+        "parameters": [
+          {
+            "name": "top",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Top programs focus",
+              "enum": [
+                "10",
+                "all"
+              ],
+              "default": "10",
+              "title": "Top"
+            },
+            "description": "Top programs focus"
+          },
+          {
+            "name": "timerange",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Time range",
+              "enum": [
+                "7d",
+                "30d",
+                "90d",
+                "all"
+              ],
+              "default": "7d",
+              "title": "Timerange"
+            },
+            "description": "Time range"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PoolShareItem"
+                  },
+                  "title": "Response Get Pool Share Graph Api V1 Main Page Pool Share Graph Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/dops_distribution_stats/program/{program_id}": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Program DOPS Stats",
+        "description": "Get distribution stats for a specific program.",
+        "operationId": "get_program_dops_stats_api_v1_main_page_dops_distribution_stats_program__program_id__get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Program Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgramDopsDistributionStatsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/main_page/dops_distribution_stats": {
+      "get": {
+        "tags": [
+          "v1-main-page"
+        ],
+        "summary": "Get Global DOPS Stats",
+        "description": "Get global DOPS distribution statistics.",
+        "operationId": "get_global_dops_stats_api_v1_main_page_dops_distribution_stats_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DopsDistributionStatsResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/header": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get Program Header",
+        "description": "Get program header",
+        "operationId": "get_program_header_api_v1_program_page__program_id__header_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgramPageGeneralInfoResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/top_tweets": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get Program Top Tweets",
+        "description": "Get program top tweets",
+        "operationId": "get_program_top_tweets_api_v1_program_page__program_id__top_tweets_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Items limit",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Items limit"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProgramTopTweetResponse"
+                  },
+                  "title": "Response Get Program Top Tweets Api V1 Program Page  Program Id  Top Tweets Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/feed": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get Program Feed",
+        "description": "Get program feed",
+        "operationId": "get_program_feed_api_v1_program_page__program_id__feed_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Items per page"
+          },
+          {
+            "name": "query",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Search query",
+              "title": "Query"
+            },
+            "description": "Search query"
+          },
+          {
+            "name": "sort_by",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Sort by",
+              "default": "tweet_timestamp",
+              "title": "Sort By"
+            },
+            "description": "Sort by"
+          },
+          {
+            "name": "direction",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Direction",
+              "default": "desc",
+              "title": "Direction"
+            },
+            "description": "Direction"
+          },
+          {
+            "name": "hide_zeros",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "description": "Hide zeros",
+              "default": false,
+              "title": "Hide Zeros"
+            },
+            "description": "Hide zeros"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProgramXFeedItemResponse"
+                  },
+                  "title": "Response Get Program Feed Api V1 Program Page  Program Id  Feed Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/leaderboard": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get Program Yappers Leaderboard",
+        "description": "Get program yappers leaderboard",
+        "operationId": "get_program_leaderboard_api_v1_program_page__program_id__leaderboard_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "description": "Page number",
+              "default": 1,
+              "title": "Page"
+            },
+            "description": "Page number"
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "description": "Items per page",
+              "default": 20,
+              "title": "Limit"
+            },
+            "description": "Items per page"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ProgramYappersLeaderboardItemResponse"
+                  },
+                  "title": "Response Get Program Leaderboard Api V1 Program Page  Program Id  Leaderboard Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/trading_view_header": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get trading view header",
+        "description": "Returns trading view header with current price info.",
+        "operationId": "get_trading_view_header_api_v1_program_page__program_id__trading_view_header_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradingViewHeaderResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/daily_stats": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get daily statistics",
+        "description": "Returns daily statistics charts.",
+        "operationId": "get_daily_stats_api_v1_program_page__program_id__daily_stats_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 90,
+              "minimum": 1,
+              "description": "Number of days",
+              "default": 30,
+              "title": "Days"
+            },
+            "description": "Number of days"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ProgramDailyStatsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/trading_view_chart": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get trading view chart data",
+        "description": "Returns chart data for trading view.",
+        "operationId": "get_trading_view_chart_api_v1_program_page__program_id__trading_view_chart_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "period",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "description": "Time period",
+              "default": "1d",
+              "title": "Period"
+            },
+            "description": "Time period"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/TradingViewChartResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/program_page/{program_id}/yapper/{twitter_handle}/stats": {
+      "get": {
+        "tags": [
+          "v1-program-page"
+        ],
+        "summary": "Get yapper stats in program",
+        "description": "Returns yapper statistics within a specific program.",
+        "operationId": "get_yapper_stats_in_program_api_v1_program_page__program_id__yapper__twitter_handle__stats_get",
+        "parameters": [
+          {
+            "name": "program_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Program ID",
+              "title": "Program Id"
+            },
+            "description": "Program ID"
+          },
+          {
+            "name": "twitter_handle",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "description": "Twitter handle",
+              "title": "Twitter Handle"
+            },
+            "description": "Twitter handle"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperStatsInProgramResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/header": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get yapper header",
+        "description": "Returns header data for yapper page.",
+        "operationId": "get_yapper_header_api_v1_yapper_page_yapper__yapper_id__header_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageHeaderResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/achievements": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get yapper achievements",
+        "description": "Returns achievements earned by yapper.",
+        "operationId": "get_yapper_achievements_api_v1_yapper_page_yapper__yapper_id__achievements_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageAchievementsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/active_programs": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get active programs",
+        "description": "Returns programs yapper is actively contributing to.",
+        "operationId": "get_active_programs_api_v1_yapper_page_yapper__yapper_id__active_programs_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/YapperPageActiveProgramResponse"
+                  },
+                  "title": "Response Get Active Programs Api V1 Yapper Page Yapper  Yapper Id  Active Programs Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/contributions": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get yapper contributions",
+        "description": "Returns contribution chart data.",
+        "operationId": "get_yapper_contributions_api_v1_yapper_page_yapper__yapper_id__contributions_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          },
+          {
+            "name": "days",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 365,
+              "minimum": 7,
+              "default": 77,
+              "title": "Days"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageContributionsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/spiderchart": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get spider chart data",
+        "description": "Returns spider chart metrics for yapper.",
+        "operationId": "get_spider_chart_api_v1_yapper_page_yapper__yapper_id__spiderchart_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageSpiderChartResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/charts": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get yapper charts",
+        "description": "Returns historical chart data for yapper.",
+        "operationId": "get_yapper_charts_api_v1_yapper_page_yapper__yapper_id__charts_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageChartsResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/xfeed": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get X (Twitter) feed",
+        "description": "Returns yapper's Twitter feed.",
+        "operationId": "get_x_feed_api_v1_yapper_page_yapper__yapper_id__xfeed_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/YapperPageXFeedResponse"
+                  },
+                  "title": "Response Get X Feed Api V1 Yapper Page Yapper  Yapper Id  Xfeed Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/{yapper_id}/leaderboard": {
+      "get": {
+        "tags": [
+          "v1-yapper-page"
+        ],
+        "summary": "Get leaderboard positions",
+        "description": "Returns yapper's positions in different program leaderboards.",
+        "operationId": "get_leaderboard_positions_api_v1_yapper_page_yapper__yapper_id__leaderboard_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "format": "uuid",
+              "description": "Yapper UUID",
+              "title": "Yapper Id"
+            },
+            "description": "Yapper UUID"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1,
+              "title": "Page"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "maximum": 50,
+              "minimum": 1,
+              "default": 20,
+              "title": "Limit"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/YapperPageLeaderboardResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/yapper_page/yapper/global/leaderboard": {
+      "get": {
+        "tags": ["v1-yapper-page"],
+        "summary": "Get leaderboard positions",
+        "description": "Get leaderboard with optional yapper_id and program_id filters.",
+        "operationId": "get_global_leaderboard_api_v1_yapper_page_yapper_global_leaderboard_get",
+        "parameters": [
+          {
+            "name": "yapper_id",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "format": "uuid", "nullable": true, "title": "Yapper Id" },
+            "description": "Optional yapper ID to highlight"
+          },
+          {
+            "name": "program_id",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "string", "format": "uuid", "nullable": true, "title": "Program Id" },
+            "description": "Optional program ID to filter"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "minimum": 1, "default": 1, "title": "Page" }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": false,
+            "schema": { "type": "integer", "maximum": 50, "minimum": 1, "default": 20, "title": "Limit" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/YapperPageLeaderboardResponse" }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/HTTPValidationError" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ContributionChartItem": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp"
+          },
+          "date": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Date"
+          },
+          "day_of_week": {
+            "type": "integer",
+            "title": "Day Of Week"
+          },
+          "tweets_count": {
+            "type": "integer",
+            "title": "Tweets Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timestamp",
+          "day_of_week",
+          "tweets_count"
+        ],
+        "title": "ContributionChartItem"
+      },
+      "DopsDistributionStatsResponse": {
+        "properties": {
+          "total_dops_distributed": {
+            "type": "number",
+            "title": "Total Dops Distributed"
+          },
+          "days_left_before_new_epoch": {
+            "type": "integer",
+            "title": "Days Left Before New Epoch"
+          },
+          "today_allocation": {
+            "type": "number",
+            "title": "Today Allocation"
+          },
+          "winner_data": {
+            "$ref": "#/components/schemas/YapperDistributionStats"
+          },
+          "loser_data": {
+            "$ref": "#/components/schemas/YapperDistributionStats"
+          },
+          "candidate_data": {
+            "$ref": "#/components/schemas/YapperDistributionStats"
+          }
+        },
+        "type": "object",
+        "required": [
+          "total_dops_distributed",
+          "days_left_before_new_epoch",
+          "today_allocation",
+          "winner_data",
+          "loser_data",
+          "candidate_data"
+        ],
+        "title": "DopsDistributionStatsResponse"
+      },
+      "GlobalSearchResponseType": {
+        "type": "string",
+        "enum": [
+          "yapper",
+          "program",
+          "tweet"
+        ],
+        "title": "GlobalSearchResponseType"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "PoolShareDailyStat": {
+        "properties": {
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp",
+            "description": "Unix timestamp"
+          },
+          "daily_dops_supply_share": {
+            "type": "number",
+            "title": "Daily Dops Supply Share",
+            "description": "Share of daily DOPS supply (percentage)"
+          }
+        },
+        "type": "object",
+        "required": [
+          "timestamp",
+          "daily_dops_supply_share"
+        ],
+        "title": "PoolShareDailyStat"
+      },
+      "PoolShareItem": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id",
+            "description": "Program UUID"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name",
+            "description": "Program name"
+          },
+          "program_image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Program Image Url",
+            "description": "Program logo URL"
+          },
+          "cumulative_tdd": {
+            "type": "number",
+            "title": "Cumulative Tdd",
+            "description": "Total TDD for the requested period"
+          },
+          "history": {
+            "items": {
+              "$ref": "#/components/schemas/PoolShareDailyStat"
+            },
+            "type": "array",
+            "title": "History",
+            "description": "Historical data points"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "program_name",
+          "cumulative_tdd",
+          "history"
+        ],
+        "title": "PoolShareItem"
+      },
+      "ProgramDailyStatsResponse": {
+        "properties": {
+          "avg_tweet_dop_score_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Tweet Dop Score Chart"
+          },
+          "avg_dops_per_user_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dops Per User Chart"
+          },
+          "daily_tdd_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Daily Tdd Chart"
+          },
+          "daily_dop_score_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Daily Dop Score Chart"
+          },
+          "avg_daily_tweets_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Daily Tweets Chart"
+          },
+          "engagement_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Engagement Chart"
+          }
+        },
+        "type": "object",
+        "required": [
+          "avg_tweet_dop_score_chart",
+          "avg_dops_per_user_chart",
+          "daily_tdd_chart",
+          "daily_dop_score_chart",
+          "avg_daily_tweets_chart",
+          "engagement_chart"
+        ],
+        "title": "ProgramDailyStatsResponse"
+      },
+      "ProgramDopsDistributionStatsResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "program_logo_url": {
+            "type": "string",
+            "title": "Program Logo Url"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          },
+          "top_yappers_count": {
+            "type": "integer",
+            "title": "Top Yappers Count"
+          },
+          "top_yappers_logos_url": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Top Yappers Logos Url"
+          },
+          "tweets_per_day": {
+            "type": "integer",
+            "title": "Tweets Per Day"
+          },
+          "daily_tdd": {
+            "type": "number",
+            "title": "Daily Tdd"
+          },
+          "avg_tweet_dop_score_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Tweet Dop Score Chart"
+          },
+          "daily_dop_score": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Daily Dop Score"
+          },
+          "avg_dops_per_user": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dops Per User"
+          },
+          "avg_daily_tweets": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Daily Tweets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "program_name",
+          "program_logo_url",
+          "yap_price",
+          "top_yappers_count",
+          "top_yappers_logos_url",
+          "tweets_per_day",
+          "daily_tdd",
+          "avg_tweet_dop_score_chart",
+          "daily_dop_score",
+          "avg_dops_per_user",
+          "avg_daily_tweets"
+        ],
+        "title": "ProgramDopsDistributionStatsResponse"
+      },
+      "ProgramPageGeneralInfoResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "leaderboard_position": {
+            "type": "integer",
+            "title": "Leaderboard Position"
+          },
+          "token_logo_url": {
+            "type": "string",
+            "title": "Token Logo Url"
+          },
+          "token_symbol": {
+            "type": "string",
+            "title": "Token Symbol"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "twitter_url": {
+            "type": "string",
+            "title": "Twitter Url"
+          },
+          "dexscreener_url": {
+            "type": "string",
+            "title": "Dexscreener Url"
+          },
+          "pumpfun_url": {
+            "type": "string",
+            "title": "Pumpfun Url"
+          },
+          "website_url": {
+            "type": "string",
+            "title": "Website Url"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          },
+          "fdv": {
+            "type": "number",
+            "title": "Fdv"
+          },
+          "has_solo_mention_filter": {
+            "type": "boolean",
+            "title": "Has Solo Mention Filter"
+          },
+          "has_verified_filter": {
+            "type": "boolean",
+            "title": "Has Verified Filter"
+          },
+          "has_sentiment_filter": {
+            "type": "boolean",
+            "title": "Has Sentiment Filter"
+          },
+          "has_media_filter": {
+            "type": "boolean",
+            "title": "Has Media Filter"
+          },
+          "has_consistency_streak_multiplier": {
+            "type": "boolean",
+            "title": "Has Consistency Streak Multiplier"
+          },
+          "has_new_author_multiplier": {
+            "type": "boolean",
+            "title": "Has New Author Multiplier"
+          },
+          "has_decay_factor_multiplier": {
+            "type": "boolean",
+            "title": "Has Decay Factor Multiplier"
+          },
+          "dops_supply_share": {
+            "type": "number",
+            "title": "Dops Supply Share"
+          },
+          "median_dops_supply_share": {
+            "type": "number",
+            "title": "Median Dops Supply Share"
+          },
+          "daily_dops_supply": {
+            "type": "number",
+            "title": "Daily Dops Supply"
+          },
+          "total_tweets": {
+            "type": "integer",
+            "title": "Total Tweets"
+          },
+          "daily_tdd": {
+            "type": "number",
+            "title": "Daily Tdd"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "volume": {
+            "type": "number",
+            "title": "Volume"
+          },
+          "avg_dops_per_tweet": {
+            "type": "number",
+            "title": "Avg Dops Per Tweet"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "leaderboard_position",
+          "token_logo_url",
+          "token_symbol",
+          "program_name",
+          "twitter_url",
+          "dexscreener_url",
+          "pumpfun_url",
+          "website_url",
+          "description",
+          "fdv",
+          "has_solo_mention_filter",
+          "has_verified_filter",
+          "has_sentiment_filter",
+          "has_media_filter",
+          "has_consistency_streak_multiplier",
+          "has_new_author_multiplier",
+          "has_decay_factor_multiplier",
+          "dops_supply_share",
+          "median_dops_supply_share",
+          "daily_dops_supply",
+          "total_tweets",
+          "daily_tdd",
+          "total_dops",
+          "volume",
+          "avg_dops_per_tweet"
+        ],
+        "title": "ProgramPageGeneralInfoResponse"
+      },
+      "ProgramSearchResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "twitter_handle": {
+            "type": "string",
+            "title": "Twitter Handle"
+          },
+          "logo": {
+            "type": "string",
+            "title": "Logo"
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GlobalSearchResponseType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "program"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "twitter_link": {
+            "type": "string",
+            "title": "Twitter Link"
+          },
+          "daily_tdd": {
+            "type": "number",
+            "title": "Daily Tdd"
+          },
+          "token_symbol": {
+            "type": "string",
+            "title": "Token Symbol"
+          },
+          "token_address": {
+            "type": "string",
+            "title": "Token Address"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "twitter_handle",
+          "logo",
+          "id",
+          "twitter_link",
+          "daily_tdd",
+          "token_symbol",
+          "token_address"
+        ],
+        "title": "ProgramSearchResponse"
+      },
+      "ProgramTopTweetResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "yapper_display_name": {
+            "type": "string",
+            "title": "Yapper Display Name"
+          },
+          "yapper_logo_url": {
+            "type": "string",
+            "title": "Yapper Logo Url"
+          },
+          "dop_score": {
+            "type": "number",
+            "title": "Dop Score"
+          },
+          "estimate_dops": {
+            "type": "number",
+            "title": "Estimate Dops"
+          },
+          "tweet_timestamp": {
+            "type": "integer",
+            "title": "Tweet Timestamp"
+          },
+          "tweet_text": {
+            "type": "string",
+            "title": "Tweet Text"
+          },
+          "tweet_url": {
+            "type": "string",
+            "title": "Tweet Url"
+          },
+          "is_authenticated": {
+            "type": "boolean",
+            "title": "Is Authenticated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "yapper_display_name",
+          "yapper_logo_url",
+          "dop_score",
+          "estimate_dops",
+          "tweet_timestamp",
+          "tweet_text",
+          "tweet_url",
+          "is_authenticated"
+        ],
+        "title": "ProgramTopTweetResponse"
+      },
+      "ProgramXFeedItemResponse": {
+        "properties": {
+          "tweet_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Tweet Id"
+          },
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "twitter_handle": {
+            "type": "string",
+            "title": "Twitter Handle"
+          },
+          "user_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "User Id"
+          },
+          "user_twitter_link": {
+            "type": "string",
+            "title": "User Twitter Link"
+          },
+          "tweet_link": {
+            "type": "string",
+            "title": "Tweet Link"
+          },
+          "passed_solo_mention_filter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passed Solo Mention Filter"
+          },
+          "passed_verified_filter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passed Verified Filter"
+          },
+          "passed_sentiment_filter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passed Sentiment Filter"
+          },
+          "passed_media_filter": {
+            "anyOf": [
+              {
+                "type": "boolean"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Passed Media Filter"
+          },
+          "dop_score": {
+            "type": "number",
+            "title": "Dop Score"
+          },
+          "estimated_reward_in_dops": {
+            "type": "number",
+            "title": "Estimated Reward In Dops"
+          },
+          "mindshare": {
+            "type": "number",
+            "title": "Mindshare"
+          },
+          "yap_text": {
+            "type": "string",
+            "title": "Yap Text"
+          },
+          "tweet_timestamp": {
+            "type": "integer",
+            "title": "Tweet Timestamp"
+          },
+          "rating": {
+            "$ref": "#/components/schemas/Rating"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tweet_id",
+          "program_id",
+          "program_name",
+          "avatar_url",
+          "username",
+          "twitter_handle",
+          "user_id",
+          "user_twitter_link",
+          "tweet_link",
+          "passed_solo_mention_filter",
+          "passed_verified_filter",
+          "passed_sentiment_filter",
+          "passed_media_filter",
+          "dop_score",
+          "estimated_reward_in_dops",
+          "mindshare",
+          "yap_text",
+          "tweet_timestamp",
+          "rating",
+          "page_count"
+        ],
+        "title": "ProgramXFeedItemResponse"
+      },
+      "ProgramYappersLeaderboardItemResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "rank_change": {
+            "type": "integer",
+            "title": "Rank Change"
+          },
+          "is_new": {
+            "type": "boolean",
+            "title": "Is New"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "total_dop_score": {
+            "type": "number",
+            "title": "Total Dop Score"
+          },
+          "pool_share": {
+            "type": "number",
+            "title": "Pool Share"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "username",
+          "avatar_url",
+          "rank",
+          "rank_change",
+          "is_new",
+          "total_dops",
+          "total_dop_score",
+          "pool_share",
+          "page_count"
+        ],
+        "title": "ProgramYappersLeaderboardItemResponse"
+      },
+      "ProgramsMainLeaderboardResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "program_image_url": {
+            "type": "string",
+            "title": "Program Image Url"
+          },
+          "is_new": {
+            "type": "boolean",
+            "title": "Is New"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          },
+          "daily_yap_price_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Daily Yap Price Chart"
+          },
+          "dops_supply_share": {
+            "type": "number",
+            "title": "Dops Supply Share"
+          },
+          "median_dops_supply_share": {
+            "type": "number",
+            "title": "Median Dops Supply Share"
+          },
+          "daily_dops_supply": {
+            "type": "number",
+            "title": "Daily Dops Supply"
+          },
+          "avg_dops_per_tweet": {
+            "type": "number",
+            "title": "Avg Dops Per Tweet"
+          },
+          "fdv": {
+            "type": "number",
+            "title": "Fdv"
+          },
+          "volume": {
+            "type": "number",
+            "title": "Volume"
+          },
+          "leaderboard_position": {
+            "type": "integer",
+            "title": "Leaderboard Position"
+          },
+          "tdd": {
+            "type": "number",
+            "title": "Tdd"
+          },
+          "total_tweets": {
+            "type": "integer",
+            "title": "Total Tweets"
+          },
+          "engagement": {
+            "type": "number",
+            "title": "Engagement"
+          },
+          "top_yappers": {
+            "type": "integer",
+            "title": "Top Yappers"
+          },
+          "top_yappers_logos": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Top Yappers Logos"
+          },
+          "avg_tweet_dop_score": {
+            "type": "number",
+            "title": "Avg Tweet Dop Score"
+          },
+          "avg_dops_per_user": {
+            "type": "number",
+            "title": "Avg Dops Per User"
+          },
+          "has_solo_mention_filter": {
+            "type": "boolean",
+            "title": "Has Solo Mention Filter"
+          },
+          "has_verified_filter": {
+            "type": "boolean",
+            "title": "Has Verified Filter"
+          },
+          "has_sentiment_filter": {
+            "type": "boolean",
+            "title": "Has Sentiment Filter"
+          },
+          "has_media_filter": {
+            "type": "boolean",
+            "title": "Has Media Filter"
+          },
+          "has_consistency_streak_multiplier": {
+            "type": "boolean",
+            "title": "Has Consistency Streak Multiplier"
+          },
+          "has_new_author_multiplier": {
+            "type": "boolean",
+            "title": "Has New Author Multiplier"
+          },
+          "has_decay_factor_multiplier": {
+            "type": "boolean",
+            "title": "Has Decay Factor Multiplier"
+          },
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "rank_change": {
+            "type": "integer",
+            "title": "Rank Change"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "program_name",
+          "program_image_url",
+          "is_new",
+          "yap_price",
+          "daily_yap_price_chart",
+          "dops_supply_share",
+          "median_dops_supply_share",
+          "daily_dops_supply",
+          "avg_dops_per_tweet",
+          "fdv",
+          "volume",
+          "leaderboard_position",
+          "tdd",
+          "total_tweets",
+          "engagement",
+          "top_yappers",
+          "top_yappers_logos",
+          "avg_tweet_dop_score",
+          "avg_dops_per_user",
+          "has_solo_mention_filter",
+          "has_verified_filter",
+          "has_sentiment_filter",
+          "has_media_filter",
+          "has_consistency_streak_multiplier",
+          "has_new_author_multiplier",
+          "has_decay_factor_multiplier",
+          "rank",
+          "rank_change",
+          "page_count"
+        ],
+        "title": "ProgramsMainLeaderboardResponse"
+      },
+      "Rating": {
+        "type": "string",
+        "enum": [
+          "plankton",
+          "shrimp",
+          "fish",
+          "dolphin",
+          "whale"
+        ],
+        "title": "Rating"
+      },
+      "RunningLineItemResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "is_new": {
+            "type": "boolean",
+            "title": "Is New"
+          },
+          "icon_url": {
+            "type": "string",
+            "title": "Icon Url"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          },
+          "yap_price_is_up": {
+            "type": "boolean",
+            "title": "Yap Price Is Up"
+          },
+          "daily_tdd": {
+            "type": "number",
+            "title": "Daily Tdd"
+          },
+          "fdv": {
+            "type": "number",
+            "title": "Fdv"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "is_new",
+          "icon_url",
+          "program_name",
+          "yap_price",
+          "yap_price_is_up",
+          "daily_tdd",
+          "fdv"
+        ],
+        "title": "RunningLineItemResponse"
+      },
+      "TopProgramResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_image_url": {
+            "type": "string",
+            "title": "Program Image Url"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "dops_supply_share": {
+            "type": "number",
+            "title": "Dops Supply Share"
+          },
+          "median_dops_supply_share": {
+            "type": "number",
+            "title": "Median Dops Supply Share"
+          },
+          "daily_dops_supply": {
+            "type": "number",
+            "title": "Daily Dops Supply"
+          },
+          "tdd": {
+            "type": "number",
+            "title": "Tdd"
+          },
+          "fdv": {
+            "type": "number",
+            "title": "Fdv"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "program_image_url",
+          "program_name",
+          "dops_supply_share",
+          "median_dops_supply_share",
+          "daily_dops_supply",
+          "tdd",
+          "fdv",
+          "yap_price"
+        ],
+        "title": "TopProgramResponse"
+      },
+      "TopTweetResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "yapper_image_url": {
+            "type": "string",
+            "title": "Yapper Image Url"
+          },
+          "yapper_name": {
+            "type": "string",
+            "title": "Yapper Name"
+          },
+          "yapper_display_name": {
+            "type": "string",
+            "title": "Yapper Display Name"
+          },
+          "yapper_dop_score": {
+            "type": "number",
+            "title": "Yapper Dop Score"
+          },
+          "tweet_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Tweet Id"
+          },
+          "tweet_timestamp": {
+            "type": "integer",
+            "title": "Tweet Timestamp"
+          },
+          "estimated_reward_in_dops": {
+            "type": "number",
+            "title": "Estimated Reward In Dops"
+          },
+          "yap_text": {
+            "type": "string",
+            "title": "Yap Text"
+          },
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "program_image_url": {
+            "type": "string",
+            "title": "Program Image Url"
+          },
+          "tdd": {
+            "type": "number",
+            "title": "Tdd"
+          },
+          "daily_tdd_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Daily Tdd Chart"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "yapper_image_url",
+          "yapper_name",
+          "yapper_display_name",
+          "yapper_dop_score",
+          "tweet_id",
+          "tweet_timestamp",
+          "estimated_reward_in_dops",
+          "yap_text",
+          "program_id",
+          "program_name",
+          "program_image_url",
+          "tdd",
+          "daily_tdd_chart"
+        ],
+        "title": "TopTweetResponse"
+      },
+      "TradingViewChartResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "timestamps": {
+            "items": {
+              "type": "integer"
+            },
+            "type": "array",
+            "title": "Timestamps"
+          },
+          "yap_prices": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Yap Prices"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "timestamps",
+          "yap_prices"
+        ],
+        "title": "TradingViewChartResponse"
+      },
+      "TradingViewHeaderResponse": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          },
+          "yap_price_delta": {
+            "type": "number",
+            "title": "Yap Price Delta"
+          },
+          "ath_token_price": {
+            "type": "number",
+            "title": "Ath Token Price"
+          },
+          "ath_token_price_delta": {
+            "type": "number",
+            "title": "Ath Token Price Delta"
+          },
+          "total_dop_score_volume": {
+            "type": "number",
+            "title": "Total Dop Score Volume"
+          },
+          "avg_dops_per_dop_score": {
+            "type": "number",
+            "title": "Avg Dops Per Dop Score"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "yap_price",
+          "yap_price_delta",
+          "ath_token_price",
+          "ath_token_price_delta",
+          "total_dop_score_volume",
+          "avg_dops_per_dop_score"
+        ],
+        "title": "TradingViewHeaderResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": [
+          "loc",
+          "msg",
+          "type"
+        ],
+        "title": "ValidationError"
+      },
+      "YapperAchievement": {
+        "properties": {
+          "achievement_type": {
+            "title": "YapperAchievementType"
+          },
+          "is_obtained": {
+            "type": "boolean",
+            "title": "Is Obtained"
+          },
+          "timestamp": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Timestamp"
+          },
+          "icon_logo_url": {
+            "type": "string",
+            "title": "Icon Logo Url"
+          },
+          "description": {
+            "type": "string",
+            "title": "Description"
+          }
+        },
+        "type": "object",
+        "required": [
+          "achievement_type",
+          "is_obtained",
+          "icon_logo_url",
+          "description"
+        ],
+        "title": "YapperAchievement"
+      },
+      "YapperDistributionStats": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "yapper_display_name": {
+            "type": "string",
+            "title": "Yapper Display Name"
+          },
+          "yapper_logo_url": {
+            "type": "string",
+            "title": "Yapper Logo Url"
+          },
+          "tde": {
+            "type": "number",
+            "title": "Total DOPS Earned"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "yapper_display_name",
+          "yapper_logo_url",
+          "tde"
+        ],
+        "title": "YapperDistributionStats"
+      },
+      "YapperPageAchievementsResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "achievements": {
+            "anyOf": [
+              {
+                "items": {
+                  "$ref": "#/components/schemas/YapperAchievement"
+                },
+                "type": "array"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Achievements"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id"
+        ],
+        "title": "YapperPageAchievementsResponse"
+      },
+      "YapperPageActiveProgramResponse": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "program_logo_url": {
+            "type": "string",
+            "title": "Program Logo Url"
+          },
+          "tdd": {
+            "type": "number",
+            "title": "Tdd"
+          },
+          "fdv": {
+            "type": "number",
+            "title": "Fdv"
+          },
+          "dops": {
+            "type": "number",
+            "title": "Dops"
+          },
+          "yap_price": {
+            "type": "number",
+            "title": "Yap Price"
+          },
+          "streak_in_program": {
+            "type": "integer",
+            "title": "Streak In Program"
+          },
+          "streak_multiplier_in_program": {
+            "type": "number",
+            "title": "Streak Multiplier In Program"
+          },
+          "tweets_in_program": {
+            "type": "integer",
+            "title": "Tweets In Program"
+          },
+          "dops_supply_share": {
+            "type": "number",
+            "title": "Dops Supply Share"
+          },
+          "median_dops_supply_share": {
+            "type": "number",
+            "title": "Median Dops Supply Share"
+          },
+          "daily_dops_supply": {
+            "type": "number",
+            "title": "Daily Dops Supply"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rank",
+          "program_id",
+          "program_name",
+          "program_logo_url",
+          "tdd",
+          "fdv",
+          "dops",
+          "yap_price",
+          "streak_in_program",
+          "streak_multiplier_in_program",
+          "tweets_in_program",
+          "dops_supply_share",
+          "median_dops_supply_share",
+          "daily_dops_supply",
+          "page_count"
+        ],
+        "title": "YapperPageActiveProgramResponse"
+      },
+      "YapperPageChartsResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "avg_dop_score_per_day": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dop Score Per Day"
+          },
+          "avg_dop_score_per_day_change": {
+            "type": "number",
+            "title": "Avg Dop Score Per Day Change"
+          },
+          "avg_dops_per_day": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dops Per Day"
+          },
+          "avg_dops_per_day_change": {
+            "type": "number",
+            "title": "Avg Dops Per Day Change"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "avg_dop_score_per_day",
+          "avg_dop_score_per_day_change",
+          "avg_dops_per_day",
+          "avg_dops_per_day_change"
+        ],
+        "title": "YapperPageChartsResponse"
+      },
+      "YapperPageContributionsResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "contributions": {
+            "items": {
+              "$ref": "#/components/schemas/ContributionChartItem"
+            },
+            "type": "array",
+            "title": "Contributions"
+          },
+          "max_contributions_in_period": {
+            "type": "integer",
+            "title": "Max Contributions In Period"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "contributions",
+          "max_contributions_in_period"
+        ],
+        "title": "YapperPageContributionsResponse"
+      },
+      "YapperPageHeaderResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "twitter_handle": {
+            "type": "string",
+            "title": "Twitter Handle"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "is_authenticated": {
+            "type": "boolean",
+            "title": "Is Authenticated"
+          },
+          "twitter_link": {
+            "type": "string",
+            "title": "Twitter Link"
+          },
+          "dop_score": {
+            "type": "number",
+            "title": "Dop Score"
+          },
+          "total_tweets": {
+            "type": "integer",
+            "title": "Total Tweets"
+          },
+          "avg_yap_price": {
+            "type": "number",
+            "title": "Avg Yap Price"
+          },
+          "leaderboard_position": {
+            "type": "integer",
+            "title": "Leaderboard Position"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "engagement": {
+            "type": "number",
+            "title": "Engagement"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "display_name",
+          "twitter_handle",
+          "logo_url",
+          "is_authenticated",
+          "twitter_link",
+          "dop_score",
+          "total_tweets",
+          "avg_yap_price",
+          "leaderboard_position",
+          "total_dops",
+          "engagement"
+        ],
+        "title": "YapperPageHeaderResponse"
+      },
+      "YapperPageLeaderboardItemResponse": {
+        "properties": {
+          "rank": {
+            "type": "integer",
+            "title": "Rank"
+          },
+          "rank_change": {
+            "type": "integer",
+            "title": "Rank Change"
+          },
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "logo_url": {
+            "type": "string",
+            "title": "Logo Url"
+          },
+          "display_name": {
+            "type": "string",
+            "title": "Display Name"
+          },
+          "dop_score": {
+            "type": "number",
+            "title": "Dop Score"
+          },
+          "dop_score_change": {
+            "type": "number",
+            "title": "Dop Score Change"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "tweets_count": {
+            "type": "integer",
+            "title": "Tweets Count"
+          },
+          "avg_dops_per_tweet": {
+            "type": "number",
+            "title": "Avg Dops Per Tweet"
+          },
+          "active_programs": {
+            "type": "integer",
+            "title": "Active Programs"
+          },
+          "active_programs_logos_urls": {
+            "items": {
+              "type": "string"
+            },
+            "type": "array",
+            "title": "Active Programs Logos Urls"
+          }
+        },
+        "type": "object",
+        "required": [
+          "rank",
+          "rank_change",
+          "yapper_id",
+          "logo_url",
+          "display_name",
+          "dop_score",
+          "dop_score_change",
+          "total_dops",
+          "tweets_count",
+          "avg_dops_per_tweet",
+          "active_programs",
+          "active_programs_logos_urls"
+        ],
+        "title": "YapperPageLeaderboardItemResponse"
+      },
+      "YapperPageLeaderboardResponse": {
+        "properties": {
+          "leaderboard": {
+            "items": {
+              "$ref": "#/components/schemas/YapperPageLeaderboardItemResponse"
+            },
+            "type": "array",
+            "title": "Leaderboard"
+          },
+          "current_yapper": {
+            "$ref": "#/components/schemas/YapperPageLeaderboardItemResponse"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "leaderboard",
+          "current_yapper",
+          "page_count"
+        ],
+        "title": "YapperPageLeaderboardResponse"
+      },
+      "YapperPageSpiderChartResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "smart": {
+            "type": "number",
+            "title": "Smart"
+          },
+          "alpha_hunter": {
+            "type": "number",
+            "title": "Alpha Hunter"
+          },
+          "shitpost": {
+            "type": "number",
+            "title": "Shitpost"
+          },
+          "creative": {
+            "type": "number",
+            "title": "Creative"
+          },
+          "engagement": {
+            "type": "number",
+            "title": "Engagement"
+          },
+          "bullish": {
+            "type": "number",
+            "title": "Bullish"
+          },
+          "bearish": {
+            "type": "number",
+            "title": "Bearish"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "smart",
+          "alpha_hunter",
+          "shitpost",
+          "creative",
+          "engagement",
+          "bullish",
+          "bearish"
+        ],
+        "title": "YapperPageSpiderChartResponse"
+      },
+      "YapperPageXFeedResponse": {
+        "properties": {
+          "tweet_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Tweet Id"
+          },
+          "timestamp": {
+            "type": "integer",
+            "title": "Timestamp"
+          },
+          "estimated_reward_in_dops": {
+            "type": "number",
+            "title": "Estimated Reward In Dops"
+          },
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_name": {
+            "type": "string",
+            "title": "Program Name"
+          },
+          "program_logo_url": {
+            "type": "string",
+            "title": "Program Logo Url"
+          },
+          "engagement": {
+            "anyOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Engagement"
+          },
+          "reach": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Reach"
+          },
+          "text": {
+            "type": "string",
+            "title": "Text"
+          },
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          }
+        },
+        "type": "object",
+        "required": [
+          "tweet_id",
+          "timestamp",
+          "estimated_reward_in_dops",
+          "program_id",
+          "program_name",
+          "program_logo_url",
+          "text",
+          "page_count"
+        ],
+        "title": "YapperPageXFeedResponse"
+      },
+      "YapperSearchResponse": {
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "twitter_handle": {
+            "type": "string",
+            "title": "Twitter Handle"
+          },
+          "logo": {
+            "type": "string",
+            "title": "Logo"
+          },
+          "tag": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/GlobalSearchResponseType"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "default": "yapper"
+          },
+          "id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Id"
+          },
+          "twitter_link": {
+            "type": "string",
+            "title": "Twitter Link"
+          },
+          "is_authenticated": {
+            "type": "boolean",
+            "title": "Is Authenticated"
+          }
+        },
+        "type": "object",
+        "required": [
+          "name",
+          "twitter_handle",
+          "logo",
+          "id",
+          "twitter_link",
+          "is_authenticated"
+        ],
+        "title": "YapperSearchResponse"
+      },
+      "YapperStatsInProgramResponse": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "avatar_url": {
+            "type": "string",
+            "title": "Avatar Url"
+          },
+          "username": {
+            "type": "string",
+            "title": "Username"
+          },
+          "twitter_handle": {
+            "type": "string",
+            "title": "Twitter Handle"
+          },
+          "twitter_url": {
+            "type": "string",
+            "title": "Twitter Url"
+          },
+          "is_verified": {
+            "type": "boolean",
+            "title": "Is Verified"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "leaderboard_position": {
+            "type": "integer",
+            "title": "Leaderboard Position"
+          },
+          "avg_dops_per_tweet_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dops Per Tweet Chart"
+          },
+          "total_dop_score": {
+            "type": "number",
+            "title": "Total Dop Score"
+          },
+          "pool_share": {
+            "type": "number",
+            "title": "Pool Share"
+          },
+          "tweet_frequency": {
+            "type": "number",
+            "title": "Tweet Frequency"
+          },
+          "total_tweets": {
+            "type": "integer",
+            "title": "Total Tweets"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "avatar_url",
+          "username",
+          "twitter_handle",
+          "twitter_url",
+          "is_verified",
+          "total_dops",
+          "leaderboard_position",
+          "avg_dops_per_tweet_chart",
+          "total_dop_score",
+          "pool_share",
+          "tweet_frequency",
+          "total_tweets"
+        ],
+        "title": "YapperStatsInProgramResponse"
+      },
+      "YappersMainLeaderboardActiveProgramData": {
+        "properties": {
+          "program_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Program Id"
+          },
+          "program_logo_url": {
+            "type": "string",
+            "title": "Program Logo Url"
+          }
+        },
+        "type": "object",
+        "required": [
+          "program_id",
+          "program_logo_url"
+        ],
+        "title": "YappersMainLeaderboardActiveProgramData"
+      },
+      "YappersMainLeaderboardData": {
+        "properties": {
+          "yapper_id": {
+            "type": "string",
+            "format": "uuid",
+            "title": "Yapper Id"
+          },
+          "yapper_dipslay_name": {
+            "type": "string",
+            "title": "Yapper Dipslay Name"
+          },
+          "yapper_logo_url": {
+            "type": "string",
+            "title": "Yapper Logo Url"
+          },
+          "is_new": {
+            "type": "boolean",
+            "title": "Is New"
+          },
+          "rank": {
+            "anyOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Rank"
+          },
+          "rank_change": {
+            "type": "integer",
+            "title": "Rank Change"
+          },
+          "total_dops": {
+            "type": "number",
+            "title": "Total Dops"
+          },
+          "dop_score": {
+            "type": "number",
+            "title": "Dop Score"
+          },
+          "total_tweets": {
+            "type": "integer",
+            "title": "Total Tweets"
+          },
+          "avg_dops_per_tweet": {
+            "type": "number",
+            "title": "Avg Dops Per Tweet"
+          },
+          "avg_dops_per_tweet_chart": {
+            "items": {
+              "type": "number"
+            },
+            "type": "array",
+            "title": "Avg Dops Per Tweet Chart"
+          },
+          "tweet_frequency": {
+            "type": "number",
+            "title": "Tweet Frequency"
+          },
+          "active_programs_count": {
+            "type": "integer",
+            "title": "Active Programs Count"
+          },
+          "active_programs_data": {
+            "items": {
+              "$ref": "#/components/schemas/YappersMainLeaderboardActiveProgramData"
+            },
+            "type": "array",
+            "title": "Active Programs Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "yapper_id",
+          "yapper_dipslay_name",
+          "yapper_logo_url",
+          "is_new",
+          "rank_change",
+          "total_dops",
+          "dop_score",
+          "total_tweets",
+          "avg_dops_per_tweet",
+          "avg_dops_per_tweet_chart",
+          "tweet_frequency",
+          "active_programs_count",
+          "active_programs_data"
+        ],
+        "title": "YappersMainLeaderboardData"
+      },
+      "YappersMainLeaderboardResponse": {
+        "properties": {
+          "page_count": {
+            "type": "integer",
+            "title": "Page Count"
+          },
+          "leaderboard_data": {
+            "items": {
+              "$ref": "#/components/schemas/YappersMainLeaderboardData"
+            },
+            "type": "array",
+            "title": "Leaderboard Data"
+          }
+        },
+        "type": "object",
+        "required": [
+          "page_count",
+          "leaderboard_data"
+        ],
+        "title": "YappersMainLeaderboardResponse"
+      }
+    }
+  }
+}
