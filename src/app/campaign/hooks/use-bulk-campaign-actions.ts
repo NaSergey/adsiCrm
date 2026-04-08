@@ -1,7 +1,7 @@
 import { useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
-import { useDeleteCampaign } from "@/entities/api/use-delete-campaign";
+import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
 import type { Campaign } from "../types";
 
 export function useBulkCampaignActions(

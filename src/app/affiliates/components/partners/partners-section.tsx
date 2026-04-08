@@ -11,6 +11,7 @@ import { cn } from "@/shared/lib/css";
 import { PartnersFiltersBar, type PartnersFilters } from "./partners-filters";
 import { EditPartnerModal, type PartnerData } from "@/features/dialog/edit/edit-partner-modal";
 import { usePartners } from "@/entities/api/use-partners";
+import { useAffiliatesSelection } from "../../selection-context";
 import type { components } from "@/shared/api/schema";
 
 type ApiPartner = components["schemas"]["ResponseUserDto"];
@@ -31,6 +32,7 @@ export function PartnersSection() {
   const [filters, setFilters] = useState<PartnersFilters>(EMPTY_FILTERS);
   const [page, setPage] = useState(1);
   const [selectedPartner, setSelectedPartner] = useState<PartnerData | null>(null);
+  const { isSelecting, selectedIds, toggleId } = useAffiliatesSelection();
 
   const { data, isLoading, error, refetch } = usePartners();
 
@@ -60,16 +62,22 @@ export function PartnersSection() {
           data={paginatedData}
           isLoading={isLoading}
           className="text-sm"
-          rowClassName="hover:bg-gray-1000/30 cursor-pointer group"
-          onRowClick={(row) => setSelectedPartner({
-            id: row.id,
-            name: row.name,
-            email: row.email,
-            comment: row.comment,
-            partnerToken: row.partnerToken ?? "",
-            role: row.role,
-            managerId: String(row.managerId ?? ""),
-          })}
+          rowClassName={(row) => isSelecting
+            ? cn("cursor-pointer select-none", selectedIds.has(row.id) ? "!bg-red-900" : "hover:!bg-red-900/70")
+            : "hover:bg-gray-1000/30 cursor-pointer group"
+          }
+          onRowClick={(row) => {
+            if (isSelecting) { toggleId(row.id); return; }
+            setSelectedPartner({
+              id: row.id,
+              name: row.name,
+              email: row.email,
+              comment: row.comment,
+              partnerToken: row.partnerToken ?? "",
+              role: row.role,
+              managerId: String(row.managerId ?? ""),
+            });
+          }}
           loadingContent={
             <div className="grid gap-px">
               {Array.from({ length: PAGE_SIZE }).map((_, i) => (

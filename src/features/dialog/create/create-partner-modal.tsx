@@ -10,6 +10,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { fetchClient } from "@/shared/api";
 import type { components } from "@/shared/api/schema";
 import { partnersQueryKey } from "@/entities/api/use-partners";
+import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import { SelectManager } from "@/entities";
 
 type CreatePartnerBody = components["schemas"]["CreateUserDto"];
@@ -31,8 +32,11 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: (body: CreatePartnerBody) =>
-      fetchClient.POST("/users", { body }),
+    mutationFn: async (body: CreatePartnerBody) => {
+      const { data, error } = await fetchClient.POST("/users", { body });
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: partnersQueryKey });
       setName("");
@@ -58,7 +62,7 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
           <Input label={t("password")} type="password" placeholder={t("password")} value={password} onChange={(e) => setPassword(e.target.value)} />
           <SelectManager label={t("manager")} value={managerId} onChange={setManagerId} />
           {error && (
-            <p className="col-span-2 text-sm text-red-500">{t("error")}</p>
+            <p className="col-span-2 text-sm text-red-500">{extractErrorMessage(error) ?? t("error")}</p>
           )}
         </div>
 

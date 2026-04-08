@@ -1,5 +1,5 @@
 import { useTranslations } from "next-intl";
-import { useRoles } from "@/entities/api/use-roles";
+import { useRoles } from "@/entities/api/data/use-roles";
 import {
   PARTNERS_DISPLAY_OPTIONS,
   LEADS_DISPLAY_OPTIONS,

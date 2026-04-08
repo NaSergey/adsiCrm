@@ -25,7 +25,7 @@ export interface DataTableProps<TData> {
   data: TData[];
   isLoading?: boolean;
   className?: string;
-  rowClassName?: string;
+  rowClassName?: string | ((row: TData) => string);
   onRowClick?: (row: TData) => void;
   loadingContent?: React.ReactNode;
   noDataContent?: React.ReactNode;
@@ -134,7 +134,7 @@ export function DataTable<TData>({
               <TableRow
                 key={row.id}
                 onClick={() => onRowClick?.(row.original)}
-                className={cn(rowClassName)}
+                className={cn(typeof rowClassName === "function" ? rowClassName(row.original) : rowClassName)}
               >
                 {row.getVisibleCells().map((cell) => (
                   <TableCell key={cell.id} className="px-4 py-3 text-sm text-gray-900 dark:text-white">

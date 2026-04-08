@@ -9,6 +9,7 @@ import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { fetchClient } from "@/shared/api";
 import { partnersQueryKey } from "@/entities/api/use-partners";
+import { useDeletePartner } from "@/entities/api/delete/use-delete-partner";
 import { SelectManager } from "@/entities";
 
 export interface PartnerData {
@@ -46,14 +47,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
     },
   });
 
-  const { mutate: remove, isPending: isDeleting } = useMutation({
-    mutationFn: () =>
-      fetchClient.DELETE("/users/{id}", { params: { path: { id: partner.id } } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: partnersQueryKey });
-      onOpenChange(false);
-    },
-  });
+  const { remove, isPending: isDeleting } = useDeletePartner({ onSuccess: () => onOpenChange(false) });
 
   const handleSave = () => {
     const body: { name: string; comment: string; password?: string; permissions: []; managerId?: number | null } = {
@@ -91,7 +85,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
           <Button onClick={handleSave} disabled={!name || isUpdating || isDeleting}>
             {isUpdating ? t("saving") : t("save")}
           </Button>
-          <Button variant="destructive" onClick={() => remove()} disabled={isUpdating || isDeleting}>
+          <Button variant="destructive" onClick={() => remove(partner.id)} disabled={isUpdating || isDeleting}>
             {isDeleting ? t("deleting") : t("delete")}
           </Button>
         </DialogFooter>

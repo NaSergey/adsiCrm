@@ -11,6 +11,7 @@ import { Select } from "@/shared/ui/select";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { fetchClient } from "@/shared/api";
+import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import type { components } from "@/shared/api/schema";
 import { SelectPartner, SelectBroker, SelectManager } from "@/entities";
 import { SelectCountryMulti } from "@/entities/ui/select-country-multi";
@@ -56,7 +57,11 @@ export function CreateCampaignModal({ open, onOpenChange, onSuccess }: CreateCam
   const checkerFunnel = useWatch({ control, name: "checkerFunnel" });
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: (body: CreateCampaignBody) => fetchClient.POST("/campaigns", { body }),
+    mutationFn: async (body: CreateCampaignBody) => {
+      const { data, error } = await fetchClient.POST("/campaigns", { body });
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: campaignsQueryKey });
       reset();
@@ -197,7 +202,7 @@ export function CreateCampaignModal({ open, onOpenChange, onSuccess }: CreateCam
         </div>
 
         {error && (
-          <p className="text-sm text-red-500">{t("error")}</p>
+          <p className="text-sm text-red-500">{extractErrorMessage(error) ?? t("error")}</p>
         )}
 
         <DialogFooter>

@@ -12,6 +12,7 @@ import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/css";
 import { EditBrokerModal, type BrokerData } from "@/features/dialog/edit/edit-broker-modal";
 import { useBrokers } from "@/entities";
+import { useAffiliatesSelection } from "../../selection-context";
 import type { components } from "@/shared/api/schema";
 
 type ApiBroker = components["schemas"]["ResponseBrokerDto"];
@@ -34,6 +35,7 @@ export function BrokersSection() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selectedBroker, setSelectedBroker] = useState<BrokerData | null>(null);
+  const { isSelecting, selectedIds, toggleId } = useAffiliatesSelection();
 
   const { data, isLoading, error, refetch } = useBrokers();
 
@@ -77,15 +79,19 @@ export function BrokersSection() {
           data={paginatedData}
           isLoading={isLoading}
           className="text-sm"
-          rowClassName="hover:bg-gray-1000/30 cursor-pointer group"
-          onRowClick={(row) =>
+          rowClassName={(row) => isSelecting
+            ? cn("cursor-pointer select-none", selectedIds.has(row.id) ? "!bg-red-900" : "hover:!bg-red-900/70")
+            : "hover:bg-gray-1000/30 cursor-pointer group"
+          }
+          onRowClick={(row) => {
+            if (isSelecting) { toggleId(row.id); return; }
             setSelectedBroker({
               id: String(row.id),
               name: row.name,
               comment: row.comment,
               managerId: row.brandManager ? String(row.brandManager.id) : "",
-            })
-          }
+            });
+          }}
           loadingContent={
             <div className="grid gap-px">
               {Array.from({ length: PAGE_SIZE }).map((_, i) => (

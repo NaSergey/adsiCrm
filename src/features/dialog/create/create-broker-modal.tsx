@@ -9,6 +9,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { brokersQueryKey } from "@/entities";
+import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
 
 interface CreateBrokerModalProps {
@@ -30,8 +31,11 @@ export function CreateBrokerModal({
   const queryClient = useQueryClient();
 
   const { mutate, isPending, error } = useMutation({
-    mutationFn: (body: { name: string; comment: string; brandManagerId?: number | null }) =>
-      fetchClient.POST("/brokers", { body }),
+    mutationFn: async (body: { name: string; comment: string; brandManagerId?: number | null }) => {
+      const { data, error } = await fetchClient.POST("/brokers", { body });
+      if (error) throw error;
+      return data;
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: brokersQueryKey });
       setName("");
@@ -53,7 +57,7 @@ export function CreateBrokerModal({
           <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
           <SelectBrandManager label={t("brandManager")} value={managerId} onChange={setManagerId} />
           {error && (
-            <p className="text-sm text-red-500">{t("error")}</p>
+            <p className="text-sm text-red-500">{extractErrorMessage(error) ?? t("error")}</p>
           )}
         </div>
 

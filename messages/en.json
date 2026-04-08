@@ -36,6 +36,10 @@
     "clear": "Clear",
     "error": "Something went wrong, please reload",
     "noUsers": "No users found",
+    "select": "Select",
+    "cancelSelect": "Cancel",
+    "deleteSelected": "Delete selected",
+    "deleting": "Deleting...",
     "columns": {
       "id": "ID",
       "name": "Name",
@@ -89,6 +93,10 @@
     "error": "Something went wrong, please reload",
     "noPartners": "No partners found",
     "noBrokers": "No brokers found",
+    "select": "Select",
+    "cancelSelect": "Cancel",
+    "deleteSelected": "Delete selected",
+    "deleting": "Deleting...",
     "columns": {
       "id": "ID",
       "name": "Name",
@@ -124,6 +132,10 @@
     "close": "Close",
     "error": "Something went wrong, please reload",
     "noData": "No data",
+    "select": "Select",
+    "cancelSelect": "Cancel",
+    "deleteSelected": "Delete selected",
+    "deleting": "Deleting...",
     "yes": "Yes",
     "no": "No",
     "stats": {

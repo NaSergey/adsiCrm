@@ -58,7 +58,7 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
   },
 
   PARTNER: {
-    pages: ["/campaign", "/leads", "/wiki"],
+    pages: ["/leads", "/wiki"],
     features: [
       "view_basic_leads", "create_lead",
       "view_own_partners",
@@ -67,7 +67,7 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
   },
 
   INTEGRATOR: {
-    pages: ["/campaign", "/senderLead", "/wiki"],
-    features: ["create_lead", "view_wiki"],
+    pages: ["/affiliates", "/senderLead", "/wiki"],
+    features: ["create_lead", "view_all_brokers", "view_affiliates", "view_wiki"],
   },
 };

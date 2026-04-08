@@ -7,6 +7,7 @@ import { EMPTY_LEADS_FILTERS, type LeadsFiltersState } from "./types";
 import { LeadsOverview } from "./components/leads-overview";
 import { LeadsTable } from "./components/table/leads-table";
 import { getLeadsColumns } from "./components/table/leads-columns";
+import { LeadsSelectionProvider } from "./selection-context";
 
 export default function LeadsPage() {
   const t = useTranslations("leads");
@@ -14,12 +15,14 @@ export default function LeadsPage() {
   const [filters, setFilters] = useState<LeadsFiltersState>(EMPTY_LEADS_FILTERS);
 
   return (
-    <div className="p-6 px-10">
-      <LeadsOverview filters={filters} />
-      <LeadsHeader filters={filters} onFiltersChange={setFilters} />
-      <div className="mt-6">
-        <LeadsTable columns={columns} filters={filters} />
+    <LeadsSelectionProvider>
+      <div className="p-6 px-10">
+        <LeadsOverview filters={filters} />
+        <LeadsHeader filters={filters} onFiltersChange={setFilters} />
+        <div className="mt-6">
+          <LeadsTable columns={columns} filters={filters} />
+        </div>
       </div>
-    </div>
+    </LeadsSelectionProvider>
   );
 }

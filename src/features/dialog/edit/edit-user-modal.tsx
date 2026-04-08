@@ -9,6 +9,7 @@ import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { fetchClient } from "@/shared/api";
 import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
+import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
 
 interface EditUserModalProps {
   open: boolean;
@@ -40,14 +41,7 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
     },
   });
 
-  const { mutate: remove, isPending: isDeleting } = useMutation({
-    mutationFn: () =>
-      fetchClient.DELETE("/users/{id}", { params: { path: { id: user!.id } } }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: usersQueryKey });
-      onOpenChange(false);
-    },
-  });
+  const { remove, isPending: isDeleting } = useDeleteUser({ onSuccess: () => onOpenChange(false) });
 
   const handleSave = () => {
     const body: { name: string; comment: string; password?: string; permissions: [] } = { name, comment, permissions: [] };
@@ -78,7 +72,7 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
             <Button onClick={handleSave} disabled={!name || isUpdating || isDeleting}>
               {isUpdating ? t("saving") : t("save")}
             </Button>
-            <Button variant="destructive" onClick={() => remove()} disabled={isUpdating || isDeleting}>
+            <Button variant="destructive" onClick={() => user && remove(user.id)} disabled={isUpdating || isDeleting}>
               {isDeleting ? t("deleting") : t("delete")}
             </Button>
           </DialogFooter>

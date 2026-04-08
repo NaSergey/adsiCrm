@@ -10,7 +10,9 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { EditIntegCodeModal } from "./edit-integ-code-modal";
 import { fetchClient } from "@/shared/api";
 import { brokersQueryKey } from "@/entities";
+import { useDeleteBroker } from "@/entities/api/delete/use-delete-broker";
 import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
+import { usePermissions } from "@/shared/lib/use-permissions";
 
 export interface BrokerData {
   id: string;
@@ -35,6 +37,7 @@ export function EditBrokerModal({
   onDelete,
 }: EditBrokerModalProps) {
   const t = useTranslations("editModals");
+  const { hasFeature } = usePermissions();
   const [name, setName] = useState(broker.name);
   const [comment, setComment] = useState(broker.comment);
   const [managerId, setManagerId] = useState(broker.managerId);
@@ -65,16 +68,8 @@ export function EditBrokerModal({
     },
   });
 
-  const { mutate: deleteMutate, isPending: isDeleting } = useMutation({
-    mutationFn: () =>
-      fetchClient.DELETE("/brokers/{id}", {
-        params: { path: { id: Number(broker.id) } },
-      }),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: brokersQueryKey });
-      onOpenChange(false);
-      onDelete();
-    },
+  const { remove: deleteMutate, isPending: isDeleting } = useDeleteBroker({
+    onSuccess: () => { onOpenChange(false); onDelete(); },
   });
 
   return (
@@ -92,15 +87,17 @@ export function EditBrokerModal({
             {error && <p className="col-span-2 text-sm text-red-500">{t("error")}</p>}
           </div>
 
-          <DialogFooter className="grid grid-cols-4 gap-3 sm:grid-cols-4">
-            <Button onClick={() => mutate()} disabled={isPending}>
+          <DialogFooter className="flex gap-3">
+            <Button onClick={() => mutate()} disabled={isPending} className="flex-1">
               {isPending ? t("saving") : t("save")}
             </Button>
-            <Button variant="secondary" onClick={() => setIntegType("add")}>{t("addLeads")}</Button>
-            <Button variant="secondary" onClick={() => setIntegType("update")}>{t("updateLeads")}</Button>
-            <Button variant="destructive" onClick={() => deleteMutate()} disabled={isDeleting}>
-              {isDeleting ? t("deleting") : t("delete")}
-            </Button>
+            <Button variant="secondary" onClick={() => setIntegType("add")} className="flex-1">{t("addLeads")}</Button>
+            <Button variant="secondary" onClick={() => setIntegType("update")} className="flex-1">{t("updateLeads")}</Button>
+            {hasFeature("create_broker") && (
+              <Button variant="destructive" onClick={() => deleteMutate(Number(broker.id))} disabled={isDeleting} className="flex-1">
+                {isDeleting ? t("deleting") : t("delete")}
+              </Button>
+            )}
           </DialogFooter>
         </DialogContent>
       </Dialog>

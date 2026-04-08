@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { MultiSelect } from "@/shared/ui/multi-select";
-import { useCountries } from "../api/use-countries";
+import { useCountries } from "../api/data/use-countries";
 
 interface SelectCountryMultiProps {
   label?: string;

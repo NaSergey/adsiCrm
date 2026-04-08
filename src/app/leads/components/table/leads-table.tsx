@@ -13,6 +13,7 @@ import { cn } from "@/shared/lib/css";
 import { type Lead } from "./leads-columns";
 import { LeadDetailModal } from "../../../../features/dialog/leadInfo/lead-detail-modal";
 import { type LeadsFiltersState, filtersToApiBody } from "../../types";
+import { useLeadsSelection } from "../../selection-context";
 
 export type { Lead };
 
@@ -20,13 +21,17 @@ export interface LeadsTableProps {
   columns: ColumnDef<Lead>[];
   filters: LeadsFiltersState;
   className?: string;
-  onRowClick?: (row: Lead) => void;
 }
 
-export function LeadsTable({ columns, filters, className = "", onRowClick }: LeadsTableProps) {
+export function LeadsTable({
+  columns,
+  filters,
+  className = "",
+}: LeadsTableProps) {
   const t = useTranslations("leads");
   const [page, setPage] = useState(1);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
+  const { isSelecting, selectedIds, toggleId } = useLeadsSelection();
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["leads", page, filters],
@@ -45,8 +50,21 @@ export function LeadsTable({ columns, filters, className = "", onRowClick }: Lea
   const hasError = !!error;
 
   function handleRowClick(row: Lead) {
+    if (isSelecting) {
+      toggleId(row.id);
+      return;
+    }
     setSelectedLead(row);
-    onRowClick?.(row);
+  }
+
+  function getRowClassName(row: Lead) {
+    if (!isSelecting) return "hover:bg-gray-1000/30 cursor-pointer group";
+    return cn(
+      "cursor-pointer select-none group",
+      selectedIds.has(row.id)
+        ? "!bg-red-900"
+        : "hover:!bg-red-900/70",
+    );
   }
 
   return (
@@ -57,7 +75,7 @@ export function LeadsTable({ columns, filters, className = "", onRowClick }: Lea
           data={items}
           isLoading={isLoading}
           className="text-sm"
-          rowClassName="hover:bg-gray-1000/30 cursor-pointer group"
+          rowClassName={getRowClassName}
           onRowClick={handleRowClick}
           loadingContent={
             <div className="grid gap-px">

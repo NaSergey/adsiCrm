@@ -50,7 +50,7 @@ export function PaginationControls({
   return (
     <div
       className={cn(
-        "flex bg-gray-1100 -mx-4 px-4 py-3 items-center",
+        "flex bg-gray-1100  px-4 py-3 items-center",
         children ? "justify-between" : "justify-end",
         className
       )}

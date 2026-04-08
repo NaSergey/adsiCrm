@@ -16,7 +16,13 @@ import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
 
 const PAGE_SIZE = 20;
 
-export function UsersSection() {
+interface UsersSectionProps {
+  isSelecting?: boolean;
+  selectedIds?: Set<number>;
+  onToggleId?: (id: number) => void;
+}
+
+export function UsersSection({ isSelecting = false, selectedIds = new Set(), onToggleId }: UsersSectionProps) {
   const t = useTranslations("users");
   const usersColumns = useMemo(() => getUsersColumns(t as (key: string) => string), [t]);
   const [filters, setFilters] = useState<UsersFilters>(EMPTY_USERS_FILTERS);
@@ -61,8 +67,14 @@ export function UsersSection() {
           data={paginatedData}
           isLoading={isLoading}
           className="text-sm"
-          rowClassName="hover:bg-gray-1000/30 cursor-pointer group"
-          onRowClick={handleRowClick}
+          rowClassName={(row) => isSelecting
+            ? cn("cursor-pointer select-none", selectedIds.has(row.id) ? "!bg-red-900" : "hover:!bg-red-900/70")
+            : "hover:bg-gray-1000/30 cursor-pointer group"
+          }
+          onRowClick={(row) => {
+            if (isSelecting) { onToggleId?.(row.id); return; }
+            handleRowClick(row);
+          }}
           loadingContent={
             <div className="grid gap-px">
               {Array.from({ length: PAGE_SIZE }).map((_, i) => (

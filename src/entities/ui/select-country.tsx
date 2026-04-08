@@ -2,7 +2,7 @@
 
 import { useTranslations } from "next-intl";
 import { SelectSearch } from "@/shared/ui/select-search";
-import { useCountries } from "../api/use-countries";
+import { useCountries } from "../api/data/use-countries";
 import type { ComponentProps } from "react";
 
 type SelectSearchProps = ComponentProps<typeof SelectSearch>;

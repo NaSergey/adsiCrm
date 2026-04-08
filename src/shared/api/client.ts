@@ -20,10 +20,13 @@ if (typeof window !== "undefined") {
     },
 
     async onResponse({ response, request }) {
-      // Skip refresh endpoint itself to avoid infinite loop
-      if (response.status !== 401 || request.url.includes("/auth/refresh")) {
-        return response;
-      }
+      if (
+          response.status !== 401 || 
+          request.url.includes("/auth/refresh") || 
+          request.url.includes("/auth/login") 
+        ) {
+          return response;
+        }
 
       // Try to refresh the access token
       const refreshRes = await fetch(`${API_URL}/auth/refresh`, {
@@ -32,10 +35,12 @@ if (typeof window !== "undefined") {
       });
 
       if (!refreshRes.ok) {
-        clearAccessToken();
-        window.location.href = "/";
-        return response;
-      }
+          clearAccessToken();
+          if (typeof window !== "undefined" && window.location.pathname !== "/") {
+            window.location.href = "/";
+          }
+          return response;
+        }
 
       const { accessToken } = await refreshRes.json();
       setAccessToken(accessToken);

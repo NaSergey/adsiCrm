@@ -12,6 +12,7 @@ import { LeadInfoTab, type LeadInfoTabRef } from "./components/lead-info-tab";
 import { ErrorStatusTab } from "./components/error-status-tab";
 import { AutologinScreenshotButton } from "./components/autologin-screenshot-button";
 import { useLeadById } from "@/entities/api/use-lead";
+import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
 
 interface LeadDetailModalProps {
   lead: Lead | null;
@@ -55,19 +56,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
     },
   });
 
-  const { mutate: deleteLead, isPending: isDeleting } = useMutation({
-    mutationFn: async () => {
-      if (!lead) return;
-      const { error } = await fetchClient.DELETE("/leads/{id}", {
-        params: { path: { id: String(lead.id) } },
-      });
-      if (error) throw error;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["leads"] });
-      onOpenChange(false);
-    },
-  });
+  const { remove: deleteLead, isPending: isDeleting } = useDeleteLead({ onSuccess: () => onOpenChange(false) });
 
   if (!lead) return null;
 
@@ -106,7 +95,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
           <Button className="w-full" variant="blue" onClick={() => save()} disabled={isSaving || isDeleting}>
             {isSaving ? t("saving") : t("save")}
           </Button>
-          <Button className="w-full" variant="destructive" onClick={() => deleteLead()} disabled={isSaving || isDeleting}>
+          <Button className="w-full" variant="destructive" onClick={() => lead && deleteLead(lead.id)} disabled={isSaving || isDeleting}>
             {isDeleting ? t("deleting") : t("delete")}
           </Button>
         </div>

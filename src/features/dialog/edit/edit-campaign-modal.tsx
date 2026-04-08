@@ -19,7 +19,7 @@ import { SelectCountryMulti } from "@/entities/ui/select-country-multi";
 import { SelectLangMulti } from "@/entities/ui/select-lang-multi";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
-import { useDeleteCampaign } from "@/entities/api/use-delete-campaign";
+import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
 import { campaignFormSchema, type CampaignFormValues } from "@/features/dialog/schemas/campaign-schema";
 
 const STATUS_OPTIONS = [

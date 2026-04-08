@@ -12,6 +12,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 import { SelectManager } from "@/entities";
 import { fetchClient } from "@/shared/api";
 import { generateToken } from "@/shared/api/utils";
+import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import { usersQueryKey } from "./create-user-modal.constants";
 import { useCreateUserOptions } from "./use-create-user-options";
 
@@ -21,14 +22,6 @@ interface CreateUserModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   onSuccess?: () => void;
-}
-
-function extractErrorMessage(error: unknown): string | null {
-  if (!error || typeof error !== "object") return null;
-  const e = error as Record<string, unknown>;
-  if (Array.isArray(e.message)) return (e.message as string[]).join(", ");
-  if (typeof e.message === "string") return e.message;
-  return null;
 }
 
 export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserModalProps) {

@@ -61,7 +61,7 @@ export function CampaignCard({
       className={`relative flex flex-col rounded-lg border bg-gray-1000 p-4 transition-colors ${
         isSelecting
           ? isSelected
-            ? "border-green-1000 ring-2 ring-blue-500/40 cursor-pointer"
+            ? "border-green-1000 ring-2 ring-green-1000 cursor-pointer"
             : "border-gray-300 dark:border-gray-700 hover:border-green-1000 cursor-pointer"
           : "border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-700/80"
       }`}
