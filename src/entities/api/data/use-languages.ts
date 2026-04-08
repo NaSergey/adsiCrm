@@ -7,7 +7,7 @@ export function useLanguages() {
   return useQuery({
     queryKey: languagesQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/lists/languages");
+      const { data, error } = await fetchClient.GET("/api/lists/languages");
       if (error) throw error;
       return data ?? [];
     },

@@ -13,6 +13,11 @@ export type Feature =
   | "view_all_leads"
   | "view_basic_leads"
   | "create_lead"
+  | "edit_lead"
+  | "delete_lead"
+  | "full_leads_filters"
+  | "import_leads"
+  | "export_leads"
   | "view_all_partners"
   | "view_own_partners"
   | "view_all_brokers"
@@ -30,10 +35,11 @@ interface RolePermissions {
 
 export const PERMISSIONS: Record<Role, RolePermissions> = {
   ADMIN: {
-    pages: ["/campaign", "/leads", "/affiliates", "/senderLead", "/logs", "/users", "/wiki"],
+    pages: ["/campaign", "/leads","/settings", "/affiliates", "/senderLead", "/logs", "/users", "/wiki"],
     features: [
       "create_user", "delete_user", "edit_user",
-      "view_all_leads", "create_lead",
+      "view_all_leads", "create_lead", "edit_lead", "delete_lead",
+      "full_leads_filters", "import_leads", "export_leads",
       "view_all_partners", "view_all_brokers", "create_broker",
       "view_affiliates", "view_logs", "view_users_page", "view_wiki",
     ],
@@ -42,7 +48,8 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
   MANAGER: {
     pages: ["/campaign", "/leads", "/affiliates", "/wiki"],
     features: [
-      "view_all_leads", "create_lead",
+      "view_all_leads", "create_lead", "edit_lead", "delete_lead",
+      "full_leads_filters", "import_leads", "export_leads",
       "view_all_partners", "view_own_partners",
       "view_affiliates", "view_wiki",
     ],

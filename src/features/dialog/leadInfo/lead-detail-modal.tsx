@@ -7,12 +7,13 @@ import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { Button } from "@/shared/ui/button";
 import { fetchClient } from "@/shared/api";
-import { type Lead } from "../../../app/leads/types";
+import { type Lead } from "@/app/(main)/leads/types";
 import { LeadInfoTab, type LeadInfoTabRef } from "./components/lead-info-tab";
 import { ErrorStatusTab } from "./components/error-status-tab";
 import { AutologinScreenshotButton } from "./components/autologin-screenshot-button";
 import { useLeadById } from "@/entities/api/use-lead";
 import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
+import { usePermissions } from "@/shared/lib/use-permissions";
 
 interface LeadDetailModalProps {
   lead: Lead | null;
@@ -24,9 +25,11 @@ type Tab = "lead_info" | "error_status";
 
 export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalProps) {
   const t = useTranslations("leadDetail");
+  const { hasFeature } = usePermissions();
   const [activeTab, setActiveTab] = useState<Tab>("lead_info");
   const tabRef = useRef<LeadInfoTabRef>(null);
   const queryClient = useQueryClient();
+  const canDeleteLead = hasFeature("delete_lead");
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "lead_info", label: t("tabLeadInfo") },
@@ -43,7 +46,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
     mutationFn: async () => {
       const values = tabRef.current?.getValues();
       if (!values || !lead) return;
-      const { error } = await fetchClient.PATCH("/leads/{id}", {
+      const { error } = await fetchClient.PATCH("/api/leads/{id}", {
         params: { path: { id: String(lead.id) } },
         body: values,
       });
@@ -95,9 +98,11 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
           <Button className="w-full" variant="blue" onClick={() => save()} disabled={isSaving || isDeleting}>
             {isSaving ? t("saving") : t("save")}
           </Button>
-          <Button className="w-full" variant="destructive" onClick={() => lead && deleteLead(lead.id)} disabled={isSaving || isDeleting}>
-            {isDeleting ? t("deleting") : t("delete")}
-          </Button>
+          {canDeleteLead && (
+            <Button className="w-full" variant="destructive" onClick={() => lead && deleteLead(lead.id)} disabled={isSaving || isDeleting}>
+              {isDeleting ? t("deleting") : t("delete")}
+            </Button>
+          )}
         </div>
       </DialogContent>
     </Dialog>

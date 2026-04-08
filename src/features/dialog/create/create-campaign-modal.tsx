@@ -58,7 +58,7 @@ export function CreateCampaignModal({ open, onOpenChange, onSuccess }: CreateCam
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (body: CreateCampaignBody) => {
-      const { data, error } = await fetchClient.POST("/campaigns", { body });
+      const { data, error } = await fetchClient.POST("/api/campaigns", { body });
       if (error) throw error;
       return data;
     },

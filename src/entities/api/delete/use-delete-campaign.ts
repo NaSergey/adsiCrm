@@ -10,7 +10,7 @@ export function useDeleteCampaign({ onSuccess }: { onSuccess?: () => void } = {}
       const list = Array.isArray(ids) ? ids : [ids];
       await Promise.all(
         list.map((id) =>
-          fetchClient.DELETE("/campaigns/{id}", { params: { path: { id } } }),
+          fetchClient.DELETE("/api/campaigns/{id}", { params: { path: { id } } }),
         ),
       );
     },

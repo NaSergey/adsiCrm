@@ -7,9 +7,9 @@ export function useRoles() {
   return useQuery({
     queryKey: rolesQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/users/roles");
+      const { data, error } = await fetchClient.GET("/api/users/roles");
       if (error) throw error;
-      return data ?? [];
+      return (data ?? []) as string[];
     },
     staleTime: Infinity,
   });

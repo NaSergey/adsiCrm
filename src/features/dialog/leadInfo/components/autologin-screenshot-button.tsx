@@ -4,9 +4,7 @@ import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
-import { getAccessToken } from "@/shared/lib/auth-token";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
+import { API_ENDPOINTS } from "@/shared/api/config";
 
 interface AutologinScreenshotButtonProps {
   leadId: number;
@@ -25,9 +23,7 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
     setImageUrl(null);
     setError(null);
     try {
-      const token = getAccessToken();
-      const res = await fetch(`${API_URL}/leads/viewAutologinImage/${leadId}`, {
-        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      const res = await fetch(API_ENDPOINTS.leads.autologinImage(leadId), {
         credentials: "include",
       });
       if (!res.ok) {

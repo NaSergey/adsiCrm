@@ -7,7 +7,7 @@ export function useCountries() {
   return useQuery({
     queryKey: countriesQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/lists/countries");
+      const { data, error } = await fetchClient.GET("/api/lists/countries");
       if (error) throw error;
       return data ?? [];
     },

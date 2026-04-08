@@ -33,7 +33,7 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (body: CreatePartnerBody) => {
-      const { data, error } = await fetchClient.POST("/users", { body });
+      const { data, error } = await fetchClient.POST("/api/users", { body });
       if (error) throw error;
       return data;
     },

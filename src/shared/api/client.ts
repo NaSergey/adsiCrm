@@ -1,9 +1,7 @@
 import createFetchClient from "openapi-fetch";
 import type { paths } from "./schema";
-import { getAccessToken, setAccessToken, clearAccessToken } from "@/shared/lib/auth-token";
-
-// Backend on :3000, frontend on :3001 — always point to backend
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
+import { getAccessToken, clearAccessToken } from "@/shared/lib/auth-token";
+import { API_URL } from "./config";
 
 const fetchClient = createFetchClient<paths>({
   baseUrl: API_URL,
@@ -21,20 +19,19 @@ if (typeof window !== "undefined") {
 
     async onResponse({ response, request }) {
       if (
-          response.status !== 401 || 
-          request.url.includes("/auth/refresh") || 
-          request.url.includes("/auth/login") 
+          response.status !== 401 ||
+          request.url.includes("/auth/refresh") ||
+          request.url.includes("/auth/login")
         ) {
           return response;
         }
 
-      // Try to refresh the access token
-      const refreshRes = await fetch(`${API_URL}/auth/refresh`, {
-        method: "GET",
-        credentials: "include",
-      });
+      // Try to refresh the access token using the shared utility
+      // Dynamic import to avoid circular dependency with utils.ts
+      const { refreshAccessToken } = await import("./utils");
+      const ok = await refreshAccessToken();
 
-      if (!refreshRes.ok) {
+      if (!ok) {
           clearAccessToken();
           if (typeof window !== "undefined" && window.location.pathname !== "/") {
             window.location.href = "/";
@@ -42,12 +39,12 @@ if (typeof window !== "undefined") {
           return response;
         }
 
-      const { accessToken } = await refreshRes.json();
-      setAccessToken(accessToken);
-
       // Retry original request with new token
       const headers = new Headers(request.headers);
-      headers.set("Authorization", `Bearer ${accessToken}`);
+      const newToken = getAccessToken();
+      if (newToken) {
+        headers.set("Authorization", `Bearer ${newToken}`);
+      }
       return fetch(new Request(request, { credentials: "include", headers }));
     },
   });

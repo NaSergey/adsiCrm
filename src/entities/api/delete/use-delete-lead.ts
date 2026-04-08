@@ -9,7 +9,7 @@ export function useDeleteLead({ onSuccess }: { onSuccess?: () => void } = {}) {
       const list = Array.isArray(ids) ? ids : [ids];
       await Promise.all(
         list.map((id) =>
-          fetchClient.DELETE("/leads/{id}", { params: { path: { id: String(id) } } }),
+          fetchClient.DELETE("/api/leads/{id}", { params: { path: { id: String(id) } } }),
         ),
       );
     },

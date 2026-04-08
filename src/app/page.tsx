@@ -5,11 +5,12 @@ import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { fetchClient } from "@/shared/api";
+import { fetchClient } from "@/shared";
 import { setAccessToken } from "@/shared/lib/auth-token";
-import { Lock, Eye, EyeOff } from "lucide-react";
+import {  Eye, EyeOff } from "lucide-react";
 import { Input } from "@/shared/ui/input";
 import { Button } from "@/shared/ui/button";
+import { Logo } from "@/shared/ui/logo";
 
 const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -31,7 +32,7 @@ export default function Home() {
     // УБРАЛИ setServerError(""); <-- Это ПЕРВАЯ причина мерцания
     
     try {
-      const { data, response } = await fetchClient.POST("/auth/login", { body: values });
+      const { data, response } = await fetchClient.POST("/api/auth/login", { body: values });
 
       if (!response.ok) {
         // Устанавливаем ошибку ТОЛЬКО если запрос реально упал
@@ -57,10 +58,9 @@ export default function Home() {
     <div className="flex min-h-screen items-center justify-center bg-gray-1100 px-4">
       <div className="w-full max-w-100">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-blue-600">
-            <Lock className="size-6 text-white" />
+          <div className="flex  items-center justify-center rounded-xl">
+            <Logo size="lg" />
           </div>
-          <h1 className="text-2xl font-semibold text-white">Pixel CRM</h1>
         </div>
 
         <div className="flex flex-col gap-4 rounded-xl border border-white/6 bg-gray-1000/60 p-6 shadow-xl backdrop-blur-sm">

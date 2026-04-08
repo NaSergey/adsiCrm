@@ -7,7 +7,7 @@ import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { fetchClient } from "@/shared/api";
+import { fetchClient } from "@/shared";
 import { brokersQueryKey } from "@/entities";
 import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
@@ -32,7 +32,7 @@ export function CreateBrokerModal({
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (body: { name: string; comment: string; brandManagerId?: number | null }) => {
-      const { data, error } = await fetchClient.POST("/brokers", { body });
+      const { data, error } = await fetchClient.POST("/api/brokers", { body });
       if (error) throw error;
       return data;
     },

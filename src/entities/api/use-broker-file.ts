@@ -5,7 +5,7 @@ export function useBrokerFile(brokerId: number, fileType: "add" | "update", enab
   return useQuery({
     queryKey: ["broker-file", brokerId, fileType],
     queryFn: async () => {
-      const { data, error } = await fetchClient.POST("/brokers/get-file", {
+      const { data, error } = await fetchClient.POST("/api/brokers/get-file", {
         body: { brokerId, fileType },
       });
       if (error) throw error;
@@ -18,7 +18,7 @@ export function useBrokerFile(brokerId: number, fileType: "add" | "update", enab
 export function useUpdateBrokerFile() {
   return useMutation({
     mutationFn: async (body: { brokerId: number; fileType: "add" | "update"; phpCode: string }) => {
-      const { error } = await fetchClient.POST("/brokers/update-file", { body });
+      const { error } = await fetchClient.POST("/api/brokers/update-file", { body });
       if (error) throw error;
     },
   });
@@ -27,7 +27,7 @@ export function useUpdateBrokerFile() {
 export function useUpdateAndRunBrokerFile() {
   return useMutation({
     mutationFn: async (body: { brokerId: number; fileType: "add" | "update"; phpCode: string }) => {
-      const { data, error } = await fetchClient.POST("/brokers/update-and-run-file", { body });
+      const { data, error } = await fetchClient.POST("/api/brokers/update-and-run-file", { body });
       if (error) throw error;
       return data;
     },

@@ -1,30 +1,14 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { getAccessToken, getTokenExpiry, setAccessToken, clearAccessToken } from "./auth-token";
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
+import { getAccessToken, getTokenExpiry, clearAccessToken } from "./auth-token";
+import { refreshAccessToken } from "@/shared/api/utils";
 
 /** How many seconds before expiry to proactively refresh. */
 const REFRESH_BEFORE_SECS = 60;
 
 /** Maximum timer delay — re-schedule after this interval to handle very long-lived tokens. */
 const MAX_DELAY_MS = 60 * 60 * 1000; // 1 hour
-
-async function doRefresh(): Promise<boolean> {
-  try {
-    const res = await fetch(`${API_URL}/auth/refresh`, {
-      method: "GET",
-      credentials: "include",
-    });
-    if (!res.ok) return false;
-    const { accessToken } = await res.json();
-    setAccessToken(accessToken);
-    return true;
-  } catch {
-    return false;
-  }
-}
 
 /**
  * Proactively refreshes the access token before it expires.
@@ -55,7 +39,7 @@ export function useTokenRefresh() {
       const rawDelayMs = refreshAtMs - nowMs;
 
       if (rawDelayMs <= 0) {
-        doRefresh().then((ok) => {
+        refreshAccessToken().then((ok) => {
           if (ok) {
             scheduleRefreshRef.current();
           } else {
@@ -69,7 +53,7 @@ export function useTokenRefresh() {
       const delayMs = Math.min(rawDelayMs, MAX_DELAY_MS);
 
       timerRef.current = setTimeout(async () => {
-        const ok = await doRefresh();
+        const ok = await refreshAccessToken();
         if (ok) {
           scheduleRefreshRef.current();
         } else {

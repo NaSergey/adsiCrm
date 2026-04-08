@@ -174,7 +174,8 @@
       "country": "Страна",
       "status": "Статус",
       "date_from": "Дата с",
-      "date_to": "Дата по"
+      "date_to": "Дата по",
+      "language": "Язык"
     }
   },
   "campaign": {
@@ -184,6 +185,7 @@
     "clearFilters": "Сбросить",
     "broker": "Брокер",
     "partner": "Партнёр",
+    "company_name": "Название компании",
     "cap": "Кап",
     "created": "Создано",
     "open": "Открыть",

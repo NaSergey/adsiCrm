@@ -61,8 +61,7 @@ export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserMod
     if (role === "MANAGER") {
       if (partnersDisplay === "all") permissions.push("full_partners_display");
       if (leadsDisplay === "full") permissions.push("full_leads_display");
-    }
-    if (role === "BRAND_MANAGER") {
+    } else if (role === "BRAND_MANAGER") {
       if (brokersDisplay === "all") permissions.push("full_brokers_display");
       if (leadsDisplay === "full") permissions.push("full_leads_display");
       if (accessCreateBroker === "true") permissions.push("access_to_create_broker");
@@ -72,7 +71,7 @@ export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserMod
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      const { data, error } = await fetchClient.POST("/users", {
+      const { data, error } = await fetchClient.POST("/api/users", {
         body: {
           name,
           email,

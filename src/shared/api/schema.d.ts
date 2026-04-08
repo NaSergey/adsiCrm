@@ -4,7 +4,7 @@
  */
 
 export interface paths {
-    "/": {
+    "/api": {
         parameters: {
             query?: never;
             header?: never;
@@ -20,7 +20,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/login": {
+    "/api/auth/login": {
         parameters: {
             query?: never;
             header?: never;
@@ -37,7 +37,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/refresh": {
+    "/api/auth/refresh": {
         parameters: {
             query?: never;
             header?: never;
@@ -54,7 +54,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/auth/logout": {
+    "/api/auth/logout": {
         parameters: {
             query?: never;
             header?: never;
@@ -71,7 +71,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users/roles": {
+    "/api/users/roles": {
         parameters: {
             query?: never;
             header?: never;
@@ -88,7 +88,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users/permissions": {
+    "/api/users/permissions": {
         parameters: {
             query?: never;
             header?: never;
@@ -105,7 +105,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users": {
+    "/api/users": {
         parameters: {
             query?: never;
             header?: never;
@@ -123,7 +123,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/users/{id}": {
+    "/api/users/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -142,7 +142,7 @@ export interface paths {
         patch: operations["UsersController_update"];
         trace?: never;
     };
-    "/users/by-role/{roleName}": {
+    "/api/users/by-role/{roleName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -159,7 +159,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/brokers/get-file": {
+    "/api/brokers/get-file": {
         parameters: {
             query?: never;
             header?: never;
@@ -176,7 +176,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/brokers/update-file": {
+    "/api/brokers/update-file": {
         parameters: {
             query?: never;
             header?: never;
@@ -193,7 +193,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/brokers/update-and-run-file": {
+    "/api/brokers/update-and-run-file": {
         parameters: {
             query?: never;
             header?: never;
@@ -210,7 +210,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/brokers": {
+    "/api/brokers": {
         parameters: {
             query?: never;
             header?: never;
@@ -229,7 +229,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/brokers/{id}": {
+    "/api/brokers/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -248,7 +248,7 @@ export interface paths {
         patch: operations["BrokersController_update"];
         trace?: never;
     };
-    "/logs": {
+    "/api/logs": {
         parameters: {
             query?: never;
             header?: never;
@@ -265,7 +265,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/logs/download/{category}/{fileName}": {
+    "/api/logs/download/{category}/{fileName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -281,7 +281,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads": {
+    "/api/leads": {
         parameters: {
             query?: never;
             header?: never;
@@ -300,7 +300,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/export-in-csv": {
+    "/api/leads/export-in-csv": {
         parameters: {
             query?: never;
             header?: never;
@@ -317,7 +317,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/downloadExportFile/{fileName}": {
+    "/api/leads/downloadExportFile/{fileName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -333,7 +333,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/viewAutologinImage/{leadId}": {
+    "/api/leads/viewAutologinImage/{leadId}": {
         parameters: {
             query?: never;
             header?: never;
@@ -349,7 +349,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/find-by-filters": {
+    "/api/leads/find-by-filters": {
         parameters: {
             query?: never;
             header?: never;
@@ -366,7 +366,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/get-statistics": {
+    "/api/leads/get-statistics": {
         parameters: {
             query?: never;
             header?: never;
@@ -383,7 +383,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/update-from-autologin": {
+    "/api/leads/update-from-autologin": {
         parameters: {
             query?: never;
             header?: never;
@@ -400,7 +400,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/leads/{id}": {
+    "/api/leads/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -419,7 +419,7 @@ export interface paths {
         patch: operations["LeadsController_update"];
         trace?: never;
     };
-    "/leads/confirm-ftd/{id}": {
+    "/api/leads/confirm-ftd/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -436,7 +436,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/campaigns": {
+    "/api/campaigns": {
         parameters: {
             query?: never;
             header?: never;
@@ -454,7 +454,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/campaigns/find-by-filters": {
+    "/api/campaigns/find-by-filters": {
         parameters: {
             query?: never;
             header?: never;
@@ -471,7 +471,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/campaigns/get-statistics/{id}": {
+    "/api/campaigns/get-statistics/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -488,7 +488,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/campaigns/{id}": {
+    "/api/campaigns/{id}": {
         parameters: {
             query?: never;
             header?: never;
@@ -507,7 +507,7 @@ export interface paths {
         patch: operations["CampaignsController_update"];
         trace?: never;
     };
-    "/status-mappings": {
+    "/api/status-mappings": {
         parameters: {
             query?: never;
             header?: never;
@@ -524,7 +524,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/status-mappings/statuses": {
+    "/api/status-mappings/statuses": {
         parameters: {
             query?: never;
             header?: never;
@@ -541,7 +541,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/status-mappings/{statusName}": {
+    "/api/status-mappings/{statusName}": {
         parameters: {
             query?: never;
             header?: never;
@@ -558,7 +558,7 @@ export interface paths {
         patch: operations["StatusMappingsController_update"];
         trace?: never;
     };
-    "/leads-import": {
+    "/api/leads-import": {
         parameters: {
             query?: never;
             header?: never;
@@ -576,7 +576,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/lists/countries": {
+    "/api/lists/countries": {
         parameters: {
             query?: never;
             header?: never;
@@ -593,7 +593,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/lists/languages": {
+    "/api/lists/languages": {
         parameters: {
             query?: never;
             header?: never;
@@ -610,7 +610,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/autologin": {
+    "/api/autologin": {
         parameters: {
             query?: never;
             header?: never;
@@ -627,7 +627,7 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
-    "/autologin/duration-sec": {
+    "/api/autologin/duration-sec": {
         parameters: {
             query?: never;
             header?: never;
@@ -645,7 +645,7 @@ export interface paths {
         patch: operations["AutologinController_updateAutologinDurationSec"];
         trace?: never;
     };
-    "/autologin/is-one-time": {
+    "/api/autologin/is-one-time": {
         parameters: {
             query?: never;
             header?: never;
@@ -1415,8 +1415,8 @@ export interface components {
             isScheduleEnabled: boolean;
             /**
              * @description Timezone
-             * @default Europe/Moscow
-             * @example Europe/Moscow
+             * @default UTC
+             * @example UTC
              */
             timezone: string;
             /**
@@ -1505,8 +1505,8 @@ export interface components {
             isScheduleEnabled: boolean;
             /**
              * @description Timezone
-             * @default Europe/Moscow
-             * @example Europe/Moscow
+             * @default UTC
+             * @example UTC
              */
             timezone: string;
             /**
@@ -1553,6 +1553,8 @@ export interface components {
             } | null;
         };
         FindByFiltersCampaignDto: {
+            /** @description Campaign name */
+            name?: string;
             /**
              * @description Partner ID
              * @example 1
@@ -1660,8 +1662,8 @@ export interface components {
                 isScheduleEnabled: boolean;
                 /**
                  * @description Timezone
-                 * @default Europe/Moscow
-                 * @example Europe/Moscow
+                 * @default UTC
+                 * @example UTC
                  */
                 timezone: string;
                 /**
@@ -1785,8 +1787,8 @@ export interface components {
             isScheduleEnabled: boolean;
             /**
              * @description Timezone
-             * @default Europe/Moscow
-             * @example Europe/Moscow
+             * @default UTC
+             * @example UTC
              */
             timezone: string;
             /**

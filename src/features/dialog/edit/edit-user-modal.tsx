@@ -34,7 +34,7 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
 
   const { mutate: update, isPending: isUpdating, error: updateError } = useMutation({
     mutationFn: (body: { name: string; comment: string; password?: string; permissions: [] }) =>
-      fetchClient.PATCH("/users/{id}", { params: { path: { id: user!.id } }, body }),
+      fetchClient.PATCH("/api/users/{id}", { params: { path: { id: user!.id } }, body }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: usersQueryKey });
       onOpenChange(false);

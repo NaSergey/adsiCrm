@@ -5,14 +5,13 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Settings, LogOut, Shield } from "lucide-react";
 import { clearAccessToken, getAccessToken, getTokenUser } from "@/shared/lib/auth-token";
+import { API_ENDPOINTS } from "@/shared/api/config";
 
 const menuItems = [
   { icon: User, label: "Profile", href: "/profile" },
   { icon: Shield, label: "Security", href: "/security" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api";
 
 export function UserMenu() {
   const router = useRouter();
@@ -25,7 +24,7 @@ export function UserMenu() {
   }, []);
 
   async function handleLogout() {
-    await fetch(`${API_URL}/auth/logout`, { method: "GET", credentials: "include" });
+    await fetch(API_ENDPOINTS.auth.logout, { method: "GET", credentials: "include" });
     clearAccessToken();
     router.push("/");
   }

@@ -174,7 +174,8 @@
       "country": "Country",
       "status": "Status",
       "date_from": "Date from",
-      "date_to": "Date to"
+      "date_to": "Date to",
+      "language": "Language"
     }
   },
   "campaign": {
@@ -184,6 +185,7 @@
     "clearFilters": "Clear",
     "broker": "Broker",
     "partner": "Partner",
+    "company_name": "Company name",
     "cap": "Cap",
     "created": "Created",
     "open": "Open",

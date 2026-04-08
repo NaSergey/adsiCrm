@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-// Импортируй свой основной конфиг (проверь правильность пути)
 import { PERMISSIONS, Role } from "@/shared/config/permissions"; 
 
 const PUBLIC_PATH = "/";
@@ -10,13 +9,16 @@ function parseRole(token: string): Role | null {
     const payload = token.split(".")[1];
     if (!payload) return null;
     const decoded = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
+    if (typeof window === "undefined") {
+      console.log("JWT Payload:", JSON.stringify(decoded, null, 2));
+    }
     return (decoded.role as Role) ?? null;
   } catch {
     return null;
   }
 }
 
-export function proxy(request: NextRequest) {
+export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
   const token = request.cookies.get(TOKEN_KEY)?.value;
 

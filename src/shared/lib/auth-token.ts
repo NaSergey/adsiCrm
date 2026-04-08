@@ -42,3 +42,14 @@ export function clearAccessToken(): void {
   localStorage.removeItem(ACCESS_TOKEN_KEY);
   document.cookie = `${ACCESS_TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 }
+
+/** Returns all user data from JWT token */
+export function getAllTokenData(token: string): Record<string, unknown> | null {
+  try {
+    const payloadB64 = token.split(".")[1];
+    if (!payloadB64) return null;
+    return JSON.parse(atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/")));
+  } catch {
+    return null;
+  }
+}

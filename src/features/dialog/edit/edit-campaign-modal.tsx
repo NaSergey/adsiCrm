@@ -111,7 +111,7 @@ export function EditCampaignModal({
           )
         : {};
 
-      const res = await fetchClient.PATCH("/campaigns/{id}", {
+      const res = await fetchClient.PATCH("/api/campaigns/{id}", {
         params: { path: { id: Number(campaign.id) } },
         body: {
           name: values.name,

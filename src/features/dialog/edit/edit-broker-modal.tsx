@@ -53,7 +53,7 @@ export function EditBrokerModal({
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: () =>
-      fetchClient.PATCH("/brokers/{id}", {
+      fetchClient.PATCH("/api/brokers/{id}", {
         params: { path: { id: Number(broker.id) } },
         body: {
           name,
