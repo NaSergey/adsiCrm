@@ -2,7 +2,7 @@
 
 import { Input } from "@/shared/ui/input";
 import { DateInput } from "@/shared/ui/date-input";
-import { type FilterConfig } from "../types";
+import { type FilterConfig } from "../../../../shared/types/lead";
 
 export type { FilterConfig };
 

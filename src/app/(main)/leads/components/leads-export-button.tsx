@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { Upload } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { fetchClient } from "@/shared/api";
-import { type LeadsFiltersState, filtersToApiBody } from "../types";
+import { type LeadsFiltersState, filtersToApiBody } from "../../../../shared/types/lead";
 
 
 interface LeadsExportButtonProps {

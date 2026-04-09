@@ -1,7 +1,7 @@
 import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/css";
 import { Textarea } from "@/shared/ui/textarea";
-import { type Lead } from "@/app/(main)/leads/types";
+import { type Lead } from "@/shared/types/lead";
 
 interface ErrorStatusTabProps {
   lead: Lead;

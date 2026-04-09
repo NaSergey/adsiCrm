@@ -1,6 +1,6 @@
 "use client";
 
-import { type FilterConfig, type LeadsFiltersState } from "../types";
+import { type FilterConfig, type LeadsFiltersState } from "../../../../shared/types/lead";
 import { SelectBroker, SelectPartner, SelectStats, SelectFtd } from "@/entities";
 import { SelectCountry } from "@/entities/ui/select-country";
 import { SelectCampaign } from "@/entities/ui/select-campaign";

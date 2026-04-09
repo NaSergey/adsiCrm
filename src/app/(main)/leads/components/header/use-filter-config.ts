@@ -4,7 +4,7 @@ import * as React from "react";
 import { useTranslations } from "next-intl";
 import { useLocalStorage } from "@/shared/lib/use-local-storage";
 import { usePermissions } from "@/shared/lib/use-permissions";
-import type { FilterConfig } from "../../types";
+import type { FilterConfig } from "../../../../../shared/types/lead";
 import { INITIAL_FILTERS, ALL_IDS, DEFAULT_VISIBLE, LIMITED_FILTERS, LS_KEY_VISIBLE, LS_KEY_ORDER } from "./constants";
 
 export function useFilterConfig() {

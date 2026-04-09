@@ -2,7 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { cn } from "@/shared/lib/css";
-import { type Lead } from "../../types";
+import { type Lead } from "../../../../../shared/types/lead";
 
 export type { Lead };
 

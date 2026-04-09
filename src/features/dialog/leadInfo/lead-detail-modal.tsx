@@ -7,7 +7,7 @@ import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { Button } from "@/shared/ui/button";
 import { fetchClient } from "@/shared/api";
-import { type Lead } from "@/app/(main)/leads/types";
+import { type Lead } from "@/shared/types/lead";
 import { LeadInfoTab, type LeadInfoTabRef } from "./components/lead-info-tab";
 import { ErrorStatusTab } from "./components/error-status-tab";
 import { AutologinScreenshotButton } from "./components/autologin-screenshot-button";

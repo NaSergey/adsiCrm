@@ -25,13 +25,18 @@ export function setAccessToken(token: string): void {
   document.cookie = `${ACCESS_TOKEN_KEY}=${token}; path=/; SameSite=Strict; max-age=${maxAge}`;
 }
 
-export function getTokenUser(token: string): { name: string; email: string; role: string } | null {
+export function getTokenUser(token: string): { name: string; email: string; role: string; permissions: string[] } | null {
   try {
     const payloadB64 = token.split(".")[1];
     if (!payloadB64) return null;
     const payload = JSON.parse(atob(payloadB64.replace(/-/g, "+").replace(/_/g, "/")));
     if (!payload.name || !payload.email) return null;
-    return { name: payload.name, email: payload.email, role: payload.role ?? "" };
+    return {
+      name: payload.name,
+      email: payload.email,
+      role: payload.role ?? "",
+      permissions: Array.isArray(payload.permissions) ? payload.permissions : [],
+    };
   } catch {
     return null;
   }

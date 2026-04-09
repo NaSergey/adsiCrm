@@ -5,7 +5,7 @@ import { Select } from "@/shared/ui/select";
 import { Textarea } from "@/shared/ui/textarea";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { SelectFtd } from "@/entities";
-import { type Lead } from "@/app/(main)/leads/types";
+import { type Lead } from "@/shared/types/lead";
 import { stats } from "@/shared/data/stats";
 
 interface LeadInfoTabProps {

@@ -12,7 +12,7 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/css";
 import { type Lead } from "./leads-columns";
 import { LeadDetailModal } from "@/features/dialog/leadInfo/lead-detail-modal";
-import { type LeadsFiltersState, filtersToApiBody } from "../../types";
+import { type LeadsFiltersState, filtersToApiBody } from "../../../../../shared/types/lead";
 import { useLeadsSelection } from "../../selection-context";
 
 export type { Lead };

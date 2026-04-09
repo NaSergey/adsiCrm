@@ -7,7 +7,7 @@ import { Card } from "./card";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Button } from "@/shared/ui/button";
-import { type LeadsFiltersState, filtersToApiBody } from "../types";
+import { type LeadsFiltersState, filtersToApiBody } from "../../../../shared/types/lead";
 import { useLeadsSelection } from "../selection-context";
 import { Users, CheckCircle, XCircle, Banknote, PhoneMissed, TrendingUp, AlertCircle, MousePointerClick, X, Trash2 } from "lucide-react";
 

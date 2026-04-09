@@ -1,4 +1,4 @@
-import type { FilterConfig } from "../../types";
+import type { FilterConfig } from "../../../../../shared/types/lead";
 
 export const INITIAL_FILTERS: FilterConfig[] = [
   { id: "lead_id",        label: "Lead_id",        type: "input" },

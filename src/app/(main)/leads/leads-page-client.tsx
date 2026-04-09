@@ -3,7 +3,7 @@
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
 import { LeadsHeader } from "./components/header/leads-header";
-import { EMPTY_LEADS_FILTERS, type LeadsFiltersState } from "./types";
+import { EMPTY_LEADS_FILTERS, type LeadsFiltersState } from "../../../shared/types/lead";
 import { LeadsOverview } from "./components/leads-overview";
 import { LeadsTable } from "./components/table/leads-table";
 import { getLeadsColumns } from "./components/table/leads-columns";

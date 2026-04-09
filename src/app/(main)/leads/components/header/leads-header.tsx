@@ -5,7 +5,7 @@ import { SlidersHorizontal, X, GripVertical } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { cn } from "@/shared/lib/css";
-import { type LeadsFiltersState, EMPTY_LEADS_FILTERS } from "../../types";
+import { type LeadsFiltersState, EMPTY_LEADS_FILTERS } from "../../../../../shared/types/lead";
 import { LeadsFilterItem } from "../leads-filter-item";
 import { LeadsExportButton } from "../leads-export-button";
 import { LeadsImportButton } from "../leads-import-button";
