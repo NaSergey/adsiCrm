@@ -30,8 +30,14 @@ export function LeadsTable({
 }: LeadsTableProps) {
   const t = useTranslations("leads");
   const [page, setPage] = useState(1);
+  const [prevFilters, setPrevFilters] = useState(filters);
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const { isSelecting, selectedIds, toggleId } = useLeadsSelection();
+
+  if (prevFilters !== filters) {
+    setPrevFilters(filters);
+    setPage(1);
+  }
 
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["leads", page, filters],
@@ -58,12 +64,22 @@ export function LeadsTable({
   }
 
   function getRowClassName(row: Lead) {
-    if (!isSelecting) return "hover:bg-gray-1000/30 cursor-pointer group";
+    const isDuplicate = row.dublicate;
+
+    if (!isSelecting) {
+      return cn(
+        "cursor-pointer group",
+        isDuplicate
+          ? "bg-green-1000/10 hover:bg-green-1000/1"
+          : "hover:bg-gray-1000/30"
+      );
+    }
+
     return cn(
       "cursor-pointer select-none group",
       selectedIds.has(row.id)
         ? "!bg-red-900"
-        : "hover:!bg-red-900/70",
+        : cn("hover:!bg-red-900/70", isDuplicate && "bg-amber-500/10"),
     );
   }
 

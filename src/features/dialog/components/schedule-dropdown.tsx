@@ -12,15 +12,15 @@ const TIME_OPTIONS: SelectOption[] = Array.from({ length: 48 }, (_, i) => {
 });
 
 const TIMEZONE_OPTIONS: SelectOption[] = [
-  { value: "UTC",      label: "UTC" },
-  { value: "UTC+1",    label: "UTC+1 (CET)" },
-  { value: "UTC+2",    label: "UTC+2 (EET)" },
-  { value: "UTC+3",    label: "UTC+3 (MSK)" },
-  { value: "UTC+5:30", label: "UTC+5:30 (IST)" },
-  { value: "UTC+8",    label: "UTC+8 (CST)" },
-  { value: "UTC-5",    label: "UTC-5 (EST)" },
-  { value: "UTC-6",    label: "UTC-6 (CST)" },
-  { value: "UTC-8",    label: "UTC-8 (PST)" },
+  { value: "UTC",                label: "UTC" },
+  { value: "Europe/Berlin",      label: "UTC+1 (CET)" },
+  { value: "Europe/Kyiv",        label: "UTC+2 (EET)" },
+  { value: "Europe/Moscow",      label: "UTC+3 (MSK)" },
+  { value: "Asia/Kolkata",       label: "UTC+5:30 (IST)" },
+  { value: "Asia/Shanghai",      label: "UTC+8 (CST)" },
+  { value: "America/New_York",   label: "UTC-5 (EST)" },
+  { value: "America/Chicago",    label: "UTC-6 (CST)" },
+  { value: "America/Los_Angeles",label: "UTC-8 (PST)" },
 ];
 
 const DAYS = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"] as const;
@@ -33,16 +33,27 @@ export interface ScheduleData {
 }
 
 interface ScheduleDropdownProps {
+  initialData?: Partial<ScheduleData>;
   onScheduleChange?: (data: ScheduleData) => void;
 }
 
-export function ScheduleDropdown({ onScheduleChange }: ScheduleDropdownProps) {
+export function ScheduleDropdown({ initialData, onScheduleChange }: ScheduleDropdownProps) {
   const [open, setOpen] = useState(false);
-  const [activeDays, setActiveDays] = useState<string[]>([]);
-  const [timeFrom, setTimeFrom] = useState("");
-  const [timeTo, setTimeTo] = useState("");
-  const [timezone, setTimezone] = useState("");
+  const [activeDays, setActiveDays] = useState<string[]>(initialData?.activeDays ?? []);
+  const [timeFrom, setTimeFrom] = useState(initialData?.timeFrom ?? "");
+  const [timeTo, setTimeTo] = useState(initialData?.timeTo ?? "");
+  const [timezone, setTimezone] = useState(initialData?.timezone ?? "");
   const ref = useRef<HTMLDivElement>(null);
+
+  const activeDaysKey = initialData?.activeDays?.join(",") ?? "";
+
+  useEffect(() => {
+    setActiveDays(initialData?.activeDays ?? []);
+    setTimeFrom(initialData?.timeFrom ?? "");
+    setTimeTo(initialData?.timeTo ?? "");
+    setTimezone(initialData?.timezone ?? "");
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeDaysKey, initialData?.timeFrom, initialData?.timeTo, initialData?.timezone]);
 
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
@@ -76,12 +87,13 @@ export function ScheduleDropdown({ onScheduleChange }: ScheduleDropdownProps) {
         type="button"
         onClick={() => setOpen((v) => !v)}
         className={cn(
-          "flex items-center justify-center size-8 rounded-md transition-colors",
+          "relative flex items-center cursor-pointer justify-center size-8 rounded-md transition-colors",
           open || isActive
             ? "bg-blue-600 text-white"
             : "bg-gray-200 dark:bg-gray-1000 text-gray-500 hover:text-gray-900 dark:hover:text-white"
         )}
         aria-label="Schedule"
+        title={isActive ? `Schedule enabled (${activeDays.length} days)` : "Schedule disabled"}
       >
         <Clock className="size-4" />
       </button>

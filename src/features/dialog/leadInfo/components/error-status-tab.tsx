@@ -1,5 +1,6 @@
 import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/css";
+import { CheckCircle } from "lucide-react";
 import { Textarea } from "@/shared/ui/textarea";
 import { type Lead } from "@/shared/types/lead";
 
@@ -24,7 +25,6 @@ function CheckRow({ label, message, type }: { label: string; message: string; ty
   );
 }
 
-
 export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
   const t = useTranslations("leadDetail");
   const fraudInfo = lead.isFraudInfo ?? {};
@@ -37,61 +37,48 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
     ? JSON.stringify(lead.partnerResponse, null, 2)
     : "";
 
+  // Build only the fraud checks that actually have data
+  const fraudChecks: { label: string; message: string }[] = [
+    ...(fraudInfo.ip
+      ? [{ label: t("fraudIpLabel"), message: fraudInfo.ip }]
+      : []),
+    ...(fraudInfo.autologinIp || fraudInfo.autologinUseragent
+      ? [{ label: t("fraudAutologinLabel"), message: (fraudInfo.autologinIp ?? fraudInfo.autologinUseragent)! }]
+      : []),
+    ...(fraudInfo.useragent
+      ? [{ label: t("fraudUseragentLabel"), message: fraudInfo.useragent }]
+      : []),
+    ...(fraudInfo.autologinFingerprintConfidence || fraudInfo.autologinFingerprintCountry || fraudInfo.autologinFingerprintLanguage || fraudInfo.autologinFingerprintScreenFrame
+      ? [{ label: t("fraudFingerprintLabel"), message: (fraudInfo.autologinFingerprintConfidence ?? fraudInfo.autologinFingerprintCountry ?? fraudInfo.autologinFingerprintLanguage ?? fraudInfo.autologinFingerprintScreenFrame)! }]
+      : []),
+  ];
+
+  const hasErrors = lead.dublicate || !!partnerError;
+
   return (
     <div className="grid grid-cols-3 flex-1 gap-0">
       {/* Col 1 — Fraud Checks */}
       <div className="flex flex-col gap-2 pr-6 border-r border-gray-1000">
         <span className="text-base text-foreground">{t("fraudAndErrors")}</span>
 
-        <CheckRow
-          label={t("fraudIpLabel")}
-          message={fraudInfo.ip ?? t("fraudIpSuccess")}
-          type={fraudInfo.ip ? "error" : "success"}
-        />
+        {!lead.isFraud ? (
+          <div className="flex items-center gap-2 px-3 py-2 rounded-md bg-green-500/10 text-green-400 text-sm">
+            <CheckCircle className="size-4 shrink-0" />
+            {t("reliableLead")}
+          </div>
+        ) : (
+          fraudChecks.map((check) => (
+            <CheckRow key={check.label} label={check.label} message={check.message} type="error" />
+          ))
+        )}
 
-        <CheckRow
-          label={t("fraudAutologinLabel")}
-          message={
-            fraudInfo.autologinIp ?? fraudInfo.autologinUseragent
-              ?? t("fraudAutologinSuccess")
-          }
-          type={fraudInfo.autologinIp || fraudInfo.autologinUseragent ? "error" : "success"}
-        />
-
-        <CheckRow
-          label={t("fraudUseragentLabel")}
-          message={fraudInfo.useragent ?? t("fraudUseragentSuccess")}
-          type={fraudInfo.useragent ? "error" : "success"}
-        />
-
-        <CheckRow
-          label={t("fraudFingerprintLabel")}
-          message={
-            fraudInfo.autologinFingerprintConfidence
-            ?? fraudInfo.autologinFingerprintCountry
-            ?? fraudInfo.autologinFingerprintLanguage
-            ?? fraudInfo.autologinFingerprintScreenFrame
-            ?? t("fraudFingerprintSuccess")
-          }
-          type={
-            fraudInfo.autologinFingerprintConfidence
-            || fraudInfo.autologinFingerprintCountry
-            || fraudInfo.autologinFingerprintLanguage
-            || fraudInfo.autologinFingerprintScreenFrame
-              ? "error" : "success"
-          }
-        />
-
-        <CheckRow
-          label={t("errorsLabel")}
-          message={
-            lead.dublicate
-              ? t("duplicateDetected")
-              : partnerError
-              ?? t("success")
-          }
-          type={lead.dublicate || partnerError ? "error" : "success"}
-        />
+        {hasErrors && (
+          <CheckRow
+            label={t("errorsLabel")}
+            message={lead.dublicate ? t("duplicateDetected") : partnerError!}
+            type="error"
+          />
+        )}
       </div>
 
       {/* Col 2 — Lead Rout + Status History */}

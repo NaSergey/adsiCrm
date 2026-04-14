@@ -1,7 +1,8 @@
 import { getAccessToken, getTokenUser } from "@/shared/lib/auth-token";
 import { PERMISSIONS, JWT_PERMISSION_GATES, GATED_FEATURES, type Feature, type Role } from "@/shared/config/permissions";
 
-function resolveFeatures(roleFeatures: Feature[], jwtPermissions: string[]): Feature[] {
+function resolveFeatures(role: Role | "", roleFeatures: Feature[], jwtPermissions: string[]): Feature[] {
+  if (role === "ADMIN") return roleFeatures;
   const base = roleFeatures.filter((f) => !GATED_FEATURES.has(f));
   const unlocked = Object.entries(JWT_PERMISSION_GATES)
     .filter(([perm]) => jwtPermissions.includes(perm))
@@ -14,7 +15,7 @@ export function usePermissions() {
   const user = token ? getTokenUser(token) : null;
   const role = (user?.role ?? "") as Role;
   const rolePerms = PERMISSIONS[role] ?? { pages: [], features: [] };
-  const features = resolveFeatures(rolePerms.features, user?.permissions ?? []);
+  const features = resolveFeatures(role, rolePerms.features, user?.permissions ?? []);
 
   return {
     role,

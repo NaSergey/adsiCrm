@@ -17,56 +17,125 @@ const CodeEditor = dynamic(
 );
 
 const ADD_LEAD_EXAMPLE = `<?php
-// example code (add lead to broker)
-// $lead_data - an array with data received from a partner
+// Example code (add lead to broker)
+
+// Get lead data from the system
+$input = file_get_contents("php://stdin");
+$payload = ($input === false || trim($input) === '') ? [] : json_decode($input, true);
 
 $headers = [
     'Content-Type: application/json',
 ];
 
-$j_data = array(
-    'first_name' => $lead_data->first_name,
-    'last_name'  => $lead_data->last_name,
-    'email'      => $lead_data->email,
-    'phone'      => $lead_data->phone,
-    'country'    => strtolower($lead_data->country),
-    'lang'       => strtolower($lead_data->lang),
-    'user_ip'    => $lead_data->user_ip,
-    'funnel'     => $lead_data->funnel,
-    'pass'       => $lead_data->password,
-    'key'        => 'secret_key_from_broker',
+$data = array(
+    'first_name' => $payload['first_name'],
+    'last_name' => $payload['last_name'],
+    'email' => $payload['email'],
+    'phone' => $payload['phone'],
+    'country' => strtolower($payload['country']),
+    'language' => strtolower($payload['lang']),
+    'ip' => $payload['ip'],
+    'funnel' => $payload['funnel'],
+    'password' => $payload['password'],
 );
 
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, 'https://api.my_broker.com/add_lead/');
+curl_setopt($ch, CURLOPT_URL, 'https://api.broker.com/add_lead/');
+curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 curl_setopt($ch, CURLOPT_POST, true);
-curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($j_data));
+curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
 $result = json_decode(curl_exec($ch), true);
 
+// To correctly pass the response data back to the system,
+// you must return a JSON with the parameters:
+// lead_id (the lead ID on the broker side) and broker_response (full broker response).
+// Also return autologin_url if it is present.
+
 if (isset($result['id'])) {
-    return array('success' => true, 'lead_id' => $result['id'], 'broker_answer' => $result, 'autologin_url' => $result['autologin_url']);
+    echo json_encode([
+        'lead_id' => $result['id'],
+        'broker_response' => $result,
+        'autologin_url' => $result['autologin_url']
+    ]);
 } else {
-    return array('success' => false, 'info' => 'error adding lead', 'lead_data' => $j_data, 'broker_answer' => $result);
+    // It is required to return a response even in case of failure
+    // in order to save it to the log
+    echo json_encode([
+        'broker_response' => $result
+    ]);
 }`;
 
 const UPDATE_LEAD_EXAMPLE = `<?php
-// example code for update leads
+// Example code for update leads
 
-$answer = [];
-
-$leads = json_decode(file_get_contents('https://api.mybroker/get_leads'), true);
-
-for ($i = 0; $i < count($leads); $i++) {
-    $answer[] = [
-        'lead_id'  => $leads[$i]['id'],
-        'status'   => $leads[$i]['broker_status'],
-        'ftd'      => $leads[$i]['ftd'],
-        'ftd_date' => $leads[$i]['ftd_date'],
+// To successfully update leads, you need to return an array of leads with the parameters lead_id (lead ID from the broker), status (lead status), ftd (ftd flag)
+// [
+//     {
+//         lead_id:22,
+//         status:'deposit',
+//         ftd:true,
+//     },
+//     {
+//         lead_id:23,
+//         status:'new',
+//         ftd:false,
+//     },
+//     {
+//         lead_id:24,
+//         status:'rejected',
+//         ftd:false,
+//     },
+// ]
+function get_leads($page){
+    $headers = [
+        'Content-Type: application/json',
     ];
+
+    $ch = curl_init();
+    curl_setopt_array($ch, [
+        CURLOPT_URL => 'https://api.broker.com/get_leads?page='.$page,
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT => 30,
+        CURLOPT_HTTPHEADER => $headers,
+    ]);
+
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        curl_close($ch);
+        return [];
+    }
+
+    curl_close($ch);
+
+    $res = json_decode($response, true);
+    return $res['data'] ?? [];
 }
-return $answer;`;
+
+$page = 1;
+$response = [];
+
+while (true) {
+    $leads = get_leads($page);
+
+    if (empty($leads)) {
+        break;
+    }
+
+    foreach ($leads as $lead) {
+        $response[] = [
+            'lead_id' => $lead['id'] ?? null,
+            'status'  => $lead['status'] ?? null,
+            'ftd'     => $lead['ftd'] ?? false,
+        ];
+    }
+
+    $page++;
+}
+
+echo json_encode($response);`;
 
 interface EditIntegCodeModalProps {
   open: boolean;

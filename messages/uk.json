@@ -115,6 +115,7 @@
   "leads": {
     "overview": "Огляд",
     "clearAll": "Скинути все",
+    "search": "Знайти",
     "export": "Експорт",
     "exporting": "Експортуємо...",
     "import": "Імпорт",
@@ -247,6 +248,7 @@
     "note": "Нотатка",
     "description": "Опис",
     "fraudAndErrors": "Фрод і помилки",
+    "reliableLead": "Надійний лід — фрод не виявлено",
     "leadRout": "Маршрут ліда",
     "statusHistory": "Історія статусів",
     "brokerPartnerAnswer": "Відповідь брокера/партнера",

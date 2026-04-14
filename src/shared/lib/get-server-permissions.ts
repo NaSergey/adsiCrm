@@ -10,7 +10,8 @@ export interface ServerPermissions {
   features: Feature[];
 }
 
-function resolveFeatures(roleFeatures: Feature[], jwtPermissions: string[]): Feature[] {
+function resolveFeatures(role: Role | "", roleFeatures: Feature[], jwtPermissions: string[]): Feature[] {
+  if (role === "ADMIN") return roleFeatures;
   const base = roleFeatures.filter((f) => !GATED_FEATURES.has(f));
   const unlocked = Object.entries(JWT_PERMISSION_GATES)
     .filter(([perm]) => jwtPermissions.includes(perm))
@@ -24,7 +25,7 @@ export async function getServerPermissions(): Promise<ServerPermissions> {
   const user = token ? getTokenUser(token) : null;
   const role = (user?.role ?? "") as Role | "";
   const rolePerms = role ? PERMISSIONS[role] : null;
-  const features = resolveFeatures(rolePerms?.features ?? [], user?.permissions ?? []);
+  const features = resolveFeatures(role, rolePerms?.features ?? [], user?.permissions ?? []);
 
   return {
     role,

@@ -115,6 +115,7 @@
   "leads": {
     "overview": "Overview",
     "clearAll": "Clear All",
+    "search": "Search",
     "export": "Export",
     "exporting": "Exporting...",
     "import": "Import",
@@ -247,6 +248,7 @@
     "note": "Note",
     "description": "Description",
     "fraudAndErrors": "Fraud & errors",
+    "reliableLead": "Reliable lead — no fraud detected",
     "leadRout": "Lead rout",
     "statusHistory": "Status history",
     "brokerPartnerAnswer": "Broker/Partner answer",

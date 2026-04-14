@@ -19,6 +19,7 @@ export function LeadsPageClient({ canDeleteLeads, canImport, canExport }: LeadsP
   const t = useTranslations("leads");
   const columns = useMemo(() => getLeadsColumns(t as (key: string) => string), [t]);
   const [filters, setFilters] = useState<LeadsFiltersState>(EMPTY_LEADS_FILTERS);
+  console.log("LeadsPageClient rendered with filters:", filters);
 
   return (
     <LeadsSelectionProvider>

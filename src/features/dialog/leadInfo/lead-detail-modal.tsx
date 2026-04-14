@@ -11,6 +11,7 @@ import { type Lead } from "@/shared/types/lead";
 import { LeadInfoTab, type LeadInfoTabRef } from "./components/lead-info-tab";
 import { ErrorStatusTab } from "./components/error-status-tab";
 import { AutologinScreenshotButton } from "./components/autologin-screenshot-button";
+import { FingerprintButton } from "./components/fingerprint-button";
 import { useLeadById } from "@/entities/api/use-lead";
 import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
 import { usePermissions } from "@/shared/lib/use-permissions";
@@ -58,7 +59,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
       onOpenChange(false);
     },
   });
-
+  console.log("LeadDetailModal rendered with lead:", lead, "fullLead:", fullLead, "activeTab:", activeTab, "canDeleteLead:", canDeleteLead);
   const { remove: deleteLead, isPending: isDeleting } = useDeleteLead({ onSuccess: () => onOpenChange(false) });
 
   if (!lead) return null;
@@ -84,6 +85,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
               {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
             </span>
             <AutologinScreenshotButton leadId={lead.id} />
+            <FingerprintButton fingerprint={fullLead?.fingerprint} />
           </div>
         </div>
 

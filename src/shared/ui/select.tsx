@@ -81,7 +81,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
           </span>
 
           {isOpen && (
-            <div className="absolute top-full mt-1 w-full z-50 rounded-md bg-gray-100 dark:bg-gray-1100 shadow-lg overflow-hidden">
+            <div className="absolute top-full mt-1 w-full z-50 rounded-md bg-gray-100 dark:bg-gray-1100 shadow-lg overflow-hidden max-h-48 overflow-y-auto">
 
               {options.map((opt) => (
                 <button

@@ -16,7 +16,6 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
   async function handleClick() {
     setOpen(true);
     setLoading(true);
@@ -38,6 +37,7 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
       setLoading(false);
     }
   }
+  console.log("AutologinScreenshotButton rendered with leadId:", leadId,error );
 
   return (
     <>

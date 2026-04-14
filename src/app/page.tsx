@@ -29,18 +29,16 @@ export default function Home() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    // УБРАЛИ setServerError(""); <-- Это ПЕРВАЯ причина мерцания
     
     try {
       const { data, response } = await fetchClient.POST("/api/auth/login", { body: values });
 
       if (!response.ok) {
-        // Устанавливаем ошибку ТОЛЬКО если запрос реально упал
         const message = response.status === 401 
           ? "Incorrect email or password." 
           : "Login failed. Please try again.";
         
-        console.log("Setting error:", message); // Проверь консоль!
+        console.log("Setting error:", message);
         setServerError(message);
         return;
       }

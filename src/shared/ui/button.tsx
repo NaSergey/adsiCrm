@@ -8,7 +8,7 @@ const buttonVariants = {
     default:
       "bg-green-1000 text-white hover:bg-green-1000/90 focus-visible:ring-2 focus-visible:ring-green-1000 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-1100",
     secondary:
-      "bg-gray-1000 text-gray-900 dark:text-white hover:bg-gray-1000/90 focus-visible:ring-2 focus-visible:ring-gray-1000 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-1100",
+      "bg-gray-1000 text-gray-900 dark:text-white hover:bg-gray-1000/60 focus-visible:ring-2 focus-visible:ring-gray-1000 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-1100",
     outline:
       "border border-gray-1000 bg-transparent text-gray-900 dark:text-white hover:bg-gray-1000/20 focus-visible:ring-2 focus-visible:ring-gray-1000 focus-visible:ring-offset-2 focus-visible:ring-offset-gray-1100",
     ghost:

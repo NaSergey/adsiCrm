@@ -24,7 +24,7 @@ interface Header { id: number; name: string; value: string }
 export default function SenderLeadPage() {
   const t = useTranslations("senderLead");
   const [method, setMethod]   = useState("POST");
-  const [url, setUrl]         = useState(getApiDomain() + "/leads");
+  const [url, setUrl]         = useState(getApiDomain() + "/api/leads");
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer]   = useState("");
   const [bodyType, setBodyType] = useState<"list" | "code">("list");

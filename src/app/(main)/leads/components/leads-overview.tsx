@@ -10,6 +10,7 @@ import { Button } from "@/shared/ui/button";
 import { type LeadsFiltersState, filtersToApiBody } from "../../../../shared/types/lead";
 import { useLeadsSelection } from "../selection-context";
 import { Users, CheckCircle, XCircle, Banknote, PhoneMissed, TrendingUp, AlertCircle, MousePointerClick, X, Trash2 } from "lucide-react";
+import { LeadsFiltersSettings } from "./header/leads-filters-settings";
 
 interface LeadsOverviewProps {
   filters: LeadsFiltersState;
@@ -65,6 +66,7 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
               </Button>
             </>
           )}
+          <LeadsFiltersSettings />
         </div>
       </div>
 

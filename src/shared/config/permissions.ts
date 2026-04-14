@@ -38,7 +38,7 @@ interface RolePermissions {
  * If a role has these features, they are removed unless the user has the corresponding JWT permission.
  */
 export const JWT_PERMISSION_GATES: Record<string, Feature[]> = {
-  full_leads_display: ["full_leads_filters", "import_leads", "export_leads"],
+  full_leads_display: ["full_leads_filters", "export_leads"],
   full_partners_display: ["view_all_partners"],
   full_brokers_display: ["view_all_brokers"],
   access_to_create_broker: ["create_broker"],
@@ -65,7 +65,7 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
     pages: ["/campaign", "/leads", "/affiliates", "/wiki"],
     features: [
       "view_all_leads", "create_lead", "edit_lead",
-      "full_leads_filters", "import_leads", "export_leads",
+      "full_leads_filters", "export_leads",
       "view_all_partners", "view_own_partners",
       "view_affiliates", "view_wiki",
     ],

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { EditBrokerModal, EditPartnerModal, EditCampaignModal, type BrokerData, type PartnerData, type CampaignData } from "@/features/dialog";
+import { EditBrokerModal, EditPartnerModal, CampaignModal, type BrokerData, type PartnerData, type CampaignData } from "@/features/dialog";
 import { CampaignCard } from "./campaign-card";
 import { usePinnedCampaigns } from "../hooks/use-pinned-campaigns";
 import type { Campaign } from "../types";
@@ -81,13 +81,14 @@ export function CampaignList({
       )}
 
       {campaignModal && (
-        <EditCampaignModal
+        <CampaignModal
           key={campaignModal.id}
           open
           onOpenChange={(open) => { if (!open) setCampaignModal(null); }}
           campaign={campaignModal}
           onSave={() => setCampaignModal(null)}
           onDelete={() => setCampaignModal(null)}
+          onCreateSuccess={() => setCampaignModal(null)}
         />
       )}
     </section>
