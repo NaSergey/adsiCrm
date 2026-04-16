@@ -40,7 +40,6 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
   const { data: fullLead } = useLeadById(lead?.id ?? null);
 
   useEffect(() => {
-    if (fullLead) console.log("[Lead]", fullLead);
   }, [fullLead]);
 
   const { mutate: save, isPending: isSaving } = useMutation({
@@ -59,7 +58,6 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
       onOpenChange(false);
     },
   });
-  console.log("LeadDetailModal rendered with lead:", lead, "fullLead:", fullLead, "activeTab:", activeTab, "canDeleteLead:", canDeleteLead);
   const { remove: deleteLead, isPending: isDeleting } = useDeleteLead({ onSuccess: () => onOpenChange(false) });
 
   if (!lead) return null;
@@ -68,35 +66,50 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-7xl min-h-[70vh] p-0 gap-0 overflow-hidden flex flex-col">
+      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-7xl h-[95svh] sm:h-auto sm:min-h-[70vh] p-0 gap-0 overflow-hidden flex flex-col">
         <DialogTitle className="sr-only">Lead {lead.id}</DialogTitle>
 
         {/* Header */}
-        <div className="flex items-center justify-between px-6 py-4 border-b border-gray-1000">
-          <div className="flex items-center gap-3">
-            <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} className="w-fit" />
-            <span className="text-black text-xs font-bold bg-blue-200 rounded px-1.5 py-0.5">
+        <div className="flex flex-col md:gap-2 gap-4 px-4 sm:px-6 py-3 border-b border-gray-1000">
+          {/* Строка 1: TabSwitcher + [на десктопе: ID email] + кнопки */}
+          <div className="flex items-center justify-between gap-2 min-w-0">
+            <div className="flex items-center gap-3 min-w-0">
+              <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} className="w-fit shrink-0" />
+              <span className="hidden sm:inline-block shrink-0 text-black text-xs font-bold bg-blue-200 rounded px-1.5 py-0.5">
+                {lead.id}
+              </span>
+              <span className="hidden sm:block text-sm text-foreground truncate min-w-0">{lead.email}</span>
+            </div>
+            <div className="flex items-center gap-2 shrink-0">
+              <span className="hidden sm:inline text-xs text-gray-500">
+                {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
+              </span>
+              <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
+                <AutologinScreenshotButton leadId={lead.id} />
+                <FingerprintButton fingerprint={fullLead?.fingerprint} />
+              </div>
+            </div>
+          </div>
+          {/* Строка 2: только мобилка — ID + email + дата */}
+          <div className="flex sm:hidden items-center gap-2 min-w-0">
+            <span className="shrink-0 text-black text-xs font-bold bg-blue-200 rounded px-1.5 py-0.5">
               {lead.id}
             </span>
-            <span className="text-sm text-foreground">{lead.email}</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <span className="text-xs text-gray-500">
+            <span className="text-sm text-foreground truncate flex-1 min-w-0">{lead.email}</span>
+            <span className="text-xs text-gray-500 shrink-0">
               {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
             </span>
-            <AutologinScreenshotButton leadId={lead.id} />
-            <FingerprintButton fingerprint={fullLead?.fingerprint} />
           </div>
         </div>
 
         {/* Tab Content */}
-        <div className="px-6 py-4 flex-1 overflow-y-auto flex flex-col">
+        <div className="px-4 sm:px-6 py-4 flex-1 overflow-y-auto flex flex-col">
           {activeTab === "lead_info" && <LeadInfoTab ref={tabRef} lead={leadData} />}
           {activeTab === "error_status" && <ErrorStatusTab lead={leadData} />}
         </div>
 
         {/* Footer */}
-        <div className="flex items-center gap-3 px-6 py-4 border-t border-gray-1000">
+        <div className="flex items-center gap-3 px-4 sm:px-6 py-2  border-t border-gray-1000">
           <Button className="w-full" variant="blue" onClick={() => save()} disabled={isSaving || isDeleting}>
             {isSaving ? t("saving") : t("save")}
           </Button>

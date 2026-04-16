@@ -16,13 +16,13 @@ interface LeadsFilterItemProps {
 export function LeadsFilterItem({ filter: f, filters, onChange }: LeadsFilterItemProps) {
   const set = (v: string) => onChange(f.id as keyof LeadsFiltersState, v);
 
-  if (f.id === "partner")  return <SelectPartner  className="flex-1 min-w-32" value={filters.partner}  onChange={set} />;
-  if (f.id === "broker")   return <SelectBroker   className="flex-1 min-w-32" value={filters.broker}   onChange={set} />;
-  if (f.id === "country")  return <SelectCountry  className="flex-1 min-w-32" value={filters.country}  onChange={set} />;
-  if (f.id === "campaign") return <SelectCampaign className="flex-1 min-w-32" value={filters.campaign} onChange={set} />;
-  if (f.id === "status")   return <SelectStats    className="flex-1 min-w-32" value={filters.status}   onChange={set} />;
-  if (f.id === "ftd")      return <SelectFtd      className="flex-1 min-w-32" value={filters.ftd}      onChange={set} />;
-  if (f.id === "language") return <SelectLang     className="flex-1 min-w-32" value={filters.language} onChange={set} />;
+  if (f.id === "partner")  return <SelectPartner  className="flex-1 min-w-32 w-full" value={filters.partner}  onChange={set} />;
+  if (f.id === "broker")   return <SelectBroker   className="flex-1 min-w-32 w-full" value={filters.broker}   onChange={set} />;
+  if (f.id === "country")  return <SelectCountry  className="flex-1 min-w-32 w-full" value={filters.country}  onChange={set} />;
+  if (f.id === "campaign") return <SelectCampaign className="flex-1 min-w-32 w-full" value={filters.campaign} onChange={set} />;
+  if (f.id === "status")   return <SelectStats    className="flex-1 min-w-32 w-full" value={filters.status}   onChange={set} />;
+  if (f.id === "ftd")      return <SelectFtd      className="flex-1 min-w-32 w-full" value={filters.ftd}      onChange={set} />;
+  if (f.id === "language") return <SelectLang     className="flex-1 min-w-32 w-full" value={filters.language} onChange={set} />;
 
   return (
     <FilterItem

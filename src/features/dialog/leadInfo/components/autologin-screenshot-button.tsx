@@ -37,7 +37,6 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
       setLoading(false);
     }
   }
-  console.log("AutologinScreenshotButton rendered with leadId:", leadId,error );
 
   return (
     <>

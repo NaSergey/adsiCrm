@@ -159,7 +159,7 @@ export function LeadsImportButton() {
         <DialogContent className="bg-white dark:bg-gray-1100 border-gray-200 dark:border-gray-1000 max-w-7xl p-0 overflow-hidden gap-0 flex flex-col h-[90vh]">
           <DialogTitle className="sr-only">{t("import")}</DialogTitle>
 
-          <div className="px-6 pt-5 pb-4 flex flex-col gap-4 overflow-y-auto flex-1 ">
+          <div className=" md:p-0 p-6 flex flex-col gap-4 overflow-y-auto flex-1 ">
             <div className="flex items-center justify-between">
               <p className="text-base font-semibold text-gray-900 dark:text-white">{t("import")}</p>
               <TabSwitcher tabs={tabs} activeTab={tab} onTabChange={handleTabChange} />
@@ -228,26 +228,26 @@ export function LeadsImportButton() {
             )}
           </div>
 
-          <DialogFooter className="border-t border-gray-200 dark:border-gray-1000 p-4">
+          <DialogFooter className="border-t gap-2 border-gray-200 dark:border-gray-1000 md:p-0 p-4 flex-col sm:flex-row">
 
-            {tab === "import" && !result && csvData && (
-              <Button variant="blue" className="flex-1" onClick={handleImport} disabled={importing}>
-                {importing && <span className="w-3.5 h-3.5 border-2 border-current border-t-transparent rounded-full animate-spin inline-block" />}
-                {importing ? t("importing") : t("import")}
-              </Button>
-            )}
             {tab === "import" && !result && (
-              <Button variant="outline" className="flex-1" onClick={() => inputRef.current?.click()} disabled={importing}>
+              <Button variant="blue" className="flex-1 min-h-9" onClick={() => inputRef.current?.click()} disabled={importing}>
                 <Download className="size-4" />
                 {csvData ? csvData.file.name : t("selectFile")}
               </Button>
             )}
+            {tab === "import" && !result && csvData && (
+              <Button variant="blue" size="md"  className="flex-1" onClick={handleImport} disabled={importing}>
+                {importing && <span className="w-3.5 h-3.5 border-2 min-h-9 border-current border-t-transparent rounded-full animate-spin inline-block" />}
+                {importing ? t("importing") : t("import")}
+              </Button>
+            )}
             {tab === "import" && result && (
-              <Button variant="outline" className="flex-1" onClick={() => { setResult(null); setCsvData(null); }}>
+              <Button variant="outline" className="flex-1 min-h-9" onClick={() => { setResult(null); setCsvData(null); }}>
                 {t("importAgain")}
               </Button>
             )}
-            <Button variant="outline" className="flex-1" onClick={handleClose}>{t("close")}</Button>
+            <Button variant="outline" className="flex-1 min-h-9" onClick={handleClose}>{t("close")}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>

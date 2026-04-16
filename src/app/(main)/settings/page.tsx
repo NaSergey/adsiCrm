@@ -20,7 +20,7 @@ export default function Settings() {
   const [activeTab, setActiveTab] = useState<Tab>("status");
 
   return (
-    <div className="p-6 px-10 space-y-6">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <SectionHeading title="Settings" />
         <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab} />

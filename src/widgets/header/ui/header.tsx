@@ -1,15 +1,15 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { Menu } from "lucide-react";
 import { formatGMTOffset } from "@/shared/lib/format-gmt-offset";
 import { IconClock } from "@/shared/ui/icon";
 import { ThemeSwitch } from "./theme-switch";
 import { UserMenu } from "./user-menu";
-import { LangSwitcher } from "./lang-switcher";
 import { navItems } from "../model/nav-items";
 import { getServerPermissions } from "@/shared/lib/get-server-permissions";
 import { NavLink } from "./nav-link";
 import { Logo } from "@/shared/ui/logo";
+import { MobileMenu } from "./mobile-menu";
+// ... ваши импорты
 
 export async function Header() {
   const { pages } = await getServerPermissions();
@@ -17,9 +17,21 @@ export async function Header() {
 
   const visibleNavItems = navItems.filter(item => pages.includes(item.href));
 
+  const mobileNavItems = visibleNavItems.map(({ href, icon: Icon, label }) => ({
+    href,
+    icon: <Icon className="size-5" />,
+    label: t(label as never),
+  }));
+
   return (
-    <header className="fixed left-0 right-0 top-0 z-50 bg-gray-1100">
-      <nav className="flex min-h-15 w-full items-center justify-between px-2 sm:px-4 md:px-6">
+    /* МЕНЯЕМ ТУТ: 
+       - fixed: фиксирует элемент относительно окна браузера
+       - top-0: прижимает к самому верху
+       - left-0 right-0: растягивает на всю ширину
+       - z-50: чтобы был поверх контента
+    */
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-gray-1100 shadow-md">
+      <nav className="flex h-15 w-full items-center justify-between px-2 sm:px-4 md:px-6">
         <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center" aria-label="Home">
             <Logo size="md" />
@@ -41,13 +53,10 @@ export async function Header() {
             <span suppressHydrationWarning className="hidden text-xs font-medium text-gray-400 lg:inline">
               {`(GMT${formatGMTOffset()})`}
             </span>
-            <LangSwitcher />
           </div>
 
           <div className="md:hidden">
-            <button type="button" className="p-2 text-gray-900 dark:text-white" aria-label="Open menu">
-              <Menu size={20} />
-            </button>
+            <MobileMenu navItems={mobileNavItems} />
           </div>
 
           <div className="hidden md:block">
@@ -56,7 +65,8 @@ export async function Header() {
         </div>
       </nav>
 
-      <nav className="flex justify-center bg-gray-1200 px-2 py-4 sm:px-4 md:px-6">
+      {/* Эта часть видна только на десктопе, она тоже будет зафиксирована */}
+      <nav className="hidden justify-center bg-gray-1200 px-2 py-4 sm:px-4 md:flex md:px-6 border-t border-gray-800">
         <ul className="flex flex-wrap items-center gap-1">
           {visibleNavItems.map(({ href, icon: Icon, label }) => (
             <li key={href}>

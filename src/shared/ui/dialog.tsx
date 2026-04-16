@@ -39,7 +39,7 @@ function DialogContent({
       <DialogPrimitive.Content
         data-slot="dialog-content"
         className={cn(
-          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg gap-4 border border-zinc-200 bg-white p-6 shadow-lg dark:border-zinc-800 dark:bg-zinc-950 sm:rounded-lg",
+          "fixed left-[50%] top-[50%] z-50 grid w-full max-w-lg gap-4 border border-zinc-200 bg-white md:p-6 p-3 shadow-lg dark:border-zinc-800 dark:bg-zinc-950 sm:rounded-lg",
           className
         )}
         {...props}

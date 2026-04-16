@@ -5,7 +5,7 @@ export default async function AffiliatesPage() {
   const permissions = await getServerPermissions();
 
   return (
-    <div className="p-6 px-10">
+    <div className="">
       <AffiliatesView permissions={permissions} />
     </div>
   );

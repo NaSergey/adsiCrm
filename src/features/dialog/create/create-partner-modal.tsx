@@ -55,7 +55,7 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
         <DialogTitle></DialogTitle>
         <SectionHeading title={t("createPartner")} />
 
-        <div className="grid grid-cols-2 gap-4 py-4">
+        <div className="grid grid-cols-2 md:gap-4 gap-2 py-4">
           <Input label={t("name")} placeholder={t("partnerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
           <Input label={t("email")} type="email" placeholder="email@example.com" value={email} onChange={(e) => setEmail(e.target.value)} />
           <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />

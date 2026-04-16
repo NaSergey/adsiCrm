@@ -116,7 +116,7 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
         />
       </div>
 
-      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+      <div className="grid grid-cols-2 md:gap-x-6 gap-x-3 gap-y-4">
         <div className="flex flex-col gap-4">
           <Input label={t("name")} placeholder={t("campaignNamePlaceholder")} error={errors.name?.message} {...register("name")} />
           <Input label={t("cap")} type="number" placeholder={t("dailyCapPlaceholder")} error={errors.cap?.message} {...register("cap")} />
@@ -145,9 +145,7 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
             <Controller name="checkerFunnel" control={control} render={({ field }) => (
               <Checkbox label={t("checkerFunnel")} checked={field.value} onChange={(e) => field.onChange(e.target.checked)} />
             )} />
-            {checkerFunnel && (
-              <Input className="mt-0.5 py-2" placeholder={t("funnelDataPlaceholder")} {...register("funnelData")} />
-            )}
+            <Input className="mt-0.5 py-2" placeholder={t("funnelDataPlaceholder")} disabled={!checkerFunnel} {...register("funnelData")} />
           </div>
         </div>
       </div>

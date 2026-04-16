@@ -41,7 +41,7 @@ export function LangSwitcher() {
             key={code}
             type="button"
             onClick={() => handleSelect(code)}
-            className={`flex w-full items-center gap-2.5 px-3 py-2 text-sm transition-colors hover:bg-gray-1000 ${
+            className={`flex w-full items-center cursor-pointer gap-2.5 px-3 py-2 text-sm transition-colors hover:bg-gray-1000 ${
               locale === code ? "text-white" : "text-gray-400"
             }`}
           >

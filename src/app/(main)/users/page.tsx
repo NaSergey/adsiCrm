@@ -37,27 +37,30 @@ export default function UsersPage() {
   }
 
   return (
-    <div className="p-6 px-10 space-y-4">
+    <div className="space-y-4">
       <div className="flex items-center justify-between">
         <SectionHeading title={t("title")} />
         <div className="flex items-center gap-2">
           {isSelecting && selectedIds.size > 0 && (
-            <Button variant="destructive" className="min-w-32" disabled={isDeleting} onClick={() => deleteUsers(Array.from(selectedIds))}>
+            <Button size="sm" variant="destructive" className="" disabled={isDeleting} onClick={() => deleteUsers(Array.from(selectedIds))}>
               <Trash2 className="size-4" />
               {isDeleting ? t("deleting") : `${t("deleteSelected")} (${selectedIds.size})`}
             </Button>
           )}
           <Button
+            size="sm"
             variant={isSelecting ? "ghostActive" : "secondary"}
-            className="min-w-32"
+            className=""
             onClick={isSelecting ? exitSelect : () => setIsSelecting(true)}
           >
             {isSelecting ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
             {isSelecting ? t("cancelSelect") : t("select")}
           </Button>
-          <Button className="min-w-32" onClick={() => setCreateOpen(true)}>
+          <Button size="sm" className="" onClick={() => setCreateOpen(true)}>
             <Plus className="size-4" />
-            {t("newUser")}
+            <div className="hidden md:block">
+              {t("newUser")}
+            </div>
           </Button>
         </div>
       </div>

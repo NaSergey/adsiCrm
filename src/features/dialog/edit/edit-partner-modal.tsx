@@ -66,7 +66,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
         <DialogTitle></DialogTitle>
         <SectionHeading title={t("editPartner")} />
 
-        <div className="grid grid-cols-2 gap-4 py-4">
+        <div className="grid grid-cols-2 md:gap-4 gap-2 py-4">
           <Input label={t("name")} placeholder={t("partnerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
           <Input label={t("email")} type="email" value={partner.email} readOnly />
           <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />

@@ -31,21 +31,20 @@ export function LogsFiltersBar({ filters, onChange, onSearch, isLoading }: LogsF
   ];
 
   return (
-    <section className="flex flex-wrap items-end gap-2">
-      <DateInput
-        value={filters.date}
-        onChange={(e) => onChange({ ...filters, date: e.target.value })}
-        className="shrink-0 w-45"
-      />
-      <Select
-        options={categoryOptions}
-        value={filters.category}
-        onChange={(v) => onChange({ ...filters, category: v as LogsFilters["category"] })}
-        className="shrink-0 w-40"
-      />
-      <Button variant="blue" size="md" onClick={onSearch} disabled={!filters.date || isLoading} className="shrink-0">
-        {isLoading ? t("loading") : t("search")}
-      </Button>
+    <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+      <div className="flex flex-col md:flex-row md:items-center gap-2">
+        <DateInput
+          value={filters.date}
+          onChange={(e) => onChange({ ...filters, date: e.target.value })}
+          className="w-full"
+        />
+        <Select
+          options={categoryOptions}
+          value={filters.category}
+          onChange={(v) => onChange({ ...filters, category: v as LogsFilters["category"] })}
+          className="w-full"
+        />
+      </div>
     </section>
   );
 }

@@ -38,7 +38,7 @@
     "noUsers": "No users found",
     "select": "Select",
     "cancelSelect": "Cancel",
-    "deleteSelected": "Delete selected",
+    "deleteSelected": "Delete",
     "deleting": "Deleting...",
     "columns": {
       "id": "ID",
@@ -60,9 +60,10 @@
     "answer": "Answer from system",
     "columns": {
       "date": "Date",
-      "url": "Request URL",
-      "from": "From",
-      "ip": "IP"
+      "level": "Level",
+      "message": "Message",
+      "method": "Method",
+      "url": "URL"
     },
     "categories": {
       "leads": "Leads",
@@ -95,7 +96,7 @@
     "noBrokers": "No brokers found",
     "select": "Select",
     "cancelSelect": "Cancel",
-    "deleteSelected": "Delete selected",
+    "deleteSelected": "Delete",
     "deleting": "Deleting...",
     "columns": {
       "id": "ID",
@@ -135,7 +136,7 @@
     "noData": "No data",
     "select": "Select",
     "cancelSelect": "Cancel",
-    "deleteSelected": "Delete selected",
+    "deleteSelected": "Delete",
     "deleting": "Deleting...",
     "yes": "Yes",
     "no": "No",
@@ -183,6 +184,7 @@
     "allPrograms": "All programs",
     "active": "Active",
     "newCampaign": "New campaign",
+    "filters": "Filters",
     "clearFilters": "Clear",
     "broker": "Broker",
     "partner": "Partner",

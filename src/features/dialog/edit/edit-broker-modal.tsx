@@ -87,14 +87,14 @@ export function EditBrokerModal({
             {error && <p className="col-span-2 text-sm text-red-500">{t("error")}</p>}
           </div>
 
-          <DialogFooter className="flex gap-3">
-            <Button onClick={() => mutate()} disabled={isPending} className="flex-1">
+          <DialogFooter className="flex-col sm:flex-row gap-3">
+            <Button onClick={() => mutate()} disabled={isPending} className="w-full sm:flex-1">
               {isPending ? t("saving") : t("save")}
             </Button>
-            <Button variant="secondary" onClick={() => setIntegType("add")} className="flex-1">{t("addLeads")}</Button>
-            <Button variant="secondary" onClick={() => setIntegType("update")} className="flex-1">{t("updateLeads")}</Button>
+            <Button variant="secondary" onClick={() => setIntegType("add")} className="w-full sm:flex-1">{t("addLeads")}</Button>
+            <Button variant="secondary" onClick={() => setIntegType("update")} className="w-full sm:flex-1">{t("updateLeads")}</Button>
             {hasFeature("manage_affiliates") && (
-              <Button variant="destructive" onClick={() => deleteMutate(Number(broker.id))} disabled={isDeleting} className="flex-1">
+              <Button variant="destructive" onClick={() => deleteMutate(Number(broker.id))} disabled={isDeleting} className="w-full sm:flex-1">
                 {isDeleting ? t("deleting") : t("delete")}
               </Button>
             )}

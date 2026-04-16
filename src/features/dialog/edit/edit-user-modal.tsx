@@ -56,7 +56,7 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
           <DialogTitle></DialogTitle>
           <SectionHeading title={t("editUser")} />
 
-          <div className="grid grid-cols-2 gap-4 pt-4">
+          <div className="grid grid-cols-2 md:gap-4 gap-2 pt-4">
             <Input label={t("name")} placeholder={t("usernamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
             <Input label={t("email")} type="email" value={user.email} readOnly />
             <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />

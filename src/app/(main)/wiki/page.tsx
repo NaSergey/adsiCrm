@@ -94,7 +94,7 @@ export default function WikiPage() {
 
   if (view === "code") {
     return (
-      <div className="p-6 px-10 space-y-4 w-full">
+      <div className="space-y-4 w-full">
         <div className="flex items-center gap-2">
           <Button variant="ghost" size="md" onClick={() => setView("docs")}>
             <ChevronLeft /> {t("back")}
@@ -124,7 +124,7 @@ export default function WikiPage() {
   }
 
   return (
-    <div className="p-6 px-10 space-y-8 w-full">
+    <div className="space-y-8 w-full">
       <SectionHeading title={t("title")} />
 
       {/* Add a Lead */}

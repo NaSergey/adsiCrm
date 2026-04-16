@@ -38,7 +38,7 @@
     "noUsers": "Пользователи не найдены",
     "select": "Выбрать",
     "cancelSelect": "Отмена",
-    "deleteSelected": "Удалить выбранные",
+    "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
     "columns": {
       "id": "ID",
@@ -60,9 +60,10 @@
     "answer": "Ответ системы",
     "columns": {
       "date": "Дата",
-      "url": "URL запроса",
-      "from": "Откуда",
-      "ip": "IP"
+      "level": "Уровень",
+      "message": "Сообщение",
+      "method": "Метод",
+      "url": "URL"
     },
     "categories": {
       "leads": "Лиды",
@@ -95,7 +96,7 @@
     "noBrokers": "Брокеры не найдены",
     "select": "Выбрать",
     "cancelSelect": "Отмена",
-    "deleteSelected": "Удалить выбранные",
+    "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
     "columns": {
       "id": "ID",
@@ -135,7 +136,7 @@
     "noData": "Нет данных",
     "select": "Выбрать",
     "cancelSelect": "Отмена",
-    "deleteSelected": "Удалить выбранные",
+    "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
     "yes": "Да",
     "no": "Нет",
@@ -183,6 +184,7 @@
     "allPrograms": "Все программы",
     "active": "Активные",
     "newCampaign": "Новая кампания",
+    "filters": "Фильтры",
     "clearFilters": "Сбросить",
     "broker": "Брокер",
     "partner": "Партнёр",

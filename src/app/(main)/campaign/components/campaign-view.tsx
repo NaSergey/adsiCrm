@@ -5,15 +5,14 @@ import { useTranslations } from "next-intl";
 import { PaginationControls } from "@/shared/ui/pagination";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { EmptyState } from "@/shared/ui/empty-state";
-import { CampaignToolbar } from "./campaign-toolbar";
-import { CampaignFilters, EMPTY_CAMPAIGN_FILTERS, type CampaignFiltersState } from "./campaign-filters";
+import { CampaignControls, EMPTY_CAMPAIGN_FILTERS, type CampaignFiltersState } from "./campaign-controls";
 import { CampaignList } from "./campaign-list";
 import { useCampaignData } from "../hooks/use-campaign-data";
 import { useSelectionMode } from "../hooks/use-selection-mode";
 import { useBulkCampaignActions } from "../hooks/use-bulk-campaign-actions";
 import type { ProgramFilter } from "../types";
 
-export function CampaignView() {
+export function CampaignView({ canManageCampaigns }: { canManageCampaigns?: boolean }) {
   const t = useTranslations("campaign");
   const [programFilter, setProgramFilter] = useState<ProgramFilter>("all");
   const [filters, setFilters] = useState<CampaignFiltersState>(EMPTY_CAMPAIGN_FILTERS);
@@ -36,9 +35,10 @@ export function CampaignView() {
 
   return (
     <>
-      <CampaignToolbar
+      <CampaignControls
         programFilter={programFilter}
         onProgramFilterChange={handleProgramFilterChange}
+        canManageCampaigns={canManageCampaigns}
         selection={{
           isActive: selection.isSelecting,
           selectedCount: selection.selectedIds.size,
@@ -48,8 +48,9 @@ export function CampaignView() {
           onDisable: bulk.disable,
           onDelete: bulk.delete,
         }}
+        filters={filters}
+        onFiltersChange={handleFiltersChange}
       />
-      <CampaignFilters filters={filters} onChange={handleFiltersChange} />
 
       {isLoading && (
         <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

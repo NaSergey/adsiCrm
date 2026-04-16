@@ -44,47 +44,41 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
   }, [tabs, activeTab, onTabChange]);
 
   return (
-    <section className="mb-6 flex flex-wrap items-center justify-between gap-4">
-      <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
-
-      {(canManage || canCreate) && (
-        <div className="flex items-center gap-2 ml-auto">
+    <section className="mb-6">
+      <div className="flex items-center justify-between gap-2">
+        <div className="min-w-0 overflow-hidden">
+          <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
+        </div>
+        <div className="flex items-center gap-2 shrink-0 ml-auto">
           {canManage && isSelecting && selectedIds.size > 0 && (
-            <Button
-              size="md"
-              variant="destructive"
-              disabled={isDeleting}
-              onClick={deleteSelected}
-            >
+            <Button size="sm" variant="destructive" disabled={isDeleting} onClick={deleteSelected}>
               <Trash2 className="size-4" />
               {isDeleting ? t("deleting") : `${t("deleteSelected")} (${selectedIds.size})`}
             </Button>
           )}
-
           {canManage && (
             <Button
-              size="md"
+              size="sm"
               variant={isSelecting ? "ghostActive" : "secondary"}
-              className="shrink-0"
               onClick={isSelecting ? exitSelect : startSelect}
             >
               {isSelecting ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
               {isSelecting ? t("cancelSelect") : t("select")}
             </Button>
           )}
-
           {canCreate && (
             <Button
-              size="md"
-              className="shrink-0"
+              size="sm"
               onClick={() => activeTab === "partners" ? setCreatePartnerOpen(true) : setCreateBrokerOpen(true)}
             >
               <Plus className="size-4" />
-              {activeTab === "partners" ? t("newPartner") : t("newBroker")}
+              <span className="hidden md:inline">
+                {activeTab === "partners" ? t("newPartner") : t("newBroker")}
+              </span>
             </Button>
           )}
         </div>
-      )}
+      </div>
 
       <CreatePartnerModal open={createPartnerOpen} onOpenChange={setCreatePartnerOpen} />
       <CreateBrokerModal open={createBrokerOpen} onOpenChange={setCreateBrokerOpen} />

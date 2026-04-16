@@ -30,7 +30,7 @@ const MOCK: ServiceItem[] = [
 
 export default function ServicePage() {
   return (
-    <div className="p-6 px-10 space-y-4">
+    <div className="space-y-4">
       <SectionHeading title="Service" />
       <ServiceSection data={MOCK} />
     </div>

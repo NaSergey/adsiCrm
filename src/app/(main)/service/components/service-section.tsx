@@ -56,7 +56,6 @@ export function ServiceSection({
   const handleDelete = () => {
     if (selectedItem) {
       // TODO: Call API to delete the user
-      console.log("Deleting user:", selectedItem);
       setIsDeleteModalOpen(false);
       setSelectedItem(null);
     }

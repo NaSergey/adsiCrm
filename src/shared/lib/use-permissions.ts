@@ -1,3 +1,4 @@
+import { useSyncExternalStore } from "react";
 import { getAccessToken, getTokenUser } from "@/shared/lib/auth-token";
 import { PERMISSIONS, JWT_PERMISSION_GATES, GATED_FEATURES, type Feature, type Role } from "@/shared/config/permissions";
 
@@ -10,8 +11,15 @@ function resolveFeatures(role: Role | "", roleFeatures: Feature[], jwtPermission
   return [...base, ...unlocked];
 }
 
+// Permissions don't change during a session — no external store to subscribe to
+function subscribe(_cb: () => void) {
+  return () => {};
+}
+
 export function usePermissions() {
-  const token = getAccessToken();
+  // useSyncExternalStore ensures server snapshot (null) matches initial client render,
+  // then React synchronously updates with the real token after hydration — no mismatch.
+  const token = useSyncExternalStore(subscribe, getAccessToken, () => null);
   const user = token ? getTokenUser(token) : null;
   const role = (user?.role ?? "") as Role;
   const rolePerms = PERMISSIONS[role] ?? { pages: [], features: [] };

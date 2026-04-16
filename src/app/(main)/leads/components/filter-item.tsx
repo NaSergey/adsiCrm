@@ -20,7 +20,7 @@ export function FilterItem({
       <DateInput
         value={value ?? ""}
         onChange={(e) => onChange?.(e.target.value)}
-        className="flex-1 min-w-40"
+        className="flex-1 min-w-0 w-full"
       />
     );
   }

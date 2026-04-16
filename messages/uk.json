@@ -38,7 +38,7 @@
     "noUsers": "Користувачів не знайдено",
     "select": "Вибрати",
     "cancelSelect": "Скасувати",
-    "deleteSelected": "Видалити вибрані",
+    "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
     "columns": {
       "id": "ID",
@@ -60,9 +60,10 @@
     "answer": "Відповідь системи",
     "columns": {
       "date": "Дата",
-      "url": "URL запиту",
-      "from": "Звідки",
-      "ip": "IP"
+      "level": "Рівень",
+      "message": "Повідомлення",
+      "method": "Метод",
+      "url": "URL"
     },
     "categories": {
       "leads": "Ліди",
@@ -95,7 +96,7 @@
     "noBrokers": "Брокерів не знайдено",
     "select": "Вибрати",
     "cancelSelect": "Скасувати",
-    "deleteSelected": "Видалити вибрані",
+    "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
     "columns": {
       "id": "ID",
@@ -135,7 +136,7 @@
     "noData": "Немає даних",
     "select": "Вибрати",
     "cancelSelect": "Скасувати",
-    "deleteSelected": "Видалити вибрані",
+    "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
     "yes": "Так",
     "no": "Ні",
@@ -183,6 +184,7 @@
     "allPrograms": "Всі програми",
     "active": "Активні",
     "newCampaign": "Нова кампанія",
+    "filters": "Фільтри",
     "clearFilters": "Скинути",
     "broker": "Брокер",
     "partner": "Партнер",

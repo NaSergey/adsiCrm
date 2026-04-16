@@ -56,9 +56,9 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
   const hasErrors = lead.dublicate || !!partnerError;
 
   return (
-    <div className="grid grid-cols-3 flex-1 gap-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 flex-1 gap-0">
       {/* Col 1 — Fraud Checks */}
-      <div className="flex flex-col gap-2 pr-6 border-r border-gray-1000">
+      <div className="flex flex-col gap-2 pb-6 sm:pb-0 sm:pr-6 border-b sm:border-b-0 sm:border-r border-gray-1000">
         <span className="text-base text-foreground">{t("fraudAndErrors")}</span>
 
         {!lead.isFraud ? (
@@ -82,7 +82,7 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
       </div>
 
       {/* Col 2 — Lead Rout + Status History */}
-      <div className="flex flex-col gap-4 px-6 border-r border-gray-1000">
+      <div className="flex flex-col gap-4 py-6 sm:py-0 sm:px-6 border-b lg:border-b-0 lg:border-r border-gray-1000">
         <div className="flex flex-col gap-2">
           <span className="text-base text-foreground">{t("leadRout")}</span>
           <div className="flex flex-col divide-y divide-gray-1000">
@@ -112,7 +112,7 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
       </div>
 
       {/* Col 3 — Broker/Partner Answer */}
-      <div className="flex flex-col gap-4 pl-6">
+      <div className="flex flex-col gap-4 pt-6 sm:pt-0 sm:col-span-2 lg:col-span-1 lg:pl-6">
         <span className="text-base text-foreground">{t("brokerPartnerAnswer")}</span>
         {brokerAnswer && <Textarea label={t("brokerAnswer")} rows={7} readOnly value={brokerAnswer} />}
         {partnerAnswer && <Textarea label={t("partnerAnswer")} rows={7} readOnly value={partnerAnswer} />}

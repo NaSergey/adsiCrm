@@ -31,24 +31,18 @@ function getTokenMaxAge(token: string): number {
 
 async function tryRefresh(request: NextRequest): Promise<{ accessToken: string; setCookie: string | null } | null> {
   try {
-    console.log('[middleware] tryRefresh →', REFRESH_URL);
-    console.log('[middleware] cookies forwarded:', request.headers.get("cookie") ?? "(none)");
     const res = await fetch(REFRESH_URL, {
       method: "GET",
       headers: { cookie: request.headers.get("cookie") ?? "" },
     });
-    console.log('[middleware] refresh response status:', res.status);
     if (!res.ok) {
       const body = await res.text().catch(() => "(unreadable)");
-      console.log('[middleware] refresh failed body:', body);
       return null;
     }
     const { accessToken } = await res.json();
-    console.log('[middleware] got new accessToken:', !!accessToken);
     if (!accessToken) return null;
     return { accessToken, setCookie: res.headers.get("set-cookie") };
   } catch (e) {
-    console.log('[middleware] refresh fetch error:', e);
     return null;
   }
 }

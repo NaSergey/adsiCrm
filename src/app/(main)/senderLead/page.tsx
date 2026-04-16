@@ -121,11 +121,11 @@ export default function SenderLeadPage() {
   };
 
   return (
-    <div className="p-6 px-10">
+    <div className="">
       <div className="space-y-4">
 
         {/* Top: left col (Method+URL, Headers, Run) + right col (Body) */}
-        <div className="grid grid-cols-2 gap-4 items-start">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 items-start">
 
           {/* Left column */}
           <div className="space-y-4">

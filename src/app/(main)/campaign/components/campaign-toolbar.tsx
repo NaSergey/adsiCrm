@@ -49,25 +49,24 @@ export function CampaignToolbar({ programFilter, onProgramFilterChange, selectio
     <section className="mb-6 flex flex-wrap items-center gap-3">
       <TabSwitcher tabs={tabs} activeTab={programFilter} onTabChange={handleTabChange} />
 
-      {selection.isActive && (
-        <>
-          <div className="h-5 w-px bg-gray-700" />
-          <Button size="sm" variant="secondary" disabled={selection.selectedCount === 0} onClick={selection.onEnable}>
-            <ToggleRight className="size-4" />
-            {t("enableSelected")}
-          </Button>
-          <Button size="sm" variant="secondary" disabled={selection.selectedCount === 0} onClick={selection.onDisable}>
-            <ToggleLeft className="size-4" />
-            {t("disableSelected")}
-          </Button>
-          <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={selection.onDelete}>
-            <Trash2 className="size-4" />
-            {t("deleteSelected")}
-          </Button>
-        </>
-      )}
-
-      <div className="ml-auto flex items-center gap-2">
+      <div className="ml-auto flex flex-wrap items-center justify-end gap-2">
+        {selection.isActive && (
+          <>
+            <Button size="sm" variant="secondary" disabled={selection.selectedCount === 0} onClick={selection.onEnable}>
+              <ToggleRight className="size-4" />
+              {t("enableSelected")}
+            </Button>
+            <Button size="sm" variant="secondary" disabled={selection.selectedCount === 0} onClick={selection.onDisable}>
+              <ToggleLeft className="size-4" />
+              {t("disableSelected")}
+            </Button>
+            <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={selection.onDelete}>
+              <Trash2 className="size-4" />
+              {t("deleteSelected")}
+            </Button>
+            <div className="h-5 w-px bg-gray-700" />
+          </>
+        )}
         {hasFeature("manage_campaigns") && (
           <Button
             size="md"

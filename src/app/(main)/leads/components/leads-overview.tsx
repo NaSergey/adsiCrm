@@ -45,7 +45,7 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
 
   return (
     <section className="mb-8">
-      <div className="mb-4 flex items-center justify-between">
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
         <SectionHeading title={t("overview")} />
         <div className="flex items-center gap-2">
           {canDeleteLeads && (
@@ -70,7 +70,7 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
         </div>
       </div>
 
-      <div className="grid grid-cols-7 gap-3">
+      <div className="grid grid-cols-2 sm:grid-cols-4 xl:grid-cols-7 gap-3">
         {isLoading
           ? Array.from({ length: 7 }).map((_, i) => (
               <Skeleton key={i} className="h-11 rounded-xl" />

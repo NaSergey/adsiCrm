@@ -6,9 +6,6 @@ export function useLogUserData() {
     const token = getAccessToken();
     if (token) {
       const data = getAllTokenData(token);
-      console.log("=== ALL USER DATA FROM JWT ===");
-      console.log(data);
-      console.log("==============================");
     }
   }, []);
 }

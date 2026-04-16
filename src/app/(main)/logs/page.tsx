@@ -7,7 +7,7 @@ import { SectionHeading } from "@/shared/ui/section-heading";
 export default function LogsPage() {
   const t = useTranslations("logs");
   return (
-    <div className="p-6 px-10 space-y-4">
+    <div className=" space-y-4">
       <SectionHeading title={t("title")} />
       <LogsSection />
     </div>

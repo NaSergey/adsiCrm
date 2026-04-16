@@ -12,6 +12,7 @@ interface TabSwitcherProps<T extends string = string> {
   activeTab: T;
   onTabChange: (tab: T) => void;
   className?: string;
+  itemClassName?: string;
 }
 
 export function TabSwitcher<T extends string = string>({
@@ -19,6 +20,7 @@ export function TabSwitcher<T extends string = string>({
   activeTab,
   onTabChange,
   className,
+  itemClassName,
 }: TabSwitcherProps<T>) {
   return (
     <div className={cn("flex rounded-lg border border-gray-1000 bg-gray-1200 p-0.5", className)}>
@@ -31,7 +33,8 @@ export function TabSwitcher<T extends string = string>({
             "rounded-md px-4 py-2 cursor-pointer text-sm font-medium transition-colors",
             activeTab === tab.id
               ? "bg-gray-1000 text-gray-900 dark:text-white"
-              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+              : "text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white",
+            itemClassName,
           )}
         >
           {tab.label}

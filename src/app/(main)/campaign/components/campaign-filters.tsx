@@ -33,25 +33,46 @@ export function CampaignFilters({ filters, onChange }: CampaignFiltersProps) {
   const hasFilters = Object.values(filters).some(Boolean);
 
   return (
-    <section className="mb-8 flex flex-wrap items-center gap-3">
+    <section className="mb-8 flex flex-col gap-3 md:flex-row md:flex-wrap md:items-center">
       <input
         type="text"
         placeholder={t("company_name")}
         value={filters.name}
         onChange={(e) => onChange({ ...filters, name: e.target.value })}
-        className="min-w-48 rounded border border-gray-1000 bg-gray-1000 px-3 h-9 text-white placeholder-gray-500 outline-none ring-transparent focus:ring-2 focus:ring-offset-blue-600"
+        className="w-full rounded border border-gray-1000 bg-gray-1000 px-3 h-9 text-white placeholder-gray-500 outline-none ring-transparent focus:ring-2 focus:ring-offset-blue-600 md:w-auto md:min-w-48"
       />
-      <SelectBroker className="min-w-48" value={filters.brokerId} onChange={(v) => onChange({ ...filters, brokerId: v })} />
-      <SelectPartner className="min-w-48" value={filters.partnerId} onChange={(v) => onChange({ ...filters, partnerId: v })} />
-      <SelectCountry className="w-16" value={filters.country} onChange={(v) => onChange({ ...filters, country: v })} />
-      <SelectLang className="w-16" value={filters.lang} onChange={(v) => onChange({ ...filters, lang: v })} />
+      <SelectBroker
+        className="w-full md:w-auto md:min-w-48"
+        value={filters.brokerId}
+        onChange={(v) => onChange({ ...filters, brokerId: v })}
+      />
+      <SelectPartner
+        className="w-full md:w-auto md:min-w-48"
+        value={filters.partnerId}
+        onChange={(v) => onChange({ ...filters, partnerId: v })}
+      />
+
+      {/* On mobile: side-by-side row. On desktop: unwrap into parent flex. */}
+      <div className="flex gap-3 md:contents">
+        <SelectCountry
+          className="flex-1 md:flex-none md:w-16"
+          value={filters.country}
+          onChange={(v) => onChange({ ...filters, country: v })}
+        />
+        <SelectLang
+          className="flex-1 md:flex-none md:w-16"
+          value={filters.lang}
+          onChange={(v) => onChange({ ...filters, lang: v })}
+        />
+      </div>
+
       <Button
         variant="ghost"
-        size="md"
+        size="sm"
         active={hasFilters}
         onClick={() => onChange(EMPTY_CAMPAIGN_FILTERS)}
         disabled={!hasFilters}
-        className="ml-auto"
+        className="w-full md:w-auto md:ml-auto"
       >
         {t("clearFilters")}
       </Button>

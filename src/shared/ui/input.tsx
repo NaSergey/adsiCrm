@@ -19,6 +19,13 @@ const autofillCls =
 const focusCls =
   "focus-within:ring-2 focus-within:ring-transparent focus-within:ring-offset-2 focus-within:ring-offset-blue-600";
 
+const wrapperBase = "flex items-center gap-2 rounded-md px-3 h-9 text-sm outline-none transition-colors";
+const wrapperActive = cn("bg-gray-200 dark:bg-gray-1000", focusCls);
+const wrapperInactive = "bg-gray-100 dark:bg-gray-1000/90 cursor-not-allowed opacity-60";
+
+const inputActive = "text-gray-900 dark:text-white";
+const inputInactive = "text-gray-400 dark:text-gray-500 cursor-not-allowed";
+
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, label, type = "text", readOnly, disabled, error, noIcon, ...props }, ref) => {
     const isInactive = readOnly || disabled;
@@ -34,10 +41,9 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         )}
         <label
           className={cn(
-            "flex items-center gap-2 rounded-md px-3 h-9 text-sm outline-none transition-colors",
-            label
-              ? cn("w-full", isInactive ? "bg-gray-100 dark:bg-gray-1000/40 cursor-not-allowed" : cn("bg-gray-200 dark:bg-gray-1000", focusCls))
-              : cn("flex-1 bg-gray-200 dark:bg-gray-1000", focusCls, className)
+            wrapperBase,
+            label ? "w-full" : cn("flex-1", className),
+            isInactive ? wrapperInactive : wrapperActive,
           )}
           data-slot="input-wrapper"
         >
@@ -48,8 +54,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             readOnly={readOnly}
             disabled={disabled}
             className={cn(
-              "flex-1 bg-transparent outline-none placeholder:text-gray-500 text-sm",
-              isInactive ? "text-gray-400 dark:text-gray-500 cursor-not-allowed" : "text-gray-900 dark:text-white",
+              "flex-1 min-w-0 bg-transparent outline-none placeholder:text-gray-500 text-sm",
+              isInactive ? inputInactive : inputActive,
               autofillCls
             )}
             data-slot="input"
