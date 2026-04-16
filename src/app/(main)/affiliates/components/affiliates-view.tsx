@@ -16,7 +16,8 @@ interface AffiliatesViewProps {
 }
 
 export function AffiliatesView({ permissions }: AffiliatesViewProps) {
-  const [activeTab, setActiveTab] = useState<AffiliateTab>("partners");
+  const canViewPartners = permissions.features.includes("view_all_partners") || permissions.features.includes("view_own_partners");
+  const [activeTab, setActiveTab] = useState<AffiliateTab>(canViewPartners ? "partners" : "brokers");
 
   return (
     <AffiliatesSelectionProvider activeTab={activeTab}>

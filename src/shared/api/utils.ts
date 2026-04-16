@@ -27,10 +27,10 @@ export function generateToken(length = 8): string {
   return Array.from({ length }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
 }
 
-/** Refresh the access token using the refresh endpoint */
+/** Refresh the access token using the Next.js proxy route (same-origin, cookie safe) */
 export async function refreshAccessToken(): Promise<boolean> {
   try {
-    const res = await fetch(API_ENDPOINTS.auth.refresh, {
+    const res = await fetch("/api/auth/refresh", {
       method: "GET",
       credentials: "include",
     });

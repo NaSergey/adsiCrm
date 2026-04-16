@@ -5,6 +5,7 @@ import { Plus, MousePointerClick, Trash2, ToggleLeft, ToggleRight, X } from "luc
 import { useTranslations } from "next-intl";
 import { Button } from "@/shared/ui/button";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
+import { usePermissions } from "@/shared/lib/use-permissions";
 import { CreateCampaignModal } from "@/features/dialog";
 import type { ProgramFilter } from "../types";
 
@@ -25,6 +26,7 @@ interface CampaignToolbarProps {
 }
 
 export function CampaignToolbar({ programFilter, onProgramFilterChange, selection }: CampaignToolbarProps) {
+  const { hasFeature } = usePermissions();
   const [createOpen, setCreateOpen] = useState(false);
   const t = useTranslations("campaign");
 
@@ -66,15 +68,17 @@ export function CampaignToolbar({ programFilter, onProgramFilterChange, selectio
       )}
 
       <div className="ml-auto flex items-center gap-2">
-        <Button
-          size="md"
-          variant={selection.isActive ? "ghostActive" : "secondary"}
-          className="shrink-0"
-          onClick={selection.isActive ? selection.onExit : selection.onToggle}
-        >
-          {selection.isActive ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
-          {selection.isActive ? t("cancelSelect") : t("select")}
-        </Button>
+        {hasFeature("manage_campaigns") && (
+          <Button
+            size="md"
+            variant={selection.isActive ? "ghostActive" : "secondary"}
+            className="shrink-0"
+            onClick={selection.isActive ? selection.onExit : selection.onToggle}
+          >
+            {selection.isActive ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
+            {selection.isActive ? t("cancelSelect") : t("select")}
+          </Button>
+        )}
         <Button size="md" className="shrink-0" onClick={handleCreateOpen}>
           <Plus className="size-4" />
           {t("newCampaign")}

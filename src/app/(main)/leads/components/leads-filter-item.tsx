@@ -4,6 +4,7 @@ import { type FilterConfig, type LeadsFiltersState } from "../../../../shared/ty
 import { SelectBroker, SelectPartner, SelectStats, SelectFtd } from "@/entities";
 import { SelectCountry } from "@/entities/ui/select-country";
 import { SelectCampaign } from "@/entities/ui/select-campaign";
+import { SelectLang } from "@/entities/ui/select-lang";
 import { FilterItem } from "./filter-item";
 
 interface LeadsFilterItemProps {
@@ -20,7 +21,8 @@ export function LeadsFilterItem({ filter: f, filters, onChange }: LeadsFilterIte
   if (f.id === "country")  return <SelectCountry  className="flex-1 min-w-32" value={filters.country}  onChange={set} />;
   if (f.id === "campaign") return <SelectCampaign className="flex-1 min-w-32" value={filters.campaign} onChange={set} />;
   if (f.id === "status")   return <SelectStats    className="flex-1 min-w-32" value={filters.status}   onChange={set} />;
-  if (f.id === "ftd")     return <SelectFtd      className="flex-1 min-w-32" value={filters.ftd}      onChange={set} />;
+  if (f.id === "ftd")      return <SelectFtd      className="flex-1 min-w-32" value={filters.ftd}      onChange={set} />;
+  if (f.id === "language") return <SelectLang     className="flex-1 min-w-32" value={filters.language} onChange={set} />;
 
   return (
     <FilterItem

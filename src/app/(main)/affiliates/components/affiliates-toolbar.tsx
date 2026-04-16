@@ -8,6 +8,7 @@ import { Button } from "@/shared/ui/button";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { CreateBrokerModal, CreatePartnerModal } from "@/features/dialog";
 import { useAffiliatesSelection } from "../selection-context";
+import { usePermissions } from "@/shared/lib/use-permissions";
 import type { AffiliateTab } from "../types";
 import type { Feature } from "@/shared/config/permissions";
 
@@ -23,9 +24,11 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
   const [createBrokerOpen, setCreateBrokerOpen] = useState(false);
   const { isSelecting, selectedIds, isDeleting, startSelect, exitSelect, deleteSelected } = useAffiliatesSelection();
 
+  const { hasFeature } = usePermissions();
   const canViewPartners = features.includes("view_all_partners") || features.includes("view_own_partners");
   const canViewBrokers = features.includes("view_all_brokers") || features.includes("view_own_brokers");
   const canCreate = features.includes("create_broker");
+  const canManage = hasFeature("manage_affiliates");
 
   const tabs = useMemo(() => [
     canViewPartners && { id: "partners" as AffiliateTab, label: t("partners") },
@@ -44,9 +47,9 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
     <section className="mb-6 flex flex-wrap items-center justify-between gap-4">
       <TabSwitcher tabs={tabs} activeTab={activeTab} onTabChange={onTabChange} />
 
-      {canCreate && (
+      {(canManage || canCreate) && (
         <div className="flex items-center gap-2 ml-auto">
-          {isSelecting && selectedIds.size > 0 && (
+          {canManage && isSelecting && selectedIds.size > 0 && (
             <Button
               size="md"
               variant="destructive"
@@ -58,24 +61,28 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
             </Button>
           )}
 
-          <Button
-            size="md"
-            variant={isSelecting ? "ghostActive" : "secondary"}
-            className="shrink-0"
-            onClick={isSelecting ? exitSelect : startSelect}
-          >
-            {isSelecting ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
-            {isSelecting ? t("cancelSelect") : t("select")}
-          </Button>
+          {canManage && (
+            <Button
+              size="md"
+              variant={isSelecting ? "ghostActive" : "secondary"}
+              className="shrink-0"
+              onClick={isSelecting ? exitSelect : startSelect}
+            >
+              {isSelecting ? <X className="size-4" /> : <MousePointerClick className="size-4" />}
+              {isSelecting ? t("cancelSelect") : t("select")}
+            </Button>
+          )}
 
-          <Button
-            size="md"
-            className="shrink-0"
-            onClick={() => activeTab === "partners" ? setCreatePartnerOpen(true) : setCreateBrokerOpen(true)}
-          >
-            <Plus className="size-4" />
-            {activeTab === "partners" ? t("newPartner") : t("newBroker")}
-          </Button>
+          {canCreate && (
+            <Button
+              size="md"
+              className="shrink-0"
+              onClick={() => activeTab === "partners" ? setCreatePartnerOpen(true) : setCreateBrokerOpen(true)}
+            >
+              <Plus className="size-4" />
+              {activeTab === "partners" ? t("newPartner") : t("newBroker")}
+            </Button>
+          )}
         </div>
       )}
 

@@ -26,7 +26,9 @@ export type Feature =
   | "view_affiliates"
   | "view_logs"
   | "view_users_page"
-  | "view_wiki";
+  | "view_wiki"
+  | "manage_campaigns"
+  | "manage_affiliates";
 
 interface RolePermissions {
   pages: string[];
@@ -57,7 +59,7 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
       "view_all_leads", "create_lead", "edit_lead", "delete_lead",
       "full_leads_filters", "import_leads", "export_leads",
       "view_all_partners", "view_all_brokers", "create_broker",
-      "view_affiliates", "view_logs", "view_users_page", "view_wiki",
+      "view_affiliates", "view_logs", "view_users_page", "view_wiki", "manage_campaigns", "manage_affiliates",
     ],
   },
 
@@ -91,6 +93,6 @@ export const PERMISSIONS: Record<Role, RolePermissions> = {
 
   INTEGRATOR: {
     pages: ["/affiliates", "/senderLead", "/wiki"],
-    features: ["create_lead", "view_all_brokers", "view_affiliates", "view_wiki"],
+    features: ["create_lead", "view_own_brokers", "view_all_brokers", "view_affiliates", "view_wiki"],
   },
 };

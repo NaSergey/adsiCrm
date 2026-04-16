@@ -6,6 +6,7 @@ import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Copy } from "lucide-react";
+import { usePermissions } from "@/shared/lib/use-permissions";
 import { DialogFooter, DialogTitle } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
@@ -86,6 +87,7 @@ export function buildEditFormValues(campaign: CampaignData): CampaignFormValues 
 }
 
 export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: EditCampaignFormProps) {
+  const { hasFeature } = usePermissions();
   const t = useTranslations("editModals");
   const queryClient = useQueryClient();
 
@@ -214,9 +216,11 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
         <Button className="flex-1" onClick={handleSubmit((v) => update(v))} disabled={isPending}>
           {isPending ? t("saving") : t("save")}
         </Button>
-        <Button variant="destructive" className="flex-1" onClick={() => remove(Number(campaign.id))} disabled={isDeleting}>
-          {isDeleting ? t("deleting") : t("delete")}
-        </Button>
+        {hasFeature("manage_campaigns") && (
+          <Button variant="destructive" className="flex-1" onClick={() => remove(Number(campaign.id))} disabled={isDeleting}>
+            {isDeleting ? t("deleting") : t("delete")}
+          </Button>
+        )}
       </DialogFooter>
     </>
   );

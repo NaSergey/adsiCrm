@@ -63,7 +63,7 @@ export function SelectSearch({ options, placeholder, value, onChange, label, cla
     <div
       ref={containerRef}
       onBlur={handleBlur}
-      className={cn(label ? "flex flex-col gap-1.5 w-full" : "relative inline-block min-w-30", className)}
+      className={cn(label ? "flex flex-col gap-1.5 w-full" : "relative min-w-30", className)}
     >
       {label && (
         <div className="flex items-center justify-between gap-2">
@@ -71,7 +71,7 @@ export function SelectSearch({ options, placeholder, value, onChange, label, cla
           {error && <span className="text-xs text-red-500">{error}</span>}
         </div>
       )}
-      <div className="relative">
+      <div className="relative h-9">
         <input
           type="text"
           value={search}

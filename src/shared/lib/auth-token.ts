@@ -2,7 +2,26 @@ const ACCESS_TOKEN_KEY = "pixelcrm_access_token";
 
 export function getAccessToken(): string | null {
   if (typeof window === "undefined") return null;
-  return localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  const lsToken = localStorage.getItem(ACCESS_TOKEN_KEY);
+
+  // Если токен в localStorage есть — проверяем не протух ли он
+  if (lsToken) {
+    const exp = getTokenExpiry(lsToken);
+    const isExpired = exp !== null && exp <= Math.floor(Date.now() / 1000);
+    if (!isExpired) return lsToken;
+    // Протух — чистим localStorage
+    localStorage.removeItem(ACCESS_TOKEN_KEY);
+  }
+
+  // Fallback: middleware мог поставить свежий токен в cookie (server-side refresh)
+  const match = document.cookie.match(new RegExp(`(?:^|;\\s*)${ACCESS_TOKEN_KEY}=([^;]+)`));
+  const cookieToken = match ? decodeURIComponent(match[1]) : null;
+  if (cookieToken) {
+    // Синхронизируем в localStorage для следующих вызовов
+    localStorage.setItem(ACCESS_TOKEN_KEY, cookieToken);
+  }
+  return cookieToken;
 }
 
 /** Returns the token expiry timestamp in seconds, or null if not a JWT / no exp claim. */
@@ -45,6 +64,8 @@ export function getTokenUser(token: string): { name: string; email: string; role
 export function clearAccessToken(): void {
   if (typeof window === "undefined") return;
   localStorage.removeItem(ACCESS_TOKEN_KEY);
+  // SameSite must match what setAccessToken used, otherwise some browsers treat them as different cookies
+  document.cookie = `${ACCESS_TOKEN_KEY}=; path=/; SameSite=Strict; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
   document.cookie = `${ACCESS_TOKEN_KEY}=; path=/; expires=Thu, 01 Jan 1970 00:00:00 GMT`;
 }
 

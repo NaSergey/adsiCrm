@@ -5,10 +5,17 @@ import { useTranslations } from "next-intl";
 import { Plus, X, Play, Code, List } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { Select, type SelectOption } from "@/shared/ui/select";
+import { SelectSearch } from "@/shared/ui/select-search";
 import { Textarea } from "@/shared/ui/textarea";
 import { cn } from "@/shared/lib/css";
 import { getApiDomain, generateToken, isJson } from "@/shared/api/utils";
-import {Input } from "@/shared/ui/input";
+import { Input } from "@/shared/ui/input";
+import { Geo } from "@/shared/data/geo";
+import { Lang } from "@/shared/data/lang";
+
+const GEO_OPTIONS: SelectOption[] = Geo.map((g) => ({ value: g.value ?? "", label: g.label }));
+const LANG_OPTIONS: SelectOption[] = Lang.map((l) => ({ value: l.value ?? "", label: l.label }));
+
 const METHOD_OPTIONS: SelectOption[] = [
   { value: "GET", label: "GET" },
   { value: "POST", label: "POST" },
@@ -225,7 +232,7 @@ export default function SenderLeadPage() {
               {bodyType === "list" ? (
                 <div className="space-y-2">
                   {Object.entries(body).map(([key, val]) => (
-                    <div key={key} className="flex items-center gap-2">
+                    <div key={key} className="grid grid-cols-[1fr_1fr_auto] items-center gap-2">
                       <Input
                         defaultValue={key}
                         onBlur={(e) => updateBodyKey(key, e.target.value)}
@@ -233,13 +240,29 @@ export default function SenderLeadPage() {
                         className={inputCls}
                         noIcon
                       />
-                      <Input
-                        value={val}
-                        onChange={(e) => updateBodyValue(key, e.target.value)}
-                        placeholder={t("value")}
-                        className={inputCls}
-                        noIcon
-                      />
+                      {key === "country" ? (
+                        <SelectSearch
+                          options={GEO_OPTIONS}
+                          value={val}
+                          onChange={(v) => updateBodyValue(key, v)}
+                          className="w-full"
+                        />
+                      ) : key === "language" ? (
+                        <SelectSearch
+                          options={LANG_OPTIONS}
+                          value={val}
+                          onChange={(v) => updateBodyValue(key, v)}
+                          className="w-full"
+                        />
+                      ) : (
+                        <Input
+                          value={val}
+                          onChange={(e) => updateBodyValue(key, e.target.value)}
+                          placeholder={t("value")}
+                          className={inputCls}
+                          noIcon
+                        />
+                      )}
                       <Button variant="ghost" size="sm" onClick={() => removeBodyParam(key)}>
                         <X />
                       </Button>

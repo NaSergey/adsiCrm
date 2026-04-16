@@ -29,25 +29,29 @@ export default function Home() {
   });
 
   const onSubmit = async (values: LoginFormValues) => {
-    
     try {
-      const { data, response } = await fetchClient.POST("/api/auth/login", { body: values });
+      // Используем Next.js proxy чтобы refreshToken cookie ставился same-origin
+      const response = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify(values),
+      });
 
       if (!response.ok) {
-        const message = response.status === 401 
-          ? "Incorrect email or password." 
+        const message = response.status === 401
+          ? "Incorrect email or password."
           : "Login failed. Please try again.";
-        
-        console.log("Setting error:", message);
         setServerError(message);
         return;
       }
 
+      const data = await response.json();
       if (data?.accessToken) {
         setAccessToken(data.accessToken);
         router.push("/campaign");
       }
-    } catch (err) {
+    } catch {
       setServerError("Could not connect to server.");
     }
   };

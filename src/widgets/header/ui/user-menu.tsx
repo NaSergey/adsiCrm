@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { User, Settings, LogOut, Shield } from "lucide-react";
 import { clearAccessToken, getAccessToken, getTokenUser } from "@/shared/lib/auth-token";
-import { API_ENDPOINTS } from "@/shared/api/config";
 
 const menuItems = [
   { icon: User, label: "Profile", href: "/profile" },
@@ -14,7 +12,6 @@ const menuItems = [
 ];
 
 export function UserMenu() {
-  const router = useRouter();
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const [user, setUser] = useState<{ name: string; email: string; role: string } | null>(null);
@@ -24,9 +21,15 @@ export function UserMenu() {
   }, []);
 
   async function handleLogout() {
-    await fetch(API_ENDPOINTS.auth.logout, { method: "GET", credentials: "include" });
+    // Clear local tokens immediately so middleware won't redirect back on navigation
     clearAccessToken();
-    router.push("/");
+    try {
+      await fetch("/api/auth/logout", { method: "GET", credentials: "include" });
+    } catch {
+      // Ignore network errors — local tokens are already cleared
+    }
+    // Full reload so the browser sends a fresh cookieless request through middleware
+    window.location.href = "/";
   }
 
   useEffect(() => {

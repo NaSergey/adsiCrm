@@ -93,7 +93,7 @@ export function EditBrokerModal({
             </Button>
             <Button variant="secondary" onClick={() => setIntegType("add")} className="flex-1">{t("addLeads")}</Button>
             <Button variant="secondary" onClick={() => setIntegType("update")} className="flex-1">{t("updateLeads")}</Button>
-            {hasFeature("create_broker") && (
+            {hasFeature("manage_affiliates") && (
               <Button variant="destructive" onClick={() => deleteMutate(Number(broker.id))} disabled={isDeleting} className="flex-1">
                 {isDeleting ? t("deleting") : t("delete")}
               </Button>

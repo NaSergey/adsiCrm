@@ -21,6 +21,7 @@ export function CampaignView() {
 
   const { campaigns, totalPages, isLoading, error, refetch } = useCampaignData(programFilter, page, filters);
   const selection = useSelectionMode();
+
   const bulk = useBulkCampaignActions(campaigns, selection.selectedIds, selection.exit);
 
   function handleProgramFilterChange(f: ProgramFilter) {

@@ -7,6 +7,9 @@ const fetchClient = createFetchClient<paths>({
   baseUrl: API_URL,
 });
 
+// Mutex: гарантирует что refresh выполняется только один раз при параллельных 401
+let refreshPromise: Promise<boolean> | null = null;
+
 if (typeof window !== "undefined") {
   // Attach Bearer token to every request
   fetchClient.use({
@@ -21,15 +24,18 @@ if (typeof window !== "undefined") {
       if (
           response.status !== 401 ||
           request.url.includes("/auth/refresh") ||
-          request.url.includes("/auth/login")
+          request.url.includes("/auth/login") ||
+          request.url.includes("/auth/logout")
         ) {
           return response;
         }
 
-      // Try to refresh the access token using the shared utility
-      // Dynamic import to avoid circular dependency with utils.ts
-      const { refreshAccessToken } = await import("./utils");
-      const ok = await refreshAccessToken();
+      // Если refresh уже идёт — ждём его, не запускаем новый
+      if (!refreshPromise) {
+        const { refreshAccessToken } = await import("./utils");
+        refreshPromise = refreshAccessToken().finally(() => { refreshPromise = null; });
+      }
+      const ok = await refreshPromise;
 
       if (!ok) {
           clearAccessToken();

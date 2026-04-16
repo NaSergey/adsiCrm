@@ -27,12 +27,13 @@ export interface LeadsFiltersState {
   status: string;
   date_from: string;
   date_to: string;
+  language: string;
 }
 
 export const EMPTY_LEADS_FILTERS: LeadsFiltersState = {
   lead_id: "", broker_lead_id: "", user_ip: "", campaign: "",
   ftd: "", partner: "", broker: "", funnel: "", email: "",
-  phone: "", country: "", status: "", date_from: "", date_to: "",
+  phone: "", country: "", status: "", date_from: "", date_to: "", language: "",
 };
 
 export function filtersToApiBody(filters: LeadsFiltersState) {
@@ -52,5 +53,6 @@ export function filtersToApiBody(filters: LeadsFiltersState) {
     status:       filters.status         || undefined,
     fromDate:     filters.date_from      || undefined,
     toDate:       filters.date_to        || undefined,
+    language:     filters.language       || undefined,
   };
 }
