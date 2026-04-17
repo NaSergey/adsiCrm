@@ -12,7 +12,7 @@ import { useSelectionMode } from "../hooks/use-selection-mode";
 import { useBulkCampaignActions } from "../hooks/use-bulk-campaign-actions";
 import type { ProgramFilter } from "../types";
 
-export function CampaignView({ canManageCampaigns }: { canManageCampaigns?: boolean }) {
+export function CampaignView({ canManageCampaigns, openCampaignId }: { canManageCampaigns?: boolean; openCampaignId?: number }) {
   const t = useTranslations("campaign");
   const [programFilter, setProgramFilter] = useState<ProgramFilter>("all");
   const [filters, setFilters] = useState<CampaignFiltersState>(EMPTY_CAMPAIGN_FILTERS);
@@ -69,6 +69,7 @@ export function CampaignView({ canManageCampaigns }: { canManageCampaigns?: bool
             isSelecting={selection.isSelecting}
             selectedIds={selection.selectedIds}
             onToggleSelect={selection.toggleId}
+            openCampaignId={openCampaignId}
           />
           {totalPages > 1 && (
             <div className="mt-6 flex justify-center">

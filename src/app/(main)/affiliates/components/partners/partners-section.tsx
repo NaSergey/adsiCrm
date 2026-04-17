@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { useTranslations } from "next-intl";
+import { Copy, Check } from "lucide-react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { DataTable } from "@/shared/ui/data-table";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -16,25 +17,68 @@ import type { components } from "@/shared/api/schema";
 
 type ApiPartner = components["schemas"]["ResponseUserDto"];
 
+function CopyCell({ value }: { value: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    navigator.clipboard.writeText(value).then(() => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    });
+  }
+
+  return (
+    <div className="flex items-center gap-1.5 min-w-0">
+      <span className="truncate">{value}</span>
+      <button
+        type="button"
+        onClick={handleCopy}
+        className="shrink-0 cursor-pointer text-gray-500 hover:text-white transition-colors"
+      >
+        {copied ? <Check className="size-3.5 text-green-400" /> : <Copy className="size-3.5" />}
+      </button>
+    </div>
+  );
+}
+
 const EMPTY_FILTERS: PartnersFilters = { name: "", email: "", comment: "", partner_token: "" };
 const PAGE_SIZE = 20;
 
-export function PartnersSection() {
+export function PartnersSection({ openPartnerId }: { openPartnerId?: number }) {
   const t = useTranslations("affiliates");
   const columns = useMemo<ColumnDef<ApiPartner>[]>(() => [
     { accessorKey: "id", header: t("columns.id"), size: 80 },
     { accessorKey: "name", header: t("columns.name") },
     { accessorKey: "email", header: t("columns.email") },
     { accessorKey: "comment", header: t("columns.comment") },
-    { accessorKey: "partnerToken", header: t("columns.token"), cell: ({ row }) => row.original.partnerToken ?? "—" },
+    {
+      accessorKey: "partnerToken",
+      header: t("columns.token"),
+      cell: ({ row }) => {
+        const token = row.original.partnerToken;
+        if (!token) return "—";
+        return <CopyCell value={token} />;
+      },
+    },
   ], [t]);
 
   const [filters, setFilters] = useState<PartnersFilters>(EMPTY_FILTERS);
   const [page, setPage] = useState(1);
   const [selectedPartner, setSelectedPartner] = useState<PartnerData | null>(null);
+  const [autoDismissed, setAutoDismissed] = useState(false);
   const { isSelecting, selectedIds, toggleId } = useAffiliatesSelection();
 
   const { data, isLoading, error, refetch } = usePartners();
+
+  const autoPartner = useMemo<PartnerData | null>(() => {
+    if (autoDismissed || !openPartnerId || !data) return null;
+    const p = data.find((x) => x.id === openPartnerId);
+    if (!p) return null;
+    return { id: p.id, name: p.name, email: p.email, comment: p.comment, partnerToken: p.partnerToken ?? "", role: p.role, managerId: String(p.managerId ?? "") };
+  }, [autoDismissed, openPartnerId, data]);
+
+  const effectivePartner = selectedPartner ?? autoPartner;
 
   const partners = data ?? [];
   const hasError = !!error;
@@ -68,6 +112,7 @@ export function PartnersSection() {
           }
           onRowClick={(row) => {
             if (isSelecting) { toggleId(row.id); return; }
+            setAutoDismissed(true);
             setSelectedPartner({
               id: row.id,
               name: row.name,
@@ -105,12 +150,12 @@ export function PartnersSection() {
           />
         )}
       </div>
-      {selectedPartner && (
+      {effectivePartner && (
         <EditPartnerModal
-          key={selectedPartner.id}
-          open={!!selectedPartner}
-          onOpenChange={(open) => { if (!open) setSelectedPartner(null); }}
-          partner={selectedPartner}
+          key={effectivePartner.id}
+          open={!!effectivePartner}
+          onOpenChange={(open) => { if (!open) { setAutoDismissed(true); setSelectedPartner(null); } }}
+          partner={effectivePartner}
         />
       )}
     </>

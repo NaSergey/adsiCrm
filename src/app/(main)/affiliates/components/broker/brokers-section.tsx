@@ -19,7 +19,7 @@ type ApiBroker = components["schemas"]["ResponseBrokerDto"];
 
 const PAGE_SIZE = 20;
 
-export function BrokersSection() {
+export function BrokersSection({ openBrokerId }: { openBrokerId?: number }) {
   const t = useTranslations("affiliates");
   const columns = useMemo<ColumnDef<ApiBroker>[]>(() => [
     { accessorKey: "id", header: t("columns.id"), size: 80 },
@@ -35,9 +35,19 @@ export function BrokersSection() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [selectedBroker, setSelectedBroker] = useState<BrokerData | null>(null);
+  const [autoDismissed, setAutoDismissed] = useState(false);
   const { isSelecting, selectedIds, toggleId } = useAffiliatesSelection();
 
   const { data, isLoading, error, refetch } = useBrokers();
+
+  const autoBroker = useMemo<BrokerData | null>(() => {
+    if (autoDismissed || !openBrokerId || !data) return null;
+    const b = data.find((x) => x.id === openBrokerId);
+    if (!b) return null;
+    return { id: String(b.id), name: b.name, comment: b.comment, managerId: b.brandManager ? String(b.brandManager.id) : "" };
+  }, [autoDismissed, openBrokerId, data]);
+
+  const effectiveBroker = selectedBroker ?? autoBroker;
 
   const brokers = data ?? [];
 
@@ -60,7 +70,7 @@ export function BrokersSection() {
           placeholder={t("searchByName")}
           value={search}
           onChange={(e) => { setSearch(e.target.value); setPage(1); }}
-          className="w-[240px]"
+          className="w-60"
         />
         <Button
           variant="ghost"
@@ -85,6 +95,7 @@ export function BrokersSection() {
           }
           onRowClick={(row) => {
             if (isSelecting) { toggleId(row.id); return; }
+            setAutoDismissed(true);
             setSelectedBroker({
               id: String(row.id),
               name: row.name,
@@ -119,13 +130,13 @@ export function BrokersSection() {
           />
         )}
       </div>
-      {selectedBroker && (
+      {effectiveBroker && (
         <EditBrokerModal
-          open={!!selectedBroker}
-          onOpenChange={(open) => { if (!open) setSelectedBroker(null); }}
-          broker={selectedBroker}
-          onSuccess={() => { setSelectedBroker(null); refetch(); }}
-          onDelete={() => setSelectedBroker(null)}
+          open={!!effectiveBroker}
+          onOpenChange={(open) => { if (!open) { setAutoDismissed(true); setSelectedBroker(null); } }}
+          broker={effectiveBroker}
+          onSuccess={() => { setAutoDismissed(true); setSelectedBroker(null); refetch(); }}
+          onDelete={() => { setAutoDismissed(true); setSelectedBroker(null); }}
         />
       )}
     </>

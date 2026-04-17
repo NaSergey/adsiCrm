@@ -1,3 +1,5 @@
+"use client";
+
 import { useTranslations } from "next-intl";
 import { cn } from "@/shared/lib/css";
 import { CheckCircle } from "lucide-react";
@@ -27,6 +29,11 @@ function CheckRow({ label, message, type }: { label: string; message: string; ty
 
 export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
   const t = useTranslations("leadDetail");
+
+  function navigateTo(url: string) {
+    window.open(url, "_blank");
+  }
+
   const fraudInfo = lead.isFraudInfo ?? {};
   const partnerError = (lead.partnerResponse as { error?: string } | null)?.error;
 
@@ -85,16 +92,40 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
       <div className="flex flex-col gap-4 py-6 sm:py-0 sm:px-6 border-b lg:border-b-0 lg:border-r border-gray-1000">
         <div className="flex flex-col gap-2">
           <span className="text-base text-foreground">{t("leadRout")}</span>
-          <div className="flex flex-col divide-y divide-gray-1000">
+          <div className="flex flex-col">
             {[
-              { label: t("campaign"), value: lead.campaign?.name ?? lead.funnel ?? "—" },
-              { label: t("partner"), value: lead.partner?.name ?? "—" },
-              { label: t("broker"), value: lead.broker?.name ?? "—" },
+              {
+                label: t("campaign"),
+                value: lead.campaign?.name ?? lead.funnel ?? "—",
+                href: lead.campaign?.id ? `/campaign?editCampaign=${lead.campaign.id}` : null,
+              },
+              {
+                label: t("partner"),
+                value: lead.partner?.name ?? "—",
+                href: lead.partner?.id ? `/affiliates?editPartner=${lead.partner.id}` : null,
+              },
+              {
+                label: t("broker"),
+                value: lead.broker?.name ?? "—",
+                href: lead.broker?.id ? `/affiliates?editBroker=${lead.broker.id}` : null,
+              },
             ].map((row) => (
-              <div key={row.label} className="flex items-center justify-between py-2">
-                <span className="text-sm text-gray-500">{row.label}</span>
-                <span className="text-sm text-blue-400">{row.value}</span>
-              </div>
+              row.href ? (
+                <button
+                  key={row.label}
+                  type="button"
+                  onClick={() => navigateTo(row.href!)}
+                  className="group flex w-full cursor-pointer items-center justify-between gap-2 border-b border-gray-1000 py-2 transition-colors hover:border-green-1000 text-left"
+                >
+                  <span className="text-sm text-gray-500 transition-colors group-hover:text-green-1000">{row.label}</span>
+                  <span className="text-sm text-blue-400 transition-colors group-hover:text-green-1000">{row.value}</span>
+                </button>
+              ) : (
+                <div key={row.label} className="flex items-center justify-between border-b border-gray-1000 py-2">
+                  <span className="text-sm text-gray-500">{row.label}</span>
+                  <span className="text-sm text-blue-400">{row.value}</span>
+                </div>
+              )
             ))}
           </div>
         </div>

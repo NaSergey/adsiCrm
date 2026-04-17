@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { EditBrokerModal, EditPartnerModal, CampaignModal, type BrokerData, type PartnerData, type CampaignData } from "@/features/dialog";
 import { CampaignCard } from "./campaign-card";
 import { usePinnedCampaigns } from "../hooks/use-pinned-campaigns";
@@ -11,6 +11,7 @@ interface CampaignListProps {
   isSelecting?: boolean;
   selectedIds?: Set<number>;
   onToggleSelect?: (id: number) => void;
+  openCampaignId?: number;
 }
 
 function buildCampaignData(c: Campaign): CampaignData {
@@ -38,11 +39,21 @@ export function CampaignList({
   isSelecting = false,
   selectedIds = new Set(),
   onToggleSelect,
+  openCampaignId,
 }: CampaignListProps) {
   const { pinned, toggle: togglePin } = usePinnedCampaigns();
   const [brokerModal, setBrokerModal] = useState<BrokerData | null>(null);
   const [partnerModal, setPartnerModal] = useState<PartnerData | null>(null);
   const [campaignModal, setCampaignModal] = useState<CampaignData | null>(null);
+  const [autoDismissed, setAutoDismissed] = useState(false);
+
+  const autoCampaign = useMemo<CampaignData | null>(() => {
+    if (autoDismissed || !openCampaignId || !campaigns.length) return null;
+    const c = campaigns.find((x) => x.id === openCampaignId);
+    return c ? buildCampaignData(c) : null;
+  }, [autoDismissed, openCampaignId, campaigns]);
+
+  const effectiveCampaign = campaignModal ?? autoCampaign;
 
   const sorted = [...campaigns].sort((a, b) => (pinned.has(a.id) ? 0 : 1) - (pinned.has(b.id) ? 0 : 1));
 
@@ -57,7 +68,7 @@ export function CampaignList({
           isSelected={selectedIds.has(campaign.id)}
           onBookmark={(id) => togglePin(id)}
           onSelect={(id) => onToggleSelect?.(id)}
-          onEdit={(c) => setCampaignModal(buildCampaignData(c))}
+          onEdit={(c) => { setAutoDismissed(true); setCampaignModal(buildCampaignData(c)); }}
           onBrokerClick={(c) => setBrokerModal({ id: String(c.broker?.id ?? ""), name: c.broker?.name ?? "", comment: "", managerId: "" })}
           onPartnerClick={(c) => setPartnerModal({ id: c.partner?.id ?? 0, name: c.partner?.name ?? "", email: "", comment: "", partnerToken: "", role: "PARTNER", managerId: "" })}
         />
@@ -80,15 +91,15 @@ export function CampaignList({
         />
       )}
 
-      {campaignModal && (
+      {effectiveCampaign && (
         <CampaignModal
-          key={campaignModal.id}
+          key={effectiveCampaign.id}
           open
-          onOpenChange={(open) => { if (!open) setCampaignModal(null); }}
-          campaign={campaignModal}
-          onSave={() => setCampaignModal(null)}
-          onDelete={() => setCampaignModal(null)}
-          onCreateSuccess={() => setCampaignModal(null)}
+          onOpenChange={(open) => { if (!open) { setAutoDismissed(true); setCampaignModal(null); } }}
+          campaign={effectiveCampaign}
+          onSave={() => { setAutoDismissed(true); setCampaignModal(null); }}
+          onDelete={() => { setAutoDismissed(true); setCampaignModal(null); }}
+          onCreateSuccess={() => { setAutoDismissed(true); setCampaignModal(null); }}
         />
       )}
     </section>

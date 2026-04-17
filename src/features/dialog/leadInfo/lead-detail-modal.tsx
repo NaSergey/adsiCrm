@@ -66,11 +66,11 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-7xl h-[95svh] sm:h-auto sm:min-h-[70vh] p-0 gap-0 overflow-hidden flex flex-col">
+      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-7xl h-[90svh] sm:h-auto sm:min-h-[80vh] p-0 gap-0 overflow-hidden flex flex-col">
         <DialogTitle className="sr-only">Lead {lead.id}</DialogTitle>
 
         {/* Header */}
-        <div className="flex flex-col md:gap-2 gap-4 px-4 sm:px-6 py-3 border-b border-gray-1000">
+        <div className="flex  md:px-0 px-2 md:pt-0 pt-2 flex-col pb-4 md:gap-2 gap-4 border-b border-gray-1000">
           {/* Строка 1: TabSwitcher + [на десктопе: ID email] + кнопки */}
           <div className="flex items-center justify-between gap-2 min-w-0">
             <div className="flex items-center gap-3 min-w-0">
@@ -103,7 +103,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
         </div>
 
         {/* Tab Content */}
-        <div className="px-4 sm:px-6 py-4 flex-1 overflow-y-auto flex flex-col">
+        <div className="py-4 md:px-0 px-2 flex-1 overflow-y-auto flex flex-col">
           {activeTab === "lead_info" && <LeadInfoTab ref={tabRef} lead={leadData} />}
           {activeTab === "error_status" && <ErrorStatusTab lead={leadData} />}
         </div>

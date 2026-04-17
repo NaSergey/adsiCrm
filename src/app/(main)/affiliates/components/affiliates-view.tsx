@@ -13,16 +13,25 @@ interface AffiliatesViewProps {
     pages: string[];
     features: Feature[];
   };
+  openPartnerId?: number;
+  openBrokerId?: number;
 }
 
-export function AffiliatesView({ permissions }: AffiliatesViewProps) {
+export function AffiliatesView({ permissions, openPartnerId, openBrokerId }: AffiliatesViewProps) {
   const canViewPartners = permissions.features.includes("view_all_partners") || permissions.features.includes("view_own_partners");
-  const [activeTab, setActiveTab] = useState<AffiliateTab>(canViewPartners ? "partners" : "brokers");
+
+  const defaultTab: AffiliateTab = openBrokerId
+    ? "brokers"
+    : canViewPartners ? "partners" : "brokers";
+
+  const [activeTab, setActiveTab] = useState<AffiliateTab>(defaultTab);
 
   return (
     <AffiliatesSelectionProvider activeTab={activeTab}>
       <AffiliatesToolbar activeTab={activeTab} onTabChange={setActiveTab} features={permissions.features} />
-      {activeTab === "partners" ? <PartnersSection /> : <BrokersSection />}
+      {activeTab === "partners"
+        ? <PartnersSection openPartnerId={openPartnerId} />
+        : <BrokersSection openBrokerId={openBrokerId} />}
     </AffiliatesSelectionProvider>
   );
 }
