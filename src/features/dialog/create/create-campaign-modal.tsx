@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useForm, useWatch, Controller } from "react-hook-form";
@@ -65,7 +65,7 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (body: CreateCampaignBody) => {
-      const { data, error } = await fetchClient.POST("/api/campaigns", { body });
+      const { data, error } = await fetchClient.POST("/campaigns", { body });
       if (error) throw error;
       return data;
     },

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
@@ -53,7 +53,7 @@ export function EditBrokerModal({
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: () =>
-      fetchClient.PATCH("/api/brokers/{id}", {
+      fetchClient.PATCH("/brokers/{id}", {
         params: { path: { id: Number(broker.id) } },
         body: {
           name,

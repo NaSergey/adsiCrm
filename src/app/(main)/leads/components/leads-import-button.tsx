@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useRef, useState } from "react";
 import { useTranslations } from "next-intl";
@@ -86,7 +86,7 @@ export function LeadsImportButton() {
   const loadHistory = async (page: number) => {
     setHistoryLoading(true);
     try {
-      const { data } = await fetchClient.GET("/api/leads-import", {
+      const { data } = await fetchClient.GET("/leads-import", {
         params: { query: { page } },
       });
       if (data) setHistoryData(data as typeof historyData);
@@ -123,7 +123,7 @@ export function LeadsImportButton() {
     try {
       const formData = new FormData();
       formData.append("file", csvData.file);
-      const { data, error } = await fetchClient.POST("/api/leads-import", {
+      const { data, error } = await fetchClient.POST("/leads-import", {
         body: { file: csvData.file as unknown as string },
         bodySerializer: () => formData,
       });

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect } from "react";
 import { useTranslations } from "next-intl";
@@ -109,7 +109,7 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
       const workingHours = isScheduleEnabled
         ? Object.fromEntries(values.activeDays.map((d) => [DAY_MAP[d], { start: values.timeFrom || "00:00", end: values.timeTo || "23:30" }]))
         : {};
-      const res = await fetchClient.PATCH("/api/campaigns/{id}", {
+      const res = await fetchClient.PATCH("/campaigns/{id}", {
         params: { path: { id: Number(campaign.id) } },
         body: {
           name: values.name,

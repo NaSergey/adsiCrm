@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useEffect, useState } from "react";
 import { Input } from "@/shared/ui/input";
@@ -20,8 +20,8 @@ export function AutologinTab() {
   useEffect(() => {
     const load = async () => {
       const [durationRes, onetimeRes] = await Promise.all([
-        fetchClient.GET("/api/autologin/duration-sec"),
-        fetchClient.GET("/api/autologin/is-one-time"),
+        fetchClient.GET("/autologin/duration-sec"),
+        fetchClient.GET("/autologin/is-one-time"),
       ]);
       if (durationRes.data) setLifetime(String(durationRes.data.autologin_duration_sec));
       if (onetimeRes.data) setOnetimeUrl(String(onetimeRes.data.autologin_is_one_time));
@@ -33,10 +33,10 @@ export function AutologinTab() {
   const handleSave = async () => {
     setSaving(true);
     await Promise.all([
-      fetchClient.PATCH("/api/autologin/duration-sec", {
+      fetchClient.PATCH("/autologin/duration-sec", {
         body: { durationSec: Number(lifetime) },
       }),
-      fetchClient.PATCH("/api/autologin/is-one-time", {
+      fetchClient.PATCH("/autologin/is-one-time", {
         body: { isOneTime: onetimeUrl === "true" },
       }),
     ]);

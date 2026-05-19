@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { brokersQueryKey } from "../use-brokers";
 
@@ -9,7 +9,7 @@ export function useDeleteBroker({ onSuccess }: { onSuccess?: () => void } = {}) 
     mutationFn: async (ids: number | number[]) => {
       const list = Array.isArray(ids) ? ids : [ids];
       await Promise.all(
-        list.map((id) => fetchClient.DELETE("/api/brokers/{id}", { params: { path: { id } } })),
+        list.map((id) => fetchClient.DELETE("/brokers/{id}", { params: { path: { id } } })),
       );
     },
     onSuccess: () => {

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useQuery, useMutation } from "@tanstack/react-query";
@@ -21,7 +21,7 @@ export function StatusSettingTab() {
   const { data, isLoading } = useQuery({
     queryKey: ["status-mappings"],
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/api/status-mappings");
+      const { data, error } = await fetchClient.GET("/status-mappings");
       if (error) throw error;
       return data as StatusItem[];
     },
@@ -36,7 +36,7 @@ export function StatusSettingTab() {
     mutationFn: async () => {
       await Promise.all(
         Object.entries(pendingChanges).map(([statusName, externalStatuses]) =>
-          fetchClient.PATCH("/api/status-mappings/{statusName}", {
+          fetchClient.PATCH("/status-mappings/{statusName}", {
             params: { path: { statusName } },
             body: externalStatuses,
           })

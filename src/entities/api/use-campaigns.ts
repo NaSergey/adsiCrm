@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import type { components } from "@/shared";
 
@@ -10,7 +10,7 @@ export function useCampaigns() {
   return useQuery({
     queryKey: campaignsSelectQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.POST("/api/campaigns/find-by-filters", {
+      const { data, error } = await fetchClient.POST("/campaigns/find-by-filters", {
         params: { query: { page: 1 } },
         body: { isActive: true, countries: [], languages: [] },
       });

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -40,7 +40,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
 
   const { mutate: update, isPending: isUpdating, error: updateError } = useMutation({
     mutationFn: (body: { name: string; comment: string; password?: string; permissions: []; managerId?: number | null }) =>
-      fetchClient.PATCH("/api/users/{id}", { params: { path: { id: partner.id } }, body }),
+      fetchClient.PATCH("/users/{id}", { params: { path: { id: partner.id } }, body }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: partnersQueryKey });
       onOpenChange(false);

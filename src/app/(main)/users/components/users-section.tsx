@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -33,7 +33,7 @@ export function UsersSection({ isSelecting = false, selectedIds = new Set(), onT
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: usersQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/api/users");
+      const { data, error } = await fetchClient.GET("/users");
       if (error) throw error;
       return data;
     },

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect } from "react";
 import { useTranslations } from "next-intl";
@@ -23,7 +23,7 @@ export function LogsSection() {
     setRawText(null);
     setError(false);
 
-    const { data, error } = await fetchClient.GET("/api/logs", {
+    const { data, error } = await fetchClient.GET("/logs", {
       params: { query: { date: filters.date, category: filters.category } },
     });
 
@@ -35,7 +35,7 @@ export function LogsSection() {
 
     setFileName(data.downloadUrl);
 
-    const res = await fetchClient.GET("/api/logs/download/{category}/{fileName}", {
+    const res = await fetchClient.GET("/logs/download/{category}/{fileName}", {
       params: { path: { category: filters.category, fileName: data.downloadUrl } },
       parseAs: "text",
     });

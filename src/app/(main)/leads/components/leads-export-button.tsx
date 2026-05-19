@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -21,7 +21,7 @@ export function LeadsExportButton({ filters }: LeadsExportButtonProps) {
     setExporting(true);
     setExportError(null);
     try {
-      const { data, error } = await fetchClient.POST("/api/leads/export-in-csv", {
+      const { data, error } = await fetchClient.POST("/leads/export-in-csv", {
         body: filtersToApiBody(filters),
       });
       if (error || !data?.downloadUrl) {
@@ -30,7 +30,7 @@ export function LeadsExportButton({ filters }: LeadsExportButtonProps) {
       }
 
       const fileName = data.downloadUrl.split("/").pop()!;
-      const res = await fetchClient.GET("/api/leads/downloadExportFile/{fileName}", {
+      const res = await fetchClient.GET("/leads/downloadExportFile/{fileName}", {
         params: { path: { fileName } },
         parseAs: "blob",
       });

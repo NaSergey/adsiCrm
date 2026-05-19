@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+﻿import { useQuery } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import type { components } from "@/shared/api/schema";
 
@@ -10,7 +10,7 @@ export function useBrokers() {
   return useQuery({
     queryKey: brokersQueryKey,
     queryFn: async () => {
-      const { data, error } = await fetchClient.GET("/api/brokers");
+      const { data, error } = await fetchClient.GET("/brokers");
       if (error) throw error;
       return (data ?? []) as Broker[];
     },

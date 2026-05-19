@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -71,7 +71,7 @@ export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserMod
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async () => {
-      const { data, error } = await fetchClient.POST("/api/users", {
+      const { data, error } = await fetchClient.POST("/users", {
         body: {
           name,
           email,

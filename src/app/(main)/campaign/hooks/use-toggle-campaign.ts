@@ -1,4 +1,4 @@
-import { useState, useCallback } from "react";
+﻿import { useState, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
@@ -12,7 +12,7 @@ export function useToggleCampaign(campaign: Campaign) {
 
   const { mutate } = useMutation({
     mutationFn: (value: boolean) =>
-      fetchClient.PATCH("/api/campaigns/{id}", {
+      fetchClient.PATCH("/campaigns/{id}", {
         params: { path: { id: campaign.id } },
         body: {
           isActive: value,

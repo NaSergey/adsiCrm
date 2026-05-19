@@ -1,4 +1,4 @@
-import { useQueries } from "@tanstack/react-query";
+﻿import { useQueries } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
 import type { CampaignFiltersState } from "../components/campaign-filters";
@@ -6,7 +6,7 @@ import type { ProgramFilter } from "../types";
 
 function buildQueryFn(isActive: boolean, page: number, filters: CampaignFiltersState) {
   return async () => {
-    const { data, error } = await fetchClient.POST("/api/campaigns/find-by-filters", {
+    const { data, error } = await fetchClient.POST("/campaigns/find-by-filters", {
       params: { query: { page } },
       body: {
         partnerId: filters.partnerId ? Number(filters.partnerId) : undefined,

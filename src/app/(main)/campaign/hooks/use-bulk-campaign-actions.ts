@@ -1,4 +1,4 @@
-import { useQueryClient } from "@tanstack/react-query";
+﻿import { useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
 import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
@@ -17,7 +17,7 @@ export function useBulkCampaignActions(
   async function patchSelected(isActive: boolean) {
     await Promise.all(
       selected.map((c) =>
-        fetchClient.PATCH("/api/campaigns/{id}", {
+        fetchClient.PATCH("/campaigns/{id}", {
           params: { path: { id: c.id } },
           body: {
             isActive,

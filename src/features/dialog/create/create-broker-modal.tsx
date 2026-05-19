@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
@@ -32,7 +32,7 @@ export function CreateBrokerModal({
 
   const { mutate, isPending, error } = useMutation({
     mutationFn: async (body: { name: string; comment: string; brandManagerId?: number | null }) => {
-      const { data, error } = await fetchClient.POST("/api/brokers", { body });
+      const { data, error } = await fetchClient.POST("/brokers", { body });
       if (error) throw error;
       return data;
     },

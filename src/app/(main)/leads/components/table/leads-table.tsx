@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { DataTable } from "@/shared/ui/data-table";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -42,7 +42,7 @@ export function LeadsTable({
   const { data, isLoading, error, refetch } = useQuery({
     queryKey: ["leads", page, filters],
     queryFn: async () => {
-      const { data, error } = await fetchClient.POST("/api/leads/find-by-filters", {
+      const { data, error } = await fetchClient.POST("/leads/find-by-filters", {
         params: { query: { page } },
         body: filtersToApiBody(filters),
       });

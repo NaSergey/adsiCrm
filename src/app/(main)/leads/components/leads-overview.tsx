@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
@@ -25,7 +25,7 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
     queryKey: ["leads-statistics", filters],
     placeholderData: keepPreviousData,
     queryFn: async () => {
-      const { data, error } = await fetchClient.POST("/api/leads/get-statistics", {
+      const { data, error } = await fetchClient.POST("/leads/get-statistics", {
         body: filtersToApiBody(filters),
       });
       if (error) throw error;

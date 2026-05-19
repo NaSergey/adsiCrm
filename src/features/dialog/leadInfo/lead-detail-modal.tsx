@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
@@ -46,7 +46,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
     mutationFn: async () => {
       const values = tabRef.current?.getValues();
       if (!values || !lead) return;
-      const { error } = await fetchClient.PATCH("/api/leads/{id}", {
+      const { error } = await fetchClient.PATCH("/leads/{id}", {
         params: { path: { id: String(lead.id) } },
         body: values,
       });

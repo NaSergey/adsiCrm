@@ -1,4 +1,4 @@
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
 
@@ -10,7 +10,7 @@ export function useDeleteCampaign({ onSuccess }: { onSuccess?: () => void } = {}
       const list = Array.isArray(ids) ? ids : [ids];
       await Promise.all(
         list.map((id) =>
-          fetchClient.DELETE("/api/campaigns/{id}", { params: { path: { id } } }),
+          fetchClient.DELETE("/campaigns/{id}", { params: { path: { id } } }),
         ),
       );
     },
