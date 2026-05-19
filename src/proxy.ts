@@ -5,7 +5,7 @@ const PUBLIC_PATH = "/";
 const TOKEN_KEY = "pixelcrm_access_token";
 // Middleware вызывает бэк напрямую (server-to-server, без CORS и проблем с портами)
 const API_BASE = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-const REFRESH_URL = `${API_BASE}/api/auth/refresh`;
+const REFRESH_URL = `${API_BASE}/auth/refresh`;
 
 function parseRole(token: string): Role | null {
   try {
