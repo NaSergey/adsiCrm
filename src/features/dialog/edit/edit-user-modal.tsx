@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/di
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { fetchClient } from "@/shared/api";
 import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
 import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
@@ -28,6 +29,7 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
   const [name, setName] = useState(user?.login ?? "");
   const [comment, setComment] = useState(user?.comment ?? "");
   const [password, setPassword] = useState("");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
 
   const queryClient = useQueryClient();
@@ -72,12 +74,21 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
             <Button onClick={handleSave} disabled={!name || isUpdating || isDeleting}>
               {isUpdating ? t("saving") : t("save")}
             </Button>
-            <Button variant="destructive" onClick={() => user && remove(user.id)} disabled={isUpdating || isDeleting}>
-              {isDeleting ? t("deleting") : t("delete")}
+            <Button variant="destructive" onClick={() => setConfirmOpen(true)} disabled={isUpdating || isDeleting}>
+              {t("delete")}
             </Button>
           </DialogFooter>
         </DialogContent>
       )}
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        confirmLabel={isDeleting ? t("deleting") : t("delete")}
+        isPending={isDeleting}
+        onConfirm={() => user && remove(user.id)}
+      />
     </Dialog>
   );
 }

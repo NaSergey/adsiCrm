@@ -198,13 +198,13 @@ export function EditIntegCodeModal({
 
   return (
     <Dialog open={open && editorReady} onOpenChange={onOpenChange}>
-      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-5xl p-0 gap-0 overflow-hidden flex flex-col">
+      <DialogContent className="bg-gray-1100 border-gray-1000 max-w-5xl p-4 md:p-4 gap-0 overflow-hidden flex flex-col">
         <DialogTitle className="sr-only">
           {type === "add" ? t("addLeadInteg") : t("updateLeadInteg")}
         </DialogTitle>
 
         {/* Header */}
-        <div className="flex items-center gap-3 px-6 py-4 border-b border-gray-1000">
+        <div className="flex items-center gap-3 pb-4 border-b border-gray-1000">
           <span
             className={`px-2.5 py-0.5 rounded text-xs font-semibold ${
               type === "add"
@@ -226,7 +226,7 @@ export function EditIntegCodeModal({
         </div>
 
         {/* Actions + Response */}
-        <div className="px-6 py-4 flex flex-col gap-4">
+        <div className="pt-4 flex flex-col gap-4">
           <div className="flex gap-3">
             <Button onClick={handleSave} disabled={loading} className="flex-1">
               {isSaving && (
@@ -247,14 +247,14 @@ export function EditIntegCodeModal({
             </Button>
           </div>
 
-          <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-gray-500">{t("response")}</span>
+          <div className="relative">
             <textarea
               value={answer}
               readOnly
               placeholder={t("responsePlaceholder")}
-              className="w-full bg-gray-1000 border border-gray-1000 rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-gray-500 focus:outline-none resize-none min-h-[100px]"
+              className="w-full bg-gray-1000 border border-gray-1000 rounded-md px-3 py-2 text-sm font-mono text-foreground placeholder:text-gray-500 focus:outline-none resize-none min-h-34"
             />
+            <span className="absolute top-2 right-3 text-xs font-medium text-gray-500 pointer-events-none">{t("response")}</span>
           </div>
         </div>
       </DialogContent>

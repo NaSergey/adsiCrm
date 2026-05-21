@@ -68,7 +68,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
             type="button"
             onClick={() => !disabled && setIsOpen(!isOpen)}
             disabled={disabled}
-            className={cn("h-9 w-full rounded-md bg-gray-200 dark:bg-gray-1000 pl-3 pr-9 py-1.5 text-sm text-gray-900 dark:text-white outline-none transition-colors focus:ring-2 focus:ring-transparent focus:ring-offset-2 focus:ring-offset-blue-600 disabled:cursor-not-allowed disabled:opacity-50 text-left", otherClasses)}
+            className={cn("h-9 w-full cursor-pointer rounded-md bg-gray-200 dark:bg-gray-1000 pl-3 pr-9 py-1.5 text-sm text-gray-900 dark:text-white outline-none transition-colors focus:ring-2 focus:ring-transparent focus:ring-offset-2 focus:ring-offset-blue-600 disabled:cursor-not-allowed disabled:opacity-50 text-left", otherClasses)}
             data-slot="select"
             {...props}
           >
@@ -88,7 +88,7 @@ const Select = React.forwardRef<HTMLButtonElement, SelectProps>(
                   key={opt.value}
                   onClick={() => handleSelect(opt.value)}
                   className={cn(
-                    "w-full px-3 py-2 text-left text-sm transition-colors",
+                    "w-full cursor-pointer px-3 py-2 text-left text-sm transition-colors",
                     value === opt.value
                       ? "bg-blue-600 text-white"
                       : "text-gray-900 dark:text-white hover:bg-gray-1000"

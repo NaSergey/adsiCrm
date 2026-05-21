@@ -12,9 +12,11 @@ interface CampaignListProps {
   selectedIds?: Set<number>;
   onToggleSelect?: (id: number) => void;
   openCampaignId?: number;
+  createdCampaign?: CampaignData | null;
+  onCreatedCampaignClose?: () => void;
 }
 
-function buildCampaignData(c: Campaign): CampaignData {
+export function buildCampaignData(c: Campaign): CampaignData {
   return {
     id: String(c.id),
     name: c.name,
@@ -40,6 +42,8 @@ export function CampaignList({
   selectedIds = new Set(),
   onToggleSelect,
   openCampaignId,
+  createdCampaign,
+  onCreatedCampaignClose,
 }: CampaignListProps) {
   const { pinned, toggle: togglePin } = usePinnedCampaigns();
   const [brokerModal, setBrokerModal] = useState<BrokerData | null>(null);
@@ -99,7 +103,18 @@ export function CampaignList({
           campaign={effectiveCampaign}
           onSave={() => { setAutoDismissed(true); setCampaignModal(null); }}
           onDelete={() => { setAutoDismissed(true); setCampaignModal(null); }}
-          onCreateSuccess={() => { setAutoDismissed(true); setCampaignModal(null); }}
+          onCreateSuccess={(created) => { setAutoDismissed(true); setCampaignModal(created); }}
+        />
+      )}
+
+      {createdCampaign && (
+        <CampaignModal
+          key={`created-${createdCampaign.id}`}
+          open
+          onOpenChange={(open) => { if (!open) onCreatedCampaignClose?.(); }}
+          campaign={createdCampaign}
+          onSave={onCreatedCampaignClose}
+          onDelete={onCreatedCampaignClose}
         />
       )}
     </section>

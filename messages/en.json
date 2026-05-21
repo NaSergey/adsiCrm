@@ -40,6 +40,8 @@
     "cancelSelect": "Cancel",
     "deleteSelected": "Delete",
     "deleting": "Deleting...",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone.",
     "columns": {
       "id": "ID",
       "name": "Name",
@@ -98,6 +100,8 @@
     "cancelSelect": "Cancel",
     "deleteSelected": "Delete",
     "deleting": "Deleting...",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone.",
     "columns": {
       "id": "ID",
       "name": "Name",
@@ -138,6 +142,8 @@
     "cancelSelect": "Cancel",
     "deleteSelected": "Delete",
     "deleting": "Deleting...",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
     "stats": {
@@ -199,6 +205,8 @@
     "enableSelected": "Enable",
     "disableSelected": "Disable",
     "deleteSelected": "Delete",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone.",
     "selectedCount": "{count} selected"
   },
   "wiki": {
@@ -234,6 +242,8 @@
     "save": "Save",
     "deleting": "Deleting...",
     "delete": "Delete",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone.",
     "firstName": "First Name",
     "lastName": "Last Name",
     "ftd": "FTD",
@@ -318,7 +328,9 @@
     "brokerLabel": "Broker",
     "saveAndRun": "Save & Run Code",
     "response": "Response",
-    "responsePlaceholder": "Response will appear here..."
+    "responsePlaceholder": "Response will appear here...",
+    "confirmDeleteTitle": "Are you sure?",
+    "confirmDeleteDescription": "This action cannot be undone."
   },
   "createModals": {
     "creating": "Creating...",

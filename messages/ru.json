@@ -40,6 +40,8 @@
     "cancelSelect": "Отмена",
     "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить.",
     "columns": {
       "id": "ID",
       "name": "Имя",
@@ -98,6 +100,8 @@
     "cancelSelect": "Отмена",
     "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить.",
     "columns": {
       "id": "ID",
       "name": "Имя",
@@ -138,6 +142,8 @@
     "cancelSelect": "Отмена",
     "deleteSelected": "Удалить",
     "deleting": "Удаляем...",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить.",
     "yes": "Да",
     "no": "Нет",
     "stats": {
@@ -199,6 +205,8 @@
     "enableSelected": "Включить",
     "disableSelected": "Выключить",
     "deleteSelected": "Удалить",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить.",
     "selectedCount": "Выбрано: {count}"
   },
   "wiki": {
@@ -234,6 +242,8 @@
     "save": "Сохранить",
     "deleting": "Удаляем...",
     "delete": "Удалить",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить.",
     "firstName": "Имя",
     "lastName": "Фамилия",
     "ftd": "FTD",
@@ -318,7 +328,9 @@
     "brokerLabel": "Брокер",
     "saveAndRun": "Сохранить и запустить",
     "response": "Ответ",
-    "responsePlaceholder": "Ответ появится здесь..."
+    "responsePlaceholder": "Ответ появится здесь...",
+    "confirmDeleteTitle": "Вы уверены?",
+    "confirmDeleteDescription": "Это действие нельзя отменить."
   },
   "createModals": {
     "creating": "Создаём...",

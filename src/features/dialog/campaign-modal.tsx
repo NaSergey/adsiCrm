@@ -5,6 +5,29 @@ import { Dialog, DialogContent } from "@/shared/ui/dialog";
 import { EditCampaignForm, type CampaignData } from "./edit/edit-campaign-modal";
 import { CreateCampaignForm } from "./create/create-campaign-modal";
 import type { CampaignFormValues } from "./schemas/campaign-schema";
+import type { components } from "@/shared/api/schema";
+
+type ResponseCampaignDto = components["schemas"]["ResponseCampaignDto"];
+
+function toCampaignData(c: ResponseCampaignDto): CampaignData {
+  return {
+    id: String(c.id),
+    name: c.name,
+    cap: String(c.dailyCap),
+    comment: c.comment,
+    countries: c.countries,
+    languages: c.languages,
+    partnerId: String(c.partner?.id ?? ""),
+    brokerId: String(c.broker?.id ?? ""),
+    managerId: String(c.manager?.id ?? ""),
+    status: c.isActive ? "ON" : "OFF",
+    checkerFunnel: c.checkFunnel,
+    funnelData: c.funnel,
+    isScheduleEnabled: c.isScheduleEnabled,
+    timezone: c.timezone,
+    workingHours: c.workingHours,
+  };
+}
 
 type Mode =
   | { type: "edit"; campaign: CampaignData }
@@ -16,7 +39,7 @@ interface CampaignModalProps {
   campaign: CampaignData;
   onSave?: () => void;
   onDelete?: () => void;
-  onCreateSuccess?: () => void;
+  onCreateSuccess?: (campaign: CampaignData) => void;
 }
 
 export function CampaignModal({
@@ -55,7 +78,7 @@ export function CampaignModal({
         {mode.type === "create" && (
           <CreateCampaignForm
             initialData={mode.initialData}
-            onSuccess={() => { onCreateSuccess?.(); onOpenChange(false); }}
+            onSuccess={(created) => { const mapped = toCampaignData(created); onCreateSuccess?.(mapped); setMode({ type: "edit", campaign: mapped }); }}
           />
         )}
       </DialogContent>

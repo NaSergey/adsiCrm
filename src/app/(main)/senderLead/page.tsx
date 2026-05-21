@@ -31,7 +31,7 @@ interface Header { id: number; name: string; value: string }
 export default function SenderLeadPage() {
   const t = useTranslations("senderLead");
   const [method, setMethod]   = useState("POST");
-  const [url, setUrl]         = useState(getApiDomain() + "/api/leads");
+  const [url, setUrl]         = useState(getApiDomain() + "/leads");
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer]   = useState("");
   const [bodyType, setBodyType] = useState<"list" | "code">("list");
@@ -39,7 +39,6 @@ export default function SenderLeadPage() {
   const [headers, setHeaders] = useState<Header[]>([
     { id: 0, name: "Content-type", value: "application/json" },
     { id: 1, name: "partner-token", value: "" },
-    { id: 2, name: "user-agent", value: "" },
   ]);
 
   const [body, setBody] = useState<Record<string, string>>({

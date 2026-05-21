@@ -7,6 +7,7 @@ import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/di
 import { Button } from "@/shared/ui/button";
 import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { EditIntegCodeModal } from "./edit-integ-code-modal";
 import { fetchClient } from "@/shared/api";
 import { brokersQueryKey } from "@/entities";
@@ -42,6 +43,7 @@ export function EditBrokerModal({
   const [comment, setComment] = useState(broker.comment);
   const [managerId, setManagerId] = useState(broker.managerId);
   const [integType, setIntegType] = useState<"add" | "update" | null>(null);
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   useEffect(() => {
     setName(broker.name);
@@ -94,13 +96,23 @@ export function EditBrokerModal({
             <Button variant="secondary" onClick={() => setIntegType("add")} className="w-full sm:flex-1">{t("addLeads")}</Button>
             <Button variant="secondary" onClick={() => setIntegType("update")} className="w-full sm:flex-1">{t("updateLeads")}</Button>
             {hasFeature("manage_affiliates") && (
-              <Button variant="destructive" onClick={() => deleteMutate(Number(broker.id))} disabled={isDeleting} className="w-full sm:flex-1">
-                {isDeleting ? t("deleting") : t("delete")}
+              <Button variant="destructive" onClick={() => setConfirmOpen(true)} disabled={isDeleting} className="w-full sm:flex-1">
+                {t("delete")}
               </Button>
             )}
           </DialogFooter>
         </DialogContent>
       </Dialog>
+
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        confirmLabel={isDeleting ? t("deleting") : t("delete")}
+        isPending={isDeleting}
+        onConfirm={() => deleteMutate(Number(broker.id))}
+      />
 
       {integType && (
         <EditIntegCodeModal

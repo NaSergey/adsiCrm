@@ -6,12 +6,14 @@ import { Plus, MousePointerClick, X, Trash2 } from "lucide-react";
 import { UsersSection } from "./components/users-section";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Button } from "@/shared/ui/button";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { CreateUserModal } from "@/features/dialog/create/create-user-modal";
 import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
 
 export default function UsersPage() {
   const t = useTranslations("users");
   const [createOpen, setCreateOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
@@ -42,9 +44,9 @@ export default function UsersPage() {
         <SectionHeading title={t("title")} />
         <div className="flex items-center gap-2">
           {isSelecting && selectedIds.size > 0 && (
-            <Button size="sm" variant="destructive" className="" disabled={isDeleting} onClick={() => deleteUsers(Array.from(selectedIds))}>
+            <Button size="sm" variant="destructive" disabled={isDeleting} onClick={() => setConfirmDeleteOpen(true)}>
               <Trash2 className="size-4" />
-              {isDeleting ? t("deleting") : `${t("deleteSelected")} (${selectedIds.size})`}
+              {`${t("deleteSelected")} (${selectedIds.size})`}
             </Button>
           )}
           <Button
@@ -66,6 +68,14 @@ export default function UsersPage() {
       </div>
       <UsersSection isSelecting={isSelecting} selectedIds={selectedIds} onToggleId={toggleId} />
       <CreateUserModal open={createOpen} onOpenChange={setCreateOpen} />
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onOpenChange={setConfirmDeleteOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        isPending={isDeleting}
+        onConfirm={() => { deleteUsers(Array.from(selectedIds)); setConfirmDeleteOpen(false); }}
+      />
     </div>
   );
 }

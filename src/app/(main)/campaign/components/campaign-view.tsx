@@ -2,6 +2,29 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
+import type { components } from "@/shared/api/schema";
+import type { CampaignData } from "@/features/dialog";
+type ResponseCampaignDto = components["schemas"]["ResponseCampaignDto"];
+
+function toCampaignData(c: ResponseCampaignDto): CampaignData {
+  return {
+    id: String(c.id),
+    name: c.name,
+    cap: String(c.dailyCap),
+    comment: c.comment,
+    countries: c.countries,
+    languages: c.languages,
+    partnerId: String(c.partner?.id ?? ""),
+    brokerId: String(c.broker?.id ?? ""),
+    managerId: String(c.manager?.id ?? ""),
+    status: c.isActive ? "ON" : "OFF",
+    checkerFunnel: c.checkFunnel,
+    funnelData: c.funnel,
+    isScheduleEnabled: c.isScheduleEnabled,
+    timezone: c.timezone,
+    workingHours: c.workingHours,
+  };
+}
 import { PaginationControls } from "@/shared/ui/pagination";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { EmptyState } from "@/shared/ui/empty-state";
@@ -17,6 +40,11 @@ export function CampaignView({ canManageCampaigns, openCampaignId }: { canManage
   const [programFilter, setProgramFilter] = useState<ProgramFilter>("all");
   const [filters, setFilters] = useState<CampaignFiltersState>(EMPTY_CAMPAIGN_FILTERS);
   const [page, setPage] = useState(1);
+  const [createdCampaign, setCreatedCampaign] = useState<CampaignData | null>(null);
+
+  function handleCreated(raw: ResponseCampaignDto) {
+    setCreatedCampaign(toCampaignData(raw));
+  }
 
   const { campaigns, totalPages, isLoading, error, refetch } = useCampaignData(programFilter, page, filters);
   const selection = useSelectionMode();
@@ -50,6 +78,7 @@ export function CampaignView({ canManageCampaigns, openCampaignId }: { canManage
         }}
         filters={filters}
         onFiltersChange={handleFiltersChange}
+        onCreated={handleCreated}
       />
 
       {isLoading && (
@@ -70,6 +99,8 @@ export function CampaignView({ canManageCampaigns, openCampaignId }: { canManage
             selectedIds={selection.selectedIds}
             onToggleSelect={selection.toggleId}
             openCampaignId={openCampaignId}
+            createdCampaign={createdCampaign}
+            onCreatedCampaignClose={() => setCreatedCampaign(null)}
           />
           {totalPages > 1 && (
             <div className="mt-6 flex justify-center">

@@ -42,9 +42,11 @@ export const EMPTY_CAMPAIGN_DEFAULTS: CampaignFormValues = {
   activeDays: [], timeFrom: "", timeTo: "", timezone: "UTC",
 };
 
+type ResponseCampaignDto = components["schemas"]["ResponseCampaignDto"];
+
 interface CreateCampaignFormProps {
   initialData?: Partial<CampaignFormValues>;
-  onSuccess?: () => void;
+  onSuccess?: (campaign: ResponseCampaignDto) => void;
 }
 
 export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFormProps) {
@@ -69,10 +71,10 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
       if (error) throw error;
       return data;
     },
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: campaignsQueryKey });
       reset();
-      onSuccess?.();
+      if (data) onSuccess?.(data);
     },
   });
 
@@ -103,7 +105,7 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
     <>
       <DialogTitle className="sr-only">{t("createCampaign")}</DialogTitle>
 
-      <div className="flex items-center justify-between">
+      <div className="flex items-center pr-6 justify-between">
         <SectionHeading title={t("createCampaign")} />
         <ScheduleDropdown
           initialData={{ activeDays: initialData?.activeDays, timeFrom: initialData?.timeFrom, timeTo: initialData?.timeTo, timezone: initialData?.timezone }}
@@ -164,14 +166,14 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
 interface CreateCampaignModalProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSuccess?: () => void;
+  onSuccess?: (campaign: ResponseCampaignDto) => void;
 }
 
 export function CreateCampaignModal({ open, onOpenChange, onSuccess }: CreateCampaignModalProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="bg-white dark:bg-gray-1100 border-gray-200 dark:border-gray-1000 max-w-4xl">
-        <CreateCampaignForm onSuccess={() => { onSuccess?.(); onOpenChange(false); }} />
+        <CreateCampaignForm onSuccess={(c) => { onSuccess?.(c); onOpenChange(false); }} />
       </DialogContent>
     </Dialog>
   );

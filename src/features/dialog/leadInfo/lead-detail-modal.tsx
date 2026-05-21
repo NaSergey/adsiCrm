@@ -15,6 +15,7 @@ import { FingerprintButton } from "./components/fingerprint-button";
 import { useLeadById } from "@/entities/api/use-lead";
 import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
 import { usePermissions } from "@/shared/lib/use-permissions";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 
 interface LeadDetailModalProps {
   lead: Lead | null;
@@ -31,6 +32,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
   const tabRef = useRef<LeadInfoTabRef>(null);
   const queryClient = useQueryClient();
   const canDeleteLead = hasFeature("delete_lead");
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "lead_info", label: t("tabLeadInfo") },
@@ -114,12 +116,21 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
             {isSaving ? t("saving") : t("save")}
           </Button>
           {canDeleteLead && (
-            <Button className="w-full" variant="destructive" onClick={() => lead && deleteLead(lead.id)} disabled={isSaving || isDeleting}>
-              {isDeleting ? t("deleting") : t("delete")}
+            <Button className="w-full" variant="destructive" onClick={() => setConfirmOpen(true)} disabled={isSaving || isDeleting}>
+              {t("delete")}
             </Button>
           )}
         </div>
       </DialogContent>
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        confirmLabel={isDeleting ? t("deleting") : t("delete")}
+        isPending={isDeleting}
+        onConfirm={() => lead && deleteLead(lead.id)}
+      />
     </Dialog>
   );
 }

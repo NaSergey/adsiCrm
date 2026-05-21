@@ -1,5 +1,6 @@
-﻿"use client";
+"use client";
 
+import { useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { fetchClient } from "@/shared/api";
@@ -7,6 +8,7 @@ import { Card } from "./card";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Button } from "@/shared/ui/button";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { type LeadsFiltersState, filtersToApiBody } from "../../../../shared/types/lead";
 import { useLeadsSelection } from "../selection-context";
 import { Users, CheckCircle, XCircle, Banknote, PhoneMissed, TrendingUp, AlertCircle, MousePointerClick, X, Trash2 } from "lucide-react";
@@ -20,6 +22,7 @@ interface LeadsOverviewProps {
 export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
   const t = useTranslations("leads");
   const { isSelecting, selectedIds, isDeleting, startSelect, exitSelect, deleteSelected } = useLeadsSelection();
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
 
   const { data, isLoading } = useQuery({
     queryKey: ["leads-statistics", filters],
@@ -51,9 +54,9 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
           {canDeleteLeads && (
             <>
               {isSelecting && selectedIds.size > 0 && (
-                <Button size="sm" variant="destructive" disabled={isDeleting} onClick={deleteSelected}>
+                <Button size="sm" variant="destructive" disabled={isDeleting} onClick={() => setConfirmDeleteOpen(true)}>
                   <Trash2 className="size-4" />
-                  {isDeleting ? t("deleting") : `${t("deleteSelected")} (${selectedIds.size})`}
+                  {`${t("deleteSelected")} (${selectedIds.size})`}
                 </Button>
               )}
               <Button
@@ -80,6 +83,14 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
             ))
         }
       </div>
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onOpenChange={setConfirmDeleteOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        isPending={isDeleting}
+        onConfirm={() => { deleteSelected(); setConfirmDeleteOpen(false); }}
+      />
     </section>
   );
 }

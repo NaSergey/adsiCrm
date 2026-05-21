@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { Button } from "@/shared/ui/button";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { CreateBrokerModal, CreatePartnerModal } from "@/features/dialog";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { useAffiliatesSelection } from "../selection-context";
 import { usePermissions } from "@/shared/lib/use-permissions";
 import type { AffiliateTab } from "../types";
@@ -22,6 +23,7 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
   const t = useTranslations("affiliates");
   const [createPartnerOpen, setCreatePartnerOpen] = useState(false);
   const [createBrokerOpen, setCreateBrokerOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const { isSelecting, selectedIds, isDeleting, startSelect, exitSelect, deleteSelected } = useAffiliatesSelection();
 
   const { hasFeature } = usePermissions();
@@ -51,9 +53,9 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
         </div>
         <div className="flex items-center gap-2 shrink-0 ml-auto">
           {canManage && isSelecting && selectedIds.size > 0 && (
-            <Button size="sm" variant="destructive" disabled={isDeleting} onClick={deleteSelected}>
+            <Button size="sm" variant="destructive" disabled={isDeleting} onClick={() => setConfirmDeleteOpen(true)}>
               <Trash2 className="size-4" />
-              {isDeleting ? t("deleting") : `${t("deleteSelected")} (${selectedIds.size})`}
+              {`${t("deleteSelected")} (${selectedIds.size})`}
             </Button>
           )}
           {canManage && (
@@ -82,6 +84,14 @@ export function AffiliatesToolbar({ activeTab, onTabChange, features }: Affiliat
 
       <CreatePartnerModal open={createPartnerOpen} onOpenChange={setCreatePartnerOpen} />
       <CreateBrokerModal open={createBrokerOpen} onOpenChange={setCreateBrokerOpen} />
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onOpenChange={setConfirmDeleteOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        isPending={isDeleting}
+        onConfirm={() => { deleteSelected(); setConfirmDeleteOpen(false); }}
+      />
     </section>
   );
 }

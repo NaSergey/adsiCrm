@@ -40,6 +40,8 @@
     "cancelSelect": "Скасувати",
     "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "columns": {
       "id": "ID",
       "name": "Ім'я",
@@ -98,6 +100,8 @@
     "cancelSelect": "Скасувати",
     "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "columns": {
       "id": "ID",
       "name": "Ім'я",
@@ -138,6 +142,8 @@
     "cancelSelect": "Скасувати",
     "deleteSelected": "Видалити",
     "deleting": "Видаляємо...",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "yes": "Так",
     "no": "Ні",
     "stats": {
@@ -199,6 +205,8 @@
     "enableSelected": "Увімкнути",
     "disableSelected": "Вимкнути",
     "deleteSelected": "Видалити",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "selectedCount": "Вибрано: {count}"
   },
   "wiki": {
@@ -234,6 +242,8 @@
     "save": "Зберегти",
     "deleting": "Видаляємо...",
     "delete": "Видалити",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "firstName": "Ім'я",
     "lastName": "Прізвище",
     "ftd": "FTD",
@@ -318,7 +328,9 @@
     "brokerLabel": "Брокер",
     "saveAndRun": "Зберегти та запустити",
     "response": "Відповідь",
-    "responsePlaceholder": "Відповідь з'явиться тут..."
+    "responsePlaceholder": "Відповідь з'явиться тут...",
+    "confirmDeleteTitle": "Ви впевнені?",
+    "confirmDeleteDescription": "Цю дію не можна скасувати."
   },
   "createModals": {
     "creating": "Створюємо...",

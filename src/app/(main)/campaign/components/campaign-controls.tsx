@@ -4,8 +4,12 @@ import { useState } from "react";
 import { Plus, MousePointerClick, Trash2, ToggleLeft, ToggleRight, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/shared/ui/button";
+import { Input } from "@/shared/ui/input";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { CreateCampaignModal } from "@/features/dialog";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
+import type { components } from "@/shared/api/schema";
+type ResponseCampaignDto = components["schemas"]["ResponseCampaignDto"];
 import { SelectCountry } from "@/entities/ui/select-country";
 import { SelectLang } from "@/entities/ui/select-lang";
 import { SelectBroker } from "@/entities/ui/select-broker";
@@ -45,6 +49,7 @@ interface CampaignControlsProps {
   selection: CampaignSelectionActions;
   filters: CampaignFiltersState;
   onFiltersChange: (filters: CampaignFiltersState) => void;
+  onCreated?: (campaign: ResponseCampaignDto) => void;
 }
 
 export function CampaignControls({
@@ -54,8 +59,10 @@ export function CampaignControls({
   selection,
   filters,
   onFiltersChange,
+  onCreated,
 }: CampaignControlsProps) {
   const [createOpen, setCreateOpen] = useState(false);
+  const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
   const t = useTranslations("campaign");
   const hasFilters = Object.values(filters).some(Boolean);
 
@@ -92,7 +99,7 @@ export function CampaignControls({
               <ToggleLeft className="size-4" />
               {t("disableSelected")}
             </Button>
-            <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={selection.onDelete}>
+            <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={() => setConfirmDeleteOpen(true)}>
               <Trash2 className="size-4" />
               {t("deleteSelected")}
             </Button>
@@ -133,7 +140,7 @@ export function CampaignControls({
                 <ToggleLeft className="size-4" />
                 <span className="hidden sm:inline">{t("disableSelected")}</span>
               </Button>
-              <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={selection.onDelete}>
+              <Button size="sm" variant="destructive" disabled={selection.selectedCount === 0} onClick={() => setConfirmDeleteOpen(true)}>
                 <Trash2 className="size-4" />
                 <span className="hidden sm:inline">{t("deleteSelected")}</span>
               </Button>
@@ -153,12 +160,12 @@ export function CampaignControls({
 
       {/* ── Filters ── */}
       <div className="flex flex-col gap-3 md:pb-0 pb-6 md:flex-row md:flex-wrap md:items-center">
-        <input
-          type="text"
+        <Input
+          noIcon
           placeholder={t("company_name")}
           value={filters.name}
           onChange={(e) => onFiltersChange({ ...filters, name: e.target.value })}
-          className="w-full rounded border border-gray-1000 bg-gray-1000 px-3 h-9 text-white placeholder-gray-500 outline-none ring-transparent focus:ring-2 focus:ring-offset-blue-600 md:w-auto md:min-w-48"
+          className="w-full md:w-auto md:max-w-48"
         />
         <SelectBroker
           className="w-full md:w-auto md:min-w-48"
@@ -194,7 +201,15 @@ export function CampaignControls({
         </Button>
       </div>
 
-      <CreateCampaignModal open={createOpen} onOpenChange={setCreateOpen} />
+      <CreateCampaignModal open={createOpen} onOpenChange={setCreateOpen} onSuccess={onCreated} />
+      <ConfirmDialog
+        open={confirmDeleteOpen}
+        onOpenChange={setConfirmDeleteOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        confirmLabel={t("deleteSelected")}
+        onConfirm={() => { selection.onDelete(); setConfirmDeleteOpen(false); }}
+      />
     </div>
   );
 }

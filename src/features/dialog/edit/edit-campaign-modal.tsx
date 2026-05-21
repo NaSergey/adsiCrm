@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useTranslations } from "next-intl";
 import { useForm, useWatch, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,6 +13,7 @@ import { Input } from "@/shared/ui/input";
 import { Select } from "@/shared/ui/select";
 import { Checkbox } from "@/shared/ui/checkbox";
 import { SectionHeading } from "@/shared/ui/section-heading";
+import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { ScheduleDropdown } from "@/features/dialog/components/schedule-dropdown";
 import { SelectPartner } from "@/entities/ui/select-partner";
 import { SelectBroker } from "@/entities/ui/select-broker";
@@ -138,12 +139,12 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
   });
 
   const { remove, isPending: isDeleting } = useDeleteCampaign({ onSuccess: onDelete });
+  const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
     <>
-      <DialogTitle className="sr-only">{t("editCampaign")}</DialogTitle>
-
-      <div className="flex items-center justify-between">
+      <DialogTitle className="">{t("editCampaign")}</DialogTitle>
+      <div className="flex items-center pr-6 justify-between">
         <div className="flex items-center gap-2">
           <SectionHeading title={t("editCampaign")} />
           <span className="text-xs font-normal text-gray-500">#{campaign.id}</span>
@@ -153,7 +154,7 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
             type="button"
             title="Duplicate campaign"
             onClick={() => onDuplicate?.(getValues())}
-            className="flex items-center justify-center size-8 rounded-md transition-colors bg-gray-200 dark:bg-gray-1000 text-gray-500 hover:text-gray-900 dark:hover:text-white"
+            className="flex cursor-pointer items-center justify-center size-8 rounded-md transition-colors bg-gray-200 dark:bg-gray-1000 text-gray-500 hover:text-gray-900 dark:hover:text-white"
           >
             <Copy className="size-4" />
           </button>
@@ -215,11 +216,20 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
           {isPending ? t("saving") : t("save")}
         </Button>
         {hasFeature("manage_campaigns") && (
-          <Button variant="destructive" className="flex-1" onClick={() => remove(Number(campaign.id))} disabled={isDeleting}>
-            {isDeleting ? t("deleting") : t("delete")}
+          <Button variant="destructive" className="flex-1" onClick={() => setConfirmOpen(true)} disabled={isDeleting}>
+            {t("delete")}
           </Button>
         )}
       </DialogFooter>
+      <ConfirmDialog
+        open={confirmOpen}
+        onOpenChange={setConfirmOpen}
+        title={t("confirmDeleteTitle")}
+        description={t("confirmDeleteDescription")}
+        confirmLabel={isDeleting ? t("deleting") : t("delete")}
+        isPending={isDeleting}
+        onConfirm={() => remove(Number(campaign.id))}
+      />
     </>
   );
 }

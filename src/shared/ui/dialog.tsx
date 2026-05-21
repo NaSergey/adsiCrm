@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
+import { X } from "lucide-react";
 import { cn } from "@/shared/lib/css";
 
 const Dialog = DialogPrimitive.Root;
@@ -45,6 +46,9 @@ function DialogContent({
         {...props}
       >
         {children}
+        <DialogPrimitive.Close className="absolute cursor-pointer right-4 top-4 rounded-sm opacity-70 transition-opacity hover:opacity-100 focus:outline-none disabled:pointer-events-none">
+          <X className="size-4" />
+        </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPortal>
   );
@@ -80,7 +84,7 @@ function DialogTitle({
   return (
     <DialogPrimitive.Title
       data-slot="dialog-title"
-      className={cn("text-lg font-semibold leading-none tracking-tight", className)}
+      className={cn("text-lg sr-only font-semibold leading-none tracking-tight", className)}
       {...props}
     />
   );

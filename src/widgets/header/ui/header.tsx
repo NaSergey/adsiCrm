@@ -30,7 +30,7 @@ export async function Header() {
        - left-0 right-0: растягивает на всю ширину
        - z-50: чтобы был поверх контента
     */
-    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-gray-1100 shadow-md">
+    <header className="fixed top-0 left-0 right-0 z-50 w-full bg-gray-1100">
       <nav className="flex h-15 w-full items-center justify-between px-2 sm:px-4 md:px-6">
         <div className="flex flex-1 items-center">
           <Link href="/" className="flex items-center" aria-label="Home">
@@ -66,7 +66,7 @@ export async function Header() {
       </nav>
 
       {/* Эта часть видна только на десктопе, она тоже будет зафиксирована */}
-      <nav className="hidden justify-center bg-gray-1200 px-2 py-4 sm:px-4 md:flex md:px-6 border-t border-gray-800">
+      <nav className="hidden justify-center bg-background px-2 py-4 sm:px-4 md:flex md:px-6">
         <ul className="flex flex-wrap items-center gap-1">
           {visibleNavItems.map(({ href, icon: Icon, label }) => (
             <li key={href}>
