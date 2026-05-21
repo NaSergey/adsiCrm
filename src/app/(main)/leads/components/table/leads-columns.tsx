@@ -21,7 +21,12 @@ const StatusBadge = ({ status }: { status: string }) => {
 
 type T = (key: string) => string;
 
-export const getLeadsColumns = (t: T): ColumnDef<Lead>[] => [
+export interface LeadsColumnsOptions {
+  onOpenPartner: (id: number) => void;
+  onOpenBroker: (id: number) => void;
+}
+
+export const getLeadsColumns = (t: T, opts: LeadsColumnsOptions): ColumnDef<Lead>[] => [
   {
     accessorKey: "id",
     header: t("columns.id"),
@@ -85,16 +90,36 @@ export const getLeadsColumns = (t: T): ColumnDef<Lead>[] => [
   {
     accessorKey: "partner",
     header: t("columns.partner"),
-    cell: ({ row }) => (
-      <span className="text-gray-400 text-sm">{row.original.partner?.name || "-"}</span>
-    ),
+    cell: ({ row }) => {
+      const p = row.original.partner;
+      if (!p) return <span className="text-gray-400 text-sm">-</span>;
+      return (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); opts.onOpenPartner(p.id); }}
+          className="text-gray-400 text-sm cursor-pointer hover:text-white hover:underline underline-offset-2"
+        >
+          {p.name}
+        </button>
+      );
+    },
   },
   {
     accessorKey: "broker",
     header: t("columns.broker"),
-    cell: ({ row }) => (
-      <span className="text-gray-400 text-sm">{row.original.broker?.name || "-"}</span>
-    ),
+    cell: ({ row }) => {
+      const b = row.original.broker;
+      if (!b) return <span className="text-gray-400 text-sm">-</span>;
+      return (
+        <button
+          type="button"
+          onClick={(e) => { e.stopPropagation(); opts.onOpenBroker(b.id); }}
+          className="text-gray-400 text-sm cursor-pointer hover:text-white hover:underline underline-offset-2"
+        >
+          {b.name}
+        </button>
+      );
+    },
   },
   {
     accessorKey: "isFraud",

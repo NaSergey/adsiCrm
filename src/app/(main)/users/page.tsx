@@ -9,6 +9,7 @@ import { Button } from "@/shared/ui/button";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { CreateUserModal } from "@/features/dialog/create/create-user-modal";
 import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 export default function UsersPage() {
   const t = useTranslations("users");
@@ -17,10 +18,12 @@ export default function UsersPage() {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
+  const appToast = useAppToast();
   const { remove: deleteUsers, isPending: isDeleting } = useDeleteUser({
     onSuccess: () => {
       setSelectedIds(new Set());
       setIsSelecting(false);
+      appToast.deleted("user");
     },
   });
 

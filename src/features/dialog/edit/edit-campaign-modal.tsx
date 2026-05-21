@@ -24,6 +24,7 @@ import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
 import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
 import { campaignFormSchema, type CampaignFormValues } from "@/features/dialog/schemas/campaign-schema";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 const STATUS_OPTIONS = [
   { value: "ON", label: "ON" },
@@ -91,8 +92,9 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
   const { hasFeature } = usePermissions();
   const t = useTranslations("editModals");
   const queryClient = useQueryClient();
+  const appToast = useAppToast();
 
-  const { control, register, handleSubmit, setValue, reset, getValues, formState: { errors } } = useForm<CampaignFormValues>({
+  const { control, register, handleSubmit, setValue, reset, getValues, formState: { errors, isDirty } } = useForm<CampaignFormValues>({
     resolver: zodResolver(campaignFormSchema),
     defaultValues: buildEditFormValues(campaign),
   });
@@ -138,7 +140,7 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
     },
   });
 
-  const { remove, isPending: isDeleting } = useDeleteCampaign({ onSuccess: onDelete });
+  const { remove, isPending: isDeleting } = useDeleteCampaign({ onSuccess: () => { onDelete?.(); appToast.deleted("campaign"); } });
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   return (
@@ -212,7 +214,7 @@ export function EditCampaignForm({ campaign, onSave, onDelete, onDuplicate }: Ed
       </div>
 
       <DialogFooter className="flex-row gap-3 justify-between sm:justify-between">
-        <Button className="flex-1" onClick={handleSubmit((v) => update(v))} disabled={isPending}>
+        <Button className="flex-1" onClick={handleSubmit((v) => { const dirty = isDirty; update(v, { onSuccess: () => { if (dirty) appToast.updated("campaign"); } }); })} disabled={isPending}>
           {isPending ? t("saving") : t("save")}
         </Button>
         {hasFeature("manage_campaigns") && (

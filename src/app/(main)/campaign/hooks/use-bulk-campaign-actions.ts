@@ -2,6 +2,7 @@
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
 import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 import type { Campaign } from "../types";
 
 export function useBulkCampaignActions(
@@ -10,7 +11,8 @@ export function useBulkCampaignActions(
   onDone: () => void,
 ) {
   const queryClient = useQueryClient();
-  const { removeAsync } = useDeleteCampaign({ onSuccess: onDone });
+  const appToast = useAppToast();
+  const { removeAsync } = useDeleteCampaign({ onSuccess: () => { onDone(); appToast.deleted("campaign"); } });
 
   const selected = campaigns.filter((c) => selectedIds.has(c.id));
 

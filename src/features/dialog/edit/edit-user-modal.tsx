@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/dialog";
@@ -11,6 +11,7 @@ import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { fetchClient } from "@/shared/api";
 import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
 import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 interface EditUserModalProps {
   open: boolean;
@@ -30,7 +31,10 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
   const [comment, setComment] = useState(user?.comment ?? "");
   const [password, setPassword] = useState("");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const appToast = useAppToast();
+  const isDirtyRef = useRef(false);
 
+  useEffect(() => { isDirtyRef.current = false; }, [open]);
 
   const queryClient = useQueryClient();
 
@@ -43,12 +47,12 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
     },
   });
 
-  const { remove, isPending: isDeleting } = useDeleteUser({ onSuccess: () => onOpenChange(false) });
+  const { remove, isPending: isDeleting } = useDeleteUser({ onSuccess: () => { onOpenChange(false); appToast.deleted("user"); } });
 
   const handleSave = () => {
     const body: { name: string; comment: string; password?: string; permissions: [] } = { name, comment, permissions: [] };
     if (password) body.password = password;
-    update(body);
+    update(body, { onSuccess: () => { if (isDirtyRef.current) appToast.updated("user"); } });
   };
 
   return (
@@ -59,13 +63,13 @@ export function EditUserModal({ open, onOpenChange, user }: EditUserModalProps) 
           <SectionHeading title={t("editUser")} />
 
           <div className="grid grid-cols-2 md:gap-4 gap-2 pt-4">
-            <Input label={t("name")} placeholder={t("usernamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
+            <Input label={t("name")} placeholder={t("usernamePlaceholder")} value={name} onChange={(e) => { setName(e.target.value); isDirtyRef.current = true; }} />
             <Input label={t("email")} type="email" value={user.email} readOnly />
-            <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
+            <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => { setComment(e.target.value); isDirtyRef.current = true; }} />
             <Input label={t("role")} value={user.role} readOnly />
           </div>
           <div className="flex items-center gap-2 -mt-1 pb-4">
-            <Input label={t("password")} type="password" placeholder={t("newPasswordPlaceholder")} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input label={t("password")} type="password" placeholder={t("newPasswordPlaceholder")} value={password} onChange={(e) => { setPassword(e.target.value); isDirtyRef.current = true; }} />
           </div>
           {updateError && (
             <p className="text-sm text-red-500 pb-2">{t("error")}</p>

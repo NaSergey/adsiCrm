@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/dialog";
@@ -13,6 +13,7 @@ import { fetchClient } from "@/shared/api";
 import { partnersQueryKey } from "@/entities/api/use-partners";
 import { useDeletePartner } from "@/entities/api/delete/use-delete-partner";
 import { SelectManager } from "@/entities";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 export interface PartnerData {
   id: number;
@@ -38,6 +39,10 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
   const [managerId, setManagerId] = useState(partner.managerId);
   const [copied, setCopied] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const appToast = useAppToast();
+  const isDirtyRef = useRef(false);
+
+  useEffect(() => { isDirtyRef.current = false; }, [open]);
 
   const handleCopyToken = () => {
     navigator.clipboard.writeText(partner.partnerToken);
@@ -57,7 +62,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
     },
   });
 
-  const { remove, isPending: isDeleting } = useDeletePartner({ onSuccess: () => onOpenChange(false) });
+  const { remove, isPending: isDeleting } = useDeletePartner({ onSuccess: () => { onOpenChange(false); appToast.deleted("partner"); } });
 
   const handleSave = () => {
     const body: { name: string; comment: string; password?: string; permissions: []; managerId?: number | null } = {
@@ -67,7 +72,7 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
       managerId: managerId ? Number(managerId) : null,
     };
     if (password) body.password = password;
-    update(body);
+    update(body, { onSuccess: () => { if (isDirtyRef.current) appToast.updated("partner"); } });
   };
 
   return (
@@ -77,9 +82,9 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
         <SectionHeading title={t("editPartner")} />
 
         <div className="grid grid-cols-2 md:gap-4 gap-2 py-4">
-          <Input label={t("name")} placeholder={t("partnerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
+          <Input label={t("name")} placeholder={t("partnerNamePlaceholder")} value={name} onChange={(e) => { setName(e.target.value); isDirtyRef.current = true; }} />
           <Input label={t("email")} type="email" value={partner.email} readOnly />
-          <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
+          <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => { setComment(e.target.value); isDirtyRef.current = true; }} />
           <div className="flex items-end gap-2">
             <Input label={t("partnerToken")} value={partner.partnerToken} readOnly className="flex-1" />
             <button
@@ -91,9 +96,9 @@ export function EditPartnerModal({ open, onOpenChange, partner }: EditPartnerMod
             </button>
           </div>
           <Input label={t("role")} value={partner.role} readOnly />
-          <SelectManager label={t("manager")} value={managerId} onChange={setManagerId} />
+          <SelectManager label={t("manager")} value={managerId} onChange={(v) => { setManagerId(v); isDirtyRef.current = true; }} />
           <div className="col-span-2">
-            <Input label={t("password")} type="password" placeholder={t("newPasswordPlaceholder")} value={password} onChange={(e) => setPassword(e.target.value)} />
+            <Input label={t("password")} type="password" placeholder={t("newPasswordPlaceholder")} value={password} onChange={(e) => { setPassword(e.target.value); isDirtyRef.current = true; }} />
           </div>
           {updateError && (
             <p className="col-span-2 text-sm text-red-500">{t("error")}</p>

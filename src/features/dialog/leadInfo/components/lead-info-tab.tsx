@@ -14,6 +14,7 @@ interface LeadInfoTabProps {
 
 export interface LeadInfoTabRef {
   getValues: () => { status: string; ftd: boolean; isChangeableStatus: boolean; ftdPending: boolean };
+  isDirty: () => boolean;
 }
 
 export const LeadInfoTab = forwardRef<LeadInfoTabRef, LeadInfoTabProps>(({ lead }, ref) => {
@@ -33,6 +34,7 @@ export const LeadInfoTab = forwardRef<LeadInfoTabRef, LeadInfoTabProps>(({ lead 
   const [isChangeableStatus, setIsChangeableStatus] = useState(fullLead.isChangeableStatus ?? true);
 
   useImperativeHandle(ref, () => ({
+    isDirty: () => status !== lead.status || ftd !== (fullLead.ftd ?? false) || isChangeableStatus !== (fullLead.isChangeableStatus ?? true),
     getValues: () => ({
       ftd,
       status,

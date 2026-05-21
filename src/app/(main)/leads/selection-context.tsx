@@ -2,6 +2,7 @@
 
 import { createContext, useCallback, useContext, useState, type ReactNode } from "react";
 import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 interface LeadsSelectionState {
   isSelecting: boolean;
@@ -19,10 +20,12 @@ export function LeadsSelectionProvider({ children }: { children: ReactNode }) {
   const [isSelecting, setIsSelecting] = useState(false);
   const [selectedIds, setSelectedIds] = useState<Set<number>>(new Set());
 
+  const appToast = useAppToast();
   const { remove, isPending: isDeleting } = useDeleteLead({
     onSuccess: () => {
       setSelectedIds(new Set());
       setIsSelecting(false);
+      appToast.deleted("lead");
     },
   });
 

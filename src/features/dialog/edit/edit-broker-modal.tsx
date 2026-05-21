@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import { useState, useEffect } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useTranslations } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogFooter, DialogTitle } from "@/shared/ui/dialog";
@@ -14,6 +14,7 @@ import { brokersQueryKey } from "@/entities";
 import { useDeleteBroker } from "@/entities/api/delete/use-delete-broker";
 import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
 import { usePermissions } from "@/shared/lib/use-permissions";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 export interface BrokerData {
   id: string;
@@ -44,12 +45,10 @@ export function EditBrokerModal({
   const [managerId, setManagerId] = useState(broker.managerId);
   const [integType, setIntegType] = useState<"add" | "update" | null>(null);
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const appToast = useAppToast();
+  const isDirtyRef = useRef(false);
 
-  useEffect(() => {
-    setName(broker.name);
-    setComment(broker.comment);
-    setManagerId(broker.managerId);
-  }, [broker]);
+  useEffect(() => { isDirtyRef.current = false; }, [open]);
 
   const queryClient = useQueryClient();
 
@@ -71,7 +70,7 @@ export function EditBrokerModal({
   });
 
   const { remove: deleteMutate, isPending: isDeleting } = useDeleteBroker({
-    onSuccess: () => { onOpenChange(false); onDelete(); },
+    onSuccess: () => { onOpenChange(false); onDelete(); appToast.deleted("broker"); },
   });
 
   return (
@@ -83,14 +82,16 @@ export function EditBrokerModal({
 
           <div className="grid grid-cols-2 gap-6 pb-6 pt-4">
             <Input label={t("id")} value={broker.id} readOnly />
-            <Input label={t("name")} placeholder={t("brokerNamePlaceholder")} value={name} onChange={(e) => setName(e.target.value)} />
-            <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => setComment(e.target.value)} />
-            <SelectBrandManager label={t("brandManager")} value={managerId} onChange={setManagerId} />
+            <Input label={t("name")} placeholder={t("brokerNamePlaceholder")} value={name} onChange={(e) => { setName(e.target.value); isDirtyRef.current = true; }} />
+            <Input label={t("comment")} placeholder={t("comment")} value={comment} onChange={(e) => { setComment(e.target.value); isDirtyRef.current = true; }} />
+            <SelectBrandManager label={t("brandManager")} value={managerId} onChange={(v) => { setManagerId(v); isDirtyRef.current = true; }} />
             {error && <p className="col-span-2 text-sm text-red-500">{t("error")}</p>}
           </div>
 
           <DialogFooter className="flex-col sm:flex-row gap-3">
-            <Button onClick={() => mutate()} disabled={isPending} className="w-full sm:flex-1">
+            <Button onClick={() => {
+              mutate(undefined, { onSuccess: () => { if (isDirtyRef.current) appToast.updated("broker"); } });
+            }} disabled={isPending} className="w-full sm:flex-1">
               {isPending ? t("saving") : t("save")}
             </Button>
             <Button variant="secondary" onClick={() => setIntegType("add")} className="w-full sm:flex-1">{t("addLeads")}</Button>

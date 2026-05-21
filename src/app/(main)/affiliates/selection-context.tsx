@@ -3,6 +3,7 @@
 import { createContext, useCallback, useContext, useEffect, useState, type ReactNode } from "react";
 import { useDeletePartner } from "@/entities/api/delete/use-delete-partner";
 import { useDeleteBroker } from "@/entities/api/delete/use-delete-broker";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 import type { AffiliateTab } from "./types";
 
 interface AffiliatesSelectionState {
@@ -36,8 +37,9 @@ export function AffiliatesSelectionProvider({ activeTab, children }: AffiliatesS
     exitSelect();
   }, [activeTab, exitSelect]);
 
-  const { remove: deletePartners, isPending: isDeletingPartners } = useDeletePartner({ onSuccess: exitSelect });
-  const { remove: deleteBrokers, isPending: isDeletingBrokers } = useDeleteBroker({ onSuccess: exitSelect });
+  const appToast = useAppToast();
+  const { remove: deletePartners, isPending: isDeletingPartners } = useDeletePartner({ onSuccess: () => { exitSelect(); appToast.deleted("partner"); } });
+  const { remove: deleteBrokers, isPending: isDeletingBrokers } = useDeleteBroker({ onSuccess: () => { exitSelect(); appToast.deleted("broker"); } });
 
   const toggleId = useCallback((id: number) => {
     setSelectedIds((prev) => {

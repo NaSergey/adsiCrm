@@ -19,6 +19,7 @@ import { SelectCountryMulti } from "@/entities/ui/select-country-multi";
 import { SelectLangMulti } from "@/entities/ui/select-lang-multi";
 import { ScheduleDropdown } from "@/features/dialog/components/schedule-dropdown";
 import { campaignFormSchema, type CampaignFormValues } from "@/features/dialog/schemas/campaign-schema";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 type CreateCampaignBody = components["schemas"]["CreateCampaignDto"];
 
@@ -52,6 +53,7 @@ interface CreateCampaignFormProps {
 export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFormProps) {
   const t = useTranslations("createModals");
   const queryClient = useQueryClient();
+  const appToast = useAppToast();
 
   const { control, register, handleSubmit, setValue, reset, formState: { errors } } = useForm<CampaignFormValues>({
     resolver: zodResolver(campaignFormSchema),
@@ -74,6 +76,7 @@ export function CreateCampaignForm({ initialData, onSuccess }: CreateCampaignFor
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: campaignsQueryKey });
       reset();
+      appToast.created("campaign");
       if (data) onSuccess?.(data);
     },
   });

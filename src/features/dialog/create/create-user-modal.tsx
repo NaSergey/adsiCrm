@@ -15,6 +15,7 @@ import { generateToken } from "@/shared/api/utils";
 import { extractErrorMessage } from "@/shared/lib/extract-error-message";
 import { usersQueryKey } from "./create-user-modal.constants";
 import { useCreateUserOptions } from "./use-create-user-options";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 export { usersQueryKey };
 
@@ -27,6 +28,7 @@ interface CreateUserModalProps {
 export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserModalProps) {
   const t = useTranslations("createModals");
   const { roleOptions, partnersDisplayOptions, leadsDisplayOptions, brokersDisplayOptions, accessBrokerOptions } = useCreateUserOptions();
+  const appToast = useAppToast();
 
   const [name, setName] = useState("");
   const [role, setRole] = useState("");
@@ -90,6 +92,7 @@ export function CreateUserModal({ open, onOpenChange, onSuccess }: CreateUserMod
       resetForm();
       onOpenChange(false);
       onSuccess?.();
+      appToast.created("user");
     },
   });
 

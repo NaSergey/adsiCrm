@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useTranslations } from "next-intl";
 import dynamic from "next/dynamic";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
@@ -10,6 +10,7 @@ import {
   useUpdateBrokerFile,
   useUpdateAndRunBrokerFile,
 } from "@/entities/api/use-broker-file";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 const CodeEditor = dynamic(
   () => import("./code-editor").then((m) => m.CodeEditor),
@@ -169,25 +170,34 @@ export function EditIntegCodeModal({
     if (!open) return;
     setAnswer("");
     const example = type === "add" ? ADD_LEAD_EXAMPLE : UPDATE_LEAD_EXAMPLE;
-    setCode(fileData?.phpCode || example);
+    const loaded = fileData?.phpCode || example;
+    setCode(loaded);
+    originalCodeRef.current = loaded;
   }, [open, type, fileData]);
 
+  const appToast = useAppToast();
+  const originalCodeRef = useRef("");
   const { mutate: save, isPending: isSaving } = useUpdateBrokerFile();
   const { mutate: saveAndRun, isPending: isRunning } = useUpdateAndRunBrokerFile();
 
   const loading = isSaving || isRunning;
 
   const handleSave = () => {
-    save({ brokerId: brokerIdNum, fileType: type, phpCode: code });
+    const hasChanges = code !== originalCodeRef.current;
+    save({ brokerId: brokerIdNum, fileType: type, phpCode: code }, {
+      onSuccess: () => { if (hasChanges) { originalCodeRef.current = code; appToast.updated("broker"); } },
+    });
   };
 
   const handleSaveAndRun = () => {
     setAnswer("");
+    const hasChanges = code !== originalCodeRef.current;
     saveAndRun(
       { brokerId: brokerIdNum, fileType: type, phpCode: code },
       {
         onSuccess: (data) => {
           setAnswer(JSON.stringify(data, null, 2));
+          if (hasChanges) { originalCodeRef.current = code; appToast.updated("broker"); }
         },
         onError: (err) => {
           setAnswer(String(err));

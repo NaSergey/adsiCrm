@@ -383,6 +383,17 @@
       "brandManager": "Brand Manager"
     }
   },
+  "toast": {
+    "created": "Created",
+    "updated": "Updated",
+    "deleted": "Deleted",
+    "error": "Something went wrong",
+    "broker": "Broker",
+    "partner": "Partner",
+    "user": "User",
+    "campaign": "Campaign",
+    "lead": "Lead"
+  },
   "settings": {
     "title": "Settings",
     "tabs": {

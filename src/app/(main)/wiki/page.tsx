@@ -1,12 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { ChevronLeft, Loader2 } from "lucide-react";
+import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Button } from "@/shared/ui/button";
 import { Textarea } from "@/shared/ui/textarea";
-import { getApiToken, getApiDomain, isJson } from "@/shared/api/utils";
+import { getApiDomain } from "@/shared/api/utils";
 
 const DOMAIN = getApiDomain();
 const PARTNER_TOKEN = "YOUR_PARTNER_TOKEN";
@@ -66,27 +66,6 @@ export default function WikiPage() {
   const t = useTranslations("wiki");
   const [view, setView] = useState<"docs" | "code">("docs");
   const [code, setCode] = useState(ADD_LEAD_CODE);
-  const [answer, setAnswer] = useState("");
-  const [loading, setLoading] = useState(false);
-
-  const runCode = async () => {
-    setLoading(true);
-    try {
-      const res = await fetch(getApiDomain() + "/sendbox/send_code/", {
-        method: "POST",
-        headers: { "Auth-Token": getApiToken() },
-        body: JSON.stringify({ code }),
-      });
-      let data = await res.text();
-      if (isJson(data)) data = JSON.stringify(JSON.parse(data), null, 2);
-      setAnswer(data);
-    } catch {
-      setAnswer(t("requestFailed"));
-    } finally {
-      setLoading(false);
-    }
-  };
-
   const showExample = (exampleCode: string) => {
     setCode(exampleCode);
     setView("code");
@@ -105,20 +84,10 @@ export default function WikiPage() {
         <Textarea
           className="font-mono text-sm min-h-[50vh]"
           value={code}
-          onChange={(e) => setCode(e.target.value)}
+          readOnly
           spellCheck={false}
         />
 
-        <div className="space-y-2">
-          <div className="flex items-center justify-between">
-            <span className="text-sm font-medium text-gray-500">{t("apiResponse")}</span>
-            <Button variant="blue" size="md" onClick={runCode} disabled={loading}>
-              {loading && <Loader2 className="animate-spin" />}
-              {t("run")}
-            </Button>
-          </div>
-          <CodeBlock>{answer || t("responsePlaceholder")}</CodeBlock>
-        </div>
       </div>
     );
   }

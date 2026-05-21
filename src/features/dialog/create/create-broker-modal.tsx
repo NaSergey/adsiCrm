@@ -10,6 +10,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared";
 import { brokersQueryKey } from "@/entities";
 import { extractErrorMessage } from "@/shared/lib/extract-error-message";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 import { SelectBrandManager } from "@/entities/ui/select-brand-manager";
 
 interface CreateBrokerModalProps {
@@ -27,6 +28,7 @@ export function CreateBrokerModal({
   const [name, setName] = useState("");
   const [comment, setComment] = useState("");
   const [managerId, setManagerId] = useState("");
+  const appToast = useAppToast();
 
   const queryClient = useQueryClient();
 
@@ -43,6 +45,7 @@ export function CreateBrokerModal({
       setManagerId("");
       onOpenChange(false);
       onSuccess?.();
+      appToast.created("broker");
     },
   });
 

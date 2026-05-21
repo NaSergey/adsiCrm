@@ -16,6 +16,7 @@ import { useLeadById } from "@/entities/api/use-lead";
 import { useDeleteLead } from "@/entities/api/delete/use-delete-lead";
 import { usePermissions } from "@/shared/lib/use-permissions";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 
 interface LeadDetailModalProps {
   lead: Lead | null;
@@ -33,6 +34,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
   const queryClient = useQueryClient();
   const canDeleteLead = hasFeature("delete_lead");
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const appToast = useAppToast();
 
   const tabs: { id: Tab; label: string }[] = [
     { id: "lead_info", label: t("tabLeadInfo") },
@@ -60,7 +62,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
       onOpenChange(false);
     },
   });
-  const { remove: deleteLead, isPending: isDeleting } = useDeleteLead({ onSuccess: () => onOpenChange(false) });
+  const { remove: deleteLead, isPending: isDeleting } = useDeleteLead({ onSuccess: () => { onOpenChange(false); appToast.deleted("lead"); } });
 
   if (!lead) return null;
 
@@ -112,7 +114,10 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
 
         {/* Footer */}
         <div className="flex items-center gap-3 px-4 sm:px-6 py-2  border-t border-gray-1000">
-          <Button className="w-full" variant="blue" onClick={() => save()} disabled={isSaving || isDeleting}>
+          <Button className="w-full" variant="blue" onClick={() => {
+            const dirty = tabRef.current?.isDirty() ?? false;
+            save(undefined, { onSuccess: () => { if (dirty) appToast.updated("lead"); } });
+          }} disabled={isSaving || isDeleting}>
             {isSaving ? t("saving") : t("save")}
           </Button>
           {canDeleteLead && (

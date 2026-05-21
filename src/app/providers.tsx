@@ -5,6 +5,7 @@ import { ThemeProvider } from "next-themes";
 import { useState } from "react";
 import { useTokenRefresh } from "@/shared/lib/use-token-refresh";
 import { useLogUserData } from "@/shared/lib/use-log-user-data";
+import { ToastProvider } from "@/shared/ui/toast";
 
 function TokenRefresher() {
   useTokenRefresh();
@@ -31,9 +32,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
   return (
     <ThemeProvider attribute="class" defaultTheme="dark" disableTransitionOnChange>
       <QueryClientProvider client={queryClient}>
-        <TokenRefresher />
-        <UserDataLogger />
-        {children}
+        <ToastProvider>
+          <TokenRefresher />
+          <UserDataLogger />
+          {children}
+        </ToastProvider>
       </QueryClientProvider>
     </ThemeProvider>
   );

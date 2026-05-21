@@ -11,6 +11,7 @@ import { fetchClient } from "@/shared/api";
 import type { components } from "@/shared/api/schema";
 import { partnersQueryKey } from "@/entities/api/use-partners";
 import { extractErrorMessage } from "@/shared/lib/extract-error-message";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 import { SelectManager } from "@/entities";
 
 type CreatePartnerBody = components["schemas"]["CreateUserDto"];
@@ -28,6 +29,7 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
   const [comment, setComment] = useState("");
   const [password, setPassword] = useState("");
   const [managerId, setManagerId] = useState("");
+  const appToast = useAppToast();
 
   const queryClient = useQueryClient();
 
@@ -46,6 +48,7 @@ export function CreatePartnerModal({ open, onOpenChange, onSuccess }: CreatePart
       setManagerId("");
       onOpenChange(false);
       onSuccess?.();
+      appToast.created("partner");
     },
   });
 
