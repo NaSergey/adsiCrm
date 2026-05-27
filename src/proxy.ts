@@ -30,19 +30,28 @@ function getTokenMaxAge(token: string): number {
 }
 
 async function tryRefresh(request: NextRequest): Promise<{ accessToken: string; setCookie: string | null } | null> {
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  const hasRefreshCookie = cookieHeader.includes("refreshToken=");
+  console.log("[middleware tryRefresh] URL:", REFRESH_URL, "| hasRefreshCookie:", hasRefreshCookie);
   try {
     const res = await fetch(REFRESH_URL, {
       method: "GET",
-      headers: { cookie: request.headers.get("cookie") ?? "" },
+      headers: { cookie: cookieHeader },
     });
     if (!res.ok) {
       const body = await res.text().catch(() => "(unreadable)");
+      console.log("[middleware tryRefresh] FAIL status:", res.status, "body:", body);
       return null;
     }
     const { accessToken } = await res.json();
-    if (!accessToken) return null;
+    if (!accessToken) {
+      console.log("[middleware tryRefresh] FAIL: no accessToken in response");
+      return null;
+    }
+    console.log("[middleware tryRefresh] SUCCESS");
     return { accessToken, setCookie: res.headers.get("set-cookie") };
   } catch (e) {
+    console.log("[middleware tryRefresh] EXCEPTION:", e);
     return null;
   }
 }
@@ -51,6 +60,9 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   let token = request.cookies.get(TOKEN_KEY)?.value;
   let refreshedCookie: string | null = null;
+
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  console.log(`[middleware] ${pathname} | accessToken: ${!!token} | refreshToken: ${cookieHeader.includes("refreshToken=")} | full cookie: ${cookieHeader.slice(0, 200)}`);
 
   // Если нет access token — пробуем тихий refresh перед редиректом
   if (!token && pathname !== PUBLIC_PATH) {
