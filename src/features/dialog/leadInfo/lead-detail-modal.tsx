@@ -1,7 +1,7 @@
 ﻿"use client";
 
 import { useState, useEffect, useRef } from "react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { TabSwitcher } from "@/shared/ui/tab-switcher";
@@ -28,6 +28,8 @@ type Tab = "lead_info" | "error_status";
 
 export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalProps) {
   const t = useTranslations("leadDetail");
+  const format = useFormatter();
+  const fmtDate = (iso: string) => format.dateTime(new Date(iso), { day: "2-digit", month: "2-digit", year: "numeric" });
   const { hasFeature } = usePermissions();
   const [activeTab, setActiveTab] = useState<Tab>("lead_info");
   const tabRef = useRef<LeadInfoTabRef>(null);
@@ -86,7 +88,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
             </div>
             <div className="flex items-center gap-2 shrink-0">
               <span className="hidden sm:inline text-xs text-gray-500">
-                {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
+                {lead.createdAt ? fmtDate(lead.createdAt) : "—"}
               </span>
               <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
                 <AutologinScreenshotButton leadId={lead.id} />
@@ -101,13 +103,13 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
             </span>
             <span className="text-sm text-foreground truncate flex-1 min-w-0">{lead.email}</span>
             <span className="text-xs text-gray-500 shrink-0">
-              {lead.createdAt ? new Date(lead.createdAt).toLocaleDateString() : "—"}
+              {lead.createdAt ? fmtDate(lead.createdAt) : "—"}
             </span>
           </div>
         </div>
 
         {/* Tab Content */}
-        <div className="py-4 md:px-0 px-2 flex-1 overflow-y-auto flex flex-col">
+        <div className="py-4 px-3 sm:px-6 flex-1 min-h-0 overflow-y-auto flex flex-col">
           {activeTab === "lead_info" && <LeadInfoTab ref={tabRef} lead={leadData} />}
           {activeTab === "error_status" && <ErrorStatusTab lead={leadData} />}
         </div>

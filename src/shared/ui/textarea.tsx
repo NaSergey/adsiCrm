@@ -5,11 +5,12 @@ import { cn } from "@/shared/lib/css";
 
 export interface TextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   label?: string;
+  wrapperClassName?: string;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
-  ({ className, label, ...props }, ref) => (
-    <div className={label ? "flex w-full flex-col gap-1.5" : "contents"}>
+  ({ className, label, wrapperClassName, ...props }, ref) => (
+    <div className={label ? cn("flex w-full flex-col gap-1.5", wrapperClassName) : "contents"}>
       {label && <span className="text-xs font-medium text-gray-500">{label}</span>}
       <textarea
         ref={ref}

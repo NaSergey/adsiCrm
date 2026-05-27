@@ -7,7 +7,14 @@ export async function GET(request: NextRequest) {
     headers: { cookie: request.headers.get("cookie") ?? "" },
   });
 
-  const data = await res.json();
+  const text = await res.text();
+  let data: unknown = null;
+  try {
+    data = text ? JSON.parse(text) : null;
+  } catch {
+    data = { message: text || "Refresh failed" };
+  }
+
   const response = NextResponse.json(data, { status: res.status });
 
   const setCookie = res.headers.get("set-cookie");

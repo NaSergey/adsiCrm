@@ -1,9 +1,11 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { EditBrokerModal, EditPartnerModal, CampaignModal, type BrokerData, type PartnerData, type CampaignData } from "@/features/dialog";
 import { CampaignCard } from "./campaign-card";
 import { usePinnedCampaigns } from "../hooks/use-pinned-campaigns";
+import { fetchClient } from "@/shared/api";
 import type { Campaign } from "../types";
 
 interface CampaignListProps {
@@ -47,7 +49,31 @@ export function CampaignList({
 }: CampaignListProps) {
   const { pinned, toggle: togglePin } = usePinnedCampaigns();
   const [brokerModal, setBrokerModal] = useState<BrokerData | null>(null);
-  const [partnerModal, setPartnerModal] = useState<PartnerData | null>(null);
+  const [selectedPartnerId, setSelectedPartnerId] = useState<number | null>(null);
+
+  const { data: fetchedPartner } = useQuery({
+    queryKey: ["partner", selectedPartnerId],
+    queryFn: async () => {
+      const { data, error } = await fetchClient.GET("/users/{id}", {
+        params: { path: { id: selectedPartnerId! } },
+      });
+      if (error) throw error;
+      return data;
+    },
+    enabled: !!selectedPartnerId,
+  });
+
+  const partnerModal: PartnerData | null = fetchedPartner && selectedPartnerId
+    ? {
+        id: fetchedPartner.id,
+        name: fetchedPartner.name,
+        email: fetchedPartner.email,
+        comment: fetchedPartner.comment ?? "",
+        partnerToken: fetchedPartner.partnerToken ?? "",
+        role: fetchedPartner.role,
+        managerId: String(fetchedPartner.managerId ?? ""),
+      }
+    : null;
   const [campaignModal, setCampaignModal] = useState<CampaignData | null>(null);
   const [autoDismissed, setAutoDismissed] = useState(false);
 
@@ -74,7 +100,7 @@ export function CampaignList({
           onSelect={(id) => onToggleSelect?.(id)}
           onEdit={(c) => { setAutoDismissed(true); setCampaignModal(buildCampaignData(c)); }}
           onBrokerClick={(c) => setBrokerModal({ id: String(c.broker?.id ?? ""), name: c.broker?.name ?? "", comment: "", managerId: "" })}
-          onPartnerClick={(c) => setPartnerModal({ id: c.partner?.id ?? 0, name: c.partner?.name ?? "", email: "", comment: "", partnerToken: "", role: "PARTNER", managerId: "" })}
+          onPartnerClick={(c) => setSelectedPartnerId(c.partner?.id ?? null)}
         />
       ))}
 
@@ -90,7 +116,7 @@ export function CampaignList({
       {partnerModal && (
         <EditPartnerModal
           open
-          onOpenChange={(open) => { if (!open) setPartnerModal(null); }}
+          onOpenChange={(open) => { if (!open) setSelectedPartnerId(null); }}
           partner={partnerModal}
         />
       )}

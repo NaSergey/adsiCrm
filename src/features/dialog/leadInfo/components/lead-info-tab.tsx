@@ -48,8 +48,8 @@ export const LeadInfoTab = forwardRef<LeadInfoTabRef, LeadInfoTabProps>(({ lead 
     .map((s) => ({ value: s.value as string, label: s.label }));
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-      <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:h-full">
+      <div className="lg:col-span-2 grid grid-cols-1 sm:grid-cols-2 gap-4 content-start">
         <Input label={t("firstName")} value={lead.firstName} readOnly />
         <Input label={t("ftdDate")} value={fullLead.ftdDate ?? ""} readOnly />
         <SelectFtd
@@ -81,9 +81,9 @@ export const LeadInfoTab = forwardRef<LeadInfoTabRef, LeadInfoTabProps>(({ lead 
         <Input label={t("brokerLeadId")} value={fullLead.brokerLeadId ?? ""} readOnly />
         <Input label={t("brokerUpdateDate")} value={fullLead.brokerUpdateDate ?? ""} readOnly />
       </div>
-      <div className="flex flex-col gap-4">
-        <Textarea label={t("note")} rows={8} />
-        <Textarea label={t("description")} rows={9} />
+      <div className="flex flex-col gap-4 lg:h-full">
+        <Textarea label={t("note")} wrapperClassName="flex-1" className="h-full" />
+        <Textarea label={t("description")} wrapperClassName="flex-1" className="h-full" />
       </div>
     </div>
   );

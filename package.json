@@ -8,7 +8,7 @@
     "analyze": "next experimental-analyze",
     "start": "next start",
     "lint": "eslint",
-    "generate:api": "openapi-typescript http://localhost:3000/api/swagger-json -o src/shared/api/schema.d.ts"
+    "generate:api": "openapi-typescript http://localhost:3000/swagger-json -o src/shared/api/schema.d.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

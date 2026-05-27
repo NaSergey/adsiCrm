@@ -1,5 +1,5 @@
 "use client";
-
+import { API_URL } from "@/shared/api/config";
 import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, X, Play, Code, List } from "lucide-react";
@@ -8,7 +8,7 @@ import { Select, type SelectOption } from "@/shared/ui/select";
 import { SelectSearch } from "@/shared/ui/select-search";
 import { Textarea } from "@/shared/ui/textarea";
 import { cn } from "@/shared/lib/css";
-import { getApiDomain, generateToken, isJson } from "@/shared/api/utils";
+import { generateToken, isJson } from "@/shared/api/utils";
 import { Input } from "@/shared/ui/input";
 import { Geo } from "@/shared/data/geo";
 import { Lang } from "@/shared/data/lang";
@@ -31,7 +31,7 @@ interface Header { id: number; name: string; value: string }
 export default function SenderLeadPage() {
   const t = useTranslations("senderLead");
   const [method, setMethod]   = useState("POST");
-  const [url, setUrl]         = useState(getApiDomain() + "/leads");
+  const [url, setUrl]         = useState(API_URL + "/leads");
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer]   = useState("");
   const [bodyType, setBodyType] = useState<"list" | "code">("list");

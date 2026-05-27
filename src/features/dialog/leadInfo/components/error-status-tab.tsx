@@ -1,6 +1,6 @@
 "use client";
 
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { cn } from "@/shared/lib/css";
 import { CheckCircle } from "lucide-react";
 import { Textarea } from "@/shared/ui/textarea";
@@ -29,6 +29,7 @@ function CheckRow({ label, message, type }: { label: string; message: string; ty
 
 export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
   const t = useTranslations("leadDetail");
+  const format = useFormatter();
 
   function navigateTo(url: string) {
     window.open(url, "_blank");
@@ -135,7 +136,7 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
           <div className="flex flex-col gap-0.5">
             {(lead.leadStatusHistory ?? []).map((entry) => (
               <span key={entry.id} className="px-1 py-1 text-sm text-green-400">
-                {new Date(entry.createdAt).toLocaleDateString()} : status &quot;{entry.status}&quot;
+                {format.dateTime(new Date(entry.createdAt), { day: "2-digit", month: "2-digit", year: "numeric" })} : status &quot;{entry.status}&quot;
               </span>
             ))}
           </div>

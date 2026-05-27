@@ -1,15 +1,5 @@
-import { getAccessToken, setAccessToken } from "@/shared/lib/auth-token";
-import { API_URL, API_ENDPOINTS } from "./config";
+import { setAccessToken } from "@/shared/lib/auth-token";
 
-/** Returns the base API URL */
-export function getApiDomain(): string {
-  return API_URL;
-}
-
-/** Returns the current auth token or empty string */
-export function getApiToken(): string {
-  return getAccessToken() ?? "";
-}
 
 /** Returns true if the string is valid JSON */
 export function isJson(str: string): boolean {
@@ -35,7 +25,9 @@ export async function refreshAccessToken(): Promise<boolean> {
       credentials: "include",
     });
     if (!res.ok) return false;
-    const { accessToken } = await res.json();
+    const data = await res.json().catch(() => null);
+    const accessToken = data?.accessToken;
+    if (!accessToken) return false;
     setAccessToken(accessToken);
     return true;
   } catch {

@@ -1,8 +1,19 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
+import { useFormatter } from "next-intl";
 import { cn } from "@/shared/lib/css";
 import { type Lead } from "../../../../../shared/types/lead";
+
+function DateCell({ value }: { value: string | undefined }) {
+  const format = useFormatter();
+  if (!value) return <span className="text-gray-400 text-sm">-</span>;
+  return (
+    <span className="text-gray-400 text-sm">
+      {format.dateTime(new Date(value), { day: "2-digit", month: "2-digit", year: "numeric" })}
+    </span>
+  );
+}
 
 export type { Lead };
 
@@ -49,11 +60,7 @@ export const getLeadsColumns = (t: T, opts: LeadsColumnsOptions): ColumnDef<Lead
   {
     accessorKey: "createdAt",
     header: t("columns.dateCreate"),
-    cell: ({ row }) => (
-      <span className="text-gray-400 text-sm">
-        {row.original.createdAt ? new Date(row.original.createdAt).toLocaleDateString() : "-"}
-      </span>
-    ),
+    cell: ({ row }) => <DateCell value={row.original.createdAt} />,
   },
   {
     accessorKey: "email",

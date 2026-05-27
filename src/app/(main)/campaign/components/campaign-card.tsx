@@ -1,7 +1,7 @@
 "use client";
 
 import { Bookmark, Pencil } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useTranslations, useFormatter } from "next-intl";
 import { Switch } from "@/shared/ui/switch";
 import { useToggleCampaign } from "../hooks/use-toggle-campaign";
 import type { Campaign } from "../types";
@@ -31,18 +31,6 @@ interface CampaignCardProps {
   onPartnerClick: (campaign: Campaign) => void;
 }
 
-function formatDate(iso: string) {
-  try {
-    return new Date(iso).toLocaleDateString(undefined, {
-      day: "2-digit",
-      month: "short",
-      year: "numeric",
-    });
-  } catch {
-    return iso;
-  }
-}
-
 export function CampaignCard({
   campaign,
   isPinned,
@@ -55,6 +43,7 @@ export function CampaignCard({
   onPartnerClick,
 }: CampaignCardProps) {
   const t = useTranslations("campaign");
+  const format = useFormatter();
 
   return (
     <article
@@ -125,7 +114,7 @@ export function CampaignCard({
         </div>
         <div className="flex justify-between gap-2 border-b border-gray-200 dark:border-gray-700">
           <span className="shrink-0 text-gray-500 dark:text-gray-400">{t("created")}:</span>
-          <span className="text-right text-gray-900 dark:text-white">{formatDate(campaign.createdAt)}</span>
+          <span className="text-right text-gray-900 dark:text-white">{format.dateTime(new Date(campaign.createdAt), { day: "2-digit", month: "2-digit", year: "numeric" })}</span>
         </div>
       </div>
     </article>
