@@ -52,7 +52,7 @@ export function LeadsHeader({ filters, onFiltersChange, canImport, canExport }: 
           {canImport && <LeadsImportButton />}
           {canExport && <LeadsExportButton filters={filters} />}
           <div className="flex items-center gap-2 ml-auto shrink-0 whitespace-nowrap">
-            <Button variant="blue" size="md" onClick={handleSearch}>
+            <Button variant="blue" size="md" aria-label={t("search")} onClick={handleSearch}>
               <Search className="size-4" />
             </Button>
             <Button variant="ghost" size="md" onClick={handleClearAll} disabled={!hasDraftFilters}>

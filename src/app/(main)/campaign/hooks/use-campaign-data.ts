@@ -1,6 +1,6 @@
 ﻿import { useQueries } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
-import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
+import { campaignsQueryKey } from "@/entities/api/keys";
 import type { CampaignFiltersState } from "../components/campaign-controls";
 import type { ProgramFilter } from "../types";
 

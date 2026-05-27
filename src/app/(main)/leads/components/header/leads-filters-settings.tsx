@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { useTranslations } from "next-intl";
 import { SlidersHorizontal, X, GripVertical } from "lucide-react";
 import { Button } from "@/shared/ui/button";
 import { cn } from "@/shared/lib/css";
@@ -9,6 +10,7 @@ import { useDragReorder } from "./use-drag-reorder";
 import { useDropdown } from "./use-dropdown";
 
 export function LeadsFiltersSettings() {
+  const t = useTranslations("leads");
   const { orderedFilters, visibleIds, toggleFilter, setFilterOrder } = useFilterConfig();
   const dropdownRef = React.useRef<HTMLDivElement>(null);
   const { isOpen: dropdownOpen, toggle: toggleDropdown } = useDropdown(dropdownRef);
@@ -25,7 +27,7 @@ export function LeadsFiltersSettings() {
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <Button variant="secondary" size="sm" onClick={toggleDropdown} active={dropdownOpen}>
+      <Button variant="secondary" size="sm" aria-label={t("filterSettings")} onClick={toggleDropdown} active={dropdownOpen}>
         <SlidersHorizontal />
       </Button>
 
@@ -56,7 +58,7 @@ export function LeadsFiltersSettings() {
                   {f.label}
                 </Button>
                 {isVisible && (
-                  <Button variant="plain" size="auto" onClick={() => toggleFilter(f.id)} className="shrink-0 text-gray-500 hover:text-gray-900 dark:hover:text-white">
+                  <Button variant="plain" size="auto" aria-label={t("hideFilter")} onClick={() => toggleFilter(f.id)} className="shrink-0 text-gray-500 hover:text-gray-900 dark:hover:text-white">
                     <X className="size-3.5" />
                   </Button>
                 )}

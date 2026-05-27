@@ -143,6 +143,7 @@ export default function SenderLeadPage() {
                   onChange={(e) => setUrl(e.target.value)}
                   className={cn(inputCls, "flex-1")}
                   placeholder="URL"
+                  aria-label="Request URL"
                   noIcon
                 />
               </div>
@@ -151,8 +152,8 @@ export default function SenderLeadPage() {
             {/* Headers */}
             <div className="rounded-lg border border-gray-1000">
               <div className="flex items-center justify-between border-b border-gray-1000 px-4 py-3">
-                <span className="text-sm font-medium text-gray-500">{t("headers")}</span>
-                <Button variant="ghost" size="sm" onClick={addHeader}>
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{t("headers")}</span>
+                <Button variant="ghost" size="sm" aria-label={t("add")} onClick={addHeader}>
                   <Plus /> {t("add")}
                 </Button>
               </div>
@@ -163,6 +164,7 @@ export default function SenderLeadPage() {
                       value={h.name}
                       onChange={(e) => updateHeader(h.id, "name", e.target.value)}
                       placeholder={t("name")}
+                      aria-label={t("name")}
                       className={inputCls}
                       noIcon
                     />
@@ -170,10 +172,11 @@ export default function SenderLeadPage() {
                       value={h.value}
                       onChange={(e) => updateHeader(h.id, "value", e.target.value)}
                       placeholder={t("value")}
+                      aria-label={t("value")}
                       className={inputCls}
                       noIcon
                     />
-                    <Button variant="ghost" size="sm" onClick={() => removeHeader(h.id)}>
+                    <Button variant="ghost" size="sm" aria-label={t("remove")} onClick={() => removeHeader(h.id)}>
                       <X />
                     </Button>
                   </div>
@@ -184,7 +187,7 @@ export default function SenderLeadPage() {
             {/* Response */}
             <div className="rounded-lg border border-gray-1000">
               <div className="border-b border-gray-1000 px-4 py-3">
-                <span className="text-sm font-medium text-gray-500">{t("response")}</span>
+                <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{t("response")}</span>
               </div>
               <div className="p-4">
                 <Textarea
@@ -203,10 +206,10 @@ export default function SenderLeadPage() {
           <div className="space-y-4">
           <div className="rounded-lg border border-gray-1000">
             <div className="flex items-center justify-between border-b border-gray-1000 px-4 py-3">
-              <span className="text-sm font-medium text-gray-500">{t("body")}</span>
+              <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{t("body")}</span>
               <div className="flex items-center gap-2">
                 {bodyType === "list" && (
-                  <Button variant="ghost" size="sm" onClick={addBodyParam}>
+                  <Button variant="ghost" size="sm" aria-label={t("add")} onClick={addBodyParam}>
                     <Plus /> {t("add")}
                   </Button>
                 )}
@@ -236,6 +239,7 @@ export default function SenderLeadPage() {
                         defaultValue={key}
                         onBlur={(e) => updateBodyKey(key, e.target.value)}
                         placeholder={t("key")}
+                        aria-label={`${t("key")} ${key}`}
                         className={inputCls}
                         noIcon
                       />
@@ -258,11 +262,12 @@ export default function SenderLeadPage() {
                           value={val}
                           onChange={(e) => updateBodyValue(key, e.target.value)}
                           placeholder={t("value")}
+                          aria-label={`${t("value")} ${key}`}
                           className={inputCls}
                           noIcon
                         />
                       )}
-                      <Button variant="ghost" size="sm" onClick={() => removeBodyParam(key)}>
+                      <Button variant="ghost" size="sm" aria-label={t("remove")} onClick={() => removeBodyParam(key)}>
                         <X />
                       </Button>
                     </div>

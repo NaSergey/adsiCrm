@@ -21,7 +21,7 @@ import { SelectManager } from "@/entities/ui/select-manager";
 import { SelectCountryMulti } from "@/entities/ui/select-country-multi";
 import { SelectLangMulti } from "@/entities/ui/select-lang-multi";
 import { fetchClient } from "@/shared/api";
-import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
+import { campaignsQueryKey } from "@/entities/api/keys";
 import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
 import { campaignFormSchema, type CampaignFormValues } from "@/features/dialog/schemas/campaign-schema";
 import { useAppToast } from "@/shared/lib/use-app-toast";

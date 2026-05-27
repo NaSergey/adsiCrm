@@ -84,7 +84,8 @@
     "value": "Значение",
     "key": "Ключ",
     "run": "Запустить",
-    "sending": "Отправляем..."
+    "sending": "Отправляем...",
+    "remove": "Удалить"
   },
   "affiliates": {
     "partners": "Партнёры",
@@ -146,6 +147,8 @@
     "confirmDeleteDescription": "Это действие нельзя отменить.",
     "yes": "Да",
     "no": "Нет",
+    "filterSettings": "Настройки фильтров",
+    "hideFilter": "Скрыть фильтр",
     "stats": {
       "total": "Всего",
       "accepted": "Принято",

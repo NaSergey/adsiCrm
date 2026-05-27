@@ -12,7 +12,7 @@ import { EditUserModal } from "@/features/dialog/edit/edit-user-modal";
 import { UsersFiltersBar, EMPTY_USERS_FILTERS, type UsersFilters } from "./users-filters";
 import { getUsersColumns, type UserItem } from "./users-table";
 import { fetchClient } from "@/shared/api";
-import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
+import { usersQueryKey } from "@/entities/api/keys";
 
 const PAGE_SIZE = 20;
 

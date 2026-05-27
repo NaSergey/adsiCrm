@@ -84,7 +84,8 @@
     "value": "Value",
     "key": "Key",
     "run": "Run",
-    "sending": "Sending..."
+    "sending": "Sending...",
+    "remove": "Remove"
   },
   "affiliates": {
     "partners": "Partners",
@@ -146,6 +147,8 @@
     "confirmDeleteDescription": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
+    "filterSettings": "Filter settings",
+    "hideFilter": "Hide filter",
     "stats": {
       "total": "Total",
       "accepted": "Accepted",
