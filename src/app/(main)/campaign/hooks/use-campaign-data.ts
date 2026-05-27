@@ -1,7 +1,7 @@
 ﻿import { useQueries } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
 import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
-import type { CampaignFiltersState } from "../components/campaign-filters";
+import type { CampaignFiltersState } from "../components/campaign-controls";
 import type { ProgramFilter } from "../types";
 
 function buildQueryFn(isActive: boolean, page: number, filters: CampaignFiltersState) {
