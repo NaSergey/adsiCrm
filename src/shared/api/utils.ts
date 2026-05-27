@@ -1,5 +1,11 @@
 import { setAccessToken } from "@/shared/lib/auth-token";
+import { API_URL } from "./config";
 
+
+/** Returns the API base URL (for showing in code samples, building absolute URLs, etc.) */
+export function getApiDomain(): string {
+  return API_URL;
+}
 
 /** Returns true if the string is valid JSON */
 export function isJson(str: string): boolean {

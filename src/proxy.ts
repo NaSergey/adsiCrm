@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PERMISSIONS, Role } from "@/shared/config/permissions";
+import { PERMISSIONS } from "@/shared/config/permissions";
+import { parseRole, getTokenMaxAge } from "@/shared/lib/jwt-helpers";
 
 const PUBLIC_PATH = "/";
 const TOKEN_KEY = "pixelcrm_access_token";
@@ -7,32 +8,9 @@ const TOKEN_KEY = "pixelcrm_access_token";
 const API_BASE = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 const REFRESH_URL = `${API_BASE}/auth/refresh`;
 
-function parseRole(token: string): Role | null {
-  try {
-    const payload = token.split(".")[1];
-    if (!payload) return null;
-    const decoded = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
-    return (decoded.role as Role) ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function getTokenMaxAge(token: string): number {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-    return typeof payload.exp === "number"
-      ? Math.max(0, payload.exp - Math.floor(Date.now() / 1000))
-      : 900;
-  } catch {
-    return 900;
-  }
-}
-
 async function tryRefresh(request: NextRequest): Promise<{ accessToken: string; setCookie: string | null } | null> {
   const cookieHeader = request.headers.get("cookie") ?? "";
   const hasRefreshCookie = cookieHeader.includes("refreshToken=");
-  console.log("[middleware tryRefresh] URL:", REFRESH_URL, "| hasRefreshCookie:", hasRefreshCookie);
   try {
     const res = await fetch(REFRESH_URL, {
       method: "GET",

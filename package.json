@@ -8,6 +8,12 @@
     "analyze": "next experimental-analyze",
     "start": "next start",
     "lint": "eslint",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:arch": "depcruise src --config .dependency-cruiser.cjs",
+    "test:arch:graph": "depcruise src --config .dependency-cruiser.cjs --output-type dot --output-to dependency-graph.dot",
+    "lighthouse": "lhci autorun",
     "generate:api": "openapi-typescript http://localhost:3000/swagger-json -o src/shared/api/schema.d.ts"
   },
   "dependencies": {
@@ -37,17 +43,24 @@
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@lhci/cli": "^0.15.1",
     "@next/bundle-analyzer": "^16.2.2",
     "@tailwindcss/postcss": "^4",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@vitest/coverage-v8": "^4.1.7",
     "cross-env": "^10.1.0",
+    "dependency-cruiser": "^17.4.2",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
+    "jsdom": "^29.1.1",
     "openapi-typescript": "^7.13.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "typescript": "^5",
+    "vitest": "^4.1.7"
   },
   "msw": {
     "workerDirectory": [
