@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
-import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
+import { usersQueryKey } from "@/entities/api/keys";
 
 export function useDeleteUser({ onSuccess }: { onSuccess?: () => void } = {}) {
   const queryClient = useQueryClient();

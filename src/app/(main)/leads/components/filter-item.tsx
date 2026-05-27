@@ -21,6 +21,7 @@ export function FilterItem({
         value={value ?? ""}
         onChange={(e) => onChange?.(e.target.value)}
         className="flex-1 min-w-0 w-full"
+        aria-label={filter.label}
       />
     );
   }
@@ -30,6 +31,7 @@ export function FilterItem({
       value={value ?? ""}
       onChange={(e) => onChange?.(e.target.value)}
       className="min-w-30"
+      aria-label={filter.label}
     />
   );
 }

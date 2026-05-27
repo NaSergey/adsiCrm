@@ -12,6 +12,9 @@
 
 # testing
 /coverage
+/.lighthouseci
+/dependency-graph.dot
+/dependency-graph.svg
 
 # next.js
 /.next/

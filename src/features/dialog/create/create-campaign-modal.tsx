@@ -19,11 +19,10 @@ import { SelectCountryMulti } from "@/entities/ui/select-country-multi";
 import { SelectLangMulti } from "@/entities/ui/select-lang-multi";
 import { ScheduleDropdown } from "@/features/dialog/components/schedule-dropdown";
 import { campaignFormSchema, type CampaignFormValues } from "@/features/dialog/schemas/campaign-schema";
+import { campaignsQueryKey } from "@/entities/api/keys";
 import { useAppToast } from "@/shared/lib/use-app-toast";
 
 type CreateCampaignBody = components["schemas"]["CreateCampaignDto"];
-
-export const campaignsQueryKey = ["campaigns"] as const;
 
 const STATUS_OPTIONS = [
   { value: "ON", label: "ON" },

@@ -71,9 +71,10 @@ export default function Home() {
           </div>
 
           <div className="flex flex-col gap-1.5">
-            <span className="text-xs font-medium text-gray-500">Password</span>
+            <label htmlFor="password-input" className="text-xs font-medium text-gray-500">Password</label>
             <div className="relative flex items-center gap-2 rounded-md bg-gray-1000 px-3 h-9">
               <input
+                id="password-input"
                 type={showPassword ? "text" : "password"}
                 className="flex-1 bg-transparent text-sm text-white outline-none"
                 {...register("password")}
@@ -81,8 +82,9 @@ export default function Home() {
               />
               <button
                 type="button"
+                aria-label={showPassword ? "Hide password" : "Show password"}
                 onClick={() => setShowPassword(!showPassword)}
-                className="text-gray-500 hover:text-gray-300"
+                className="text-gray-400 hover:text-gray-200"
               >
                 {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
               </button>

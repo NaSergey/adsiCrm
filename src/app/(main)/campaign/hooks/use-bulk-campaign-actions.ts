@@ -1,6 +1,6 @@
 ﻿import { useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
-import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
+import { campaignsQueryKey } from "@/entities/api/keys";
 import { useDeleteCampaign } from "@/entities/api/delete/use-delete-campaign";
 import { useAppToast } from "@/shared/lib/use-app-toast";
 import type { Campaign } from "../types";

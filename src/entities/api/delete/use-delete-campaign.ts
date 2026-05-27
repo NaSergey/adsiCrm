@@ -1,6 +1,6 @@
 ﻿import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
-import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
+import { campaignsQueryKey } from "@/entities/api/keys";
 
 export function useDeleteCampaign({ onSuccess }: { onSuccess?: () => void } = {}) {
   const queryClient = useQueryClient();

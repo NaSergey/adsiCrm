@@ -9,7 +9,7 @@ import { Input } from "@/shared/ui/input";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
 import { fetchClient } from "@/shared/api";
-import { usersQueryKey } from "@/features/dialog/create/create-user-modal";
+import { usersQueryKey } from "@/entities/api/keys";
 import { useDeleteUser } from "@/entities/api/delete/use-delete-user";
 import { useAppToast } from "@/shared/lib/use-app-toast";
 

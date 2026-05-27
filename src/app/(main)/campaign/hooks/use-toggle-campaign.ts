@@ -1,7 +1,7 @@
 ﻿import { useState, useCallback } from "react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { fetchClient } from "@/shared/api";
-import { campaignsQueryKey } from "@/features/dialog/create/create-campaign-modal";
+import { campaignsQueryKey } from "@/entities/api/keys";
 import type { Campaign } from "../types";
 
 export function useToggleCampaign(campaign: Campaign) {

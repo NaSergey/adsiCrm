@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { PERMISSIONS, Role } from "@/shared/config/permissions";
+import { PERMISSIONS } from "@/shared/config/permissions";
+import { parseRole, getTokenMaxAge } from "@/shared/lib/jwt-helpers";
 
 const PUBLIC_PATH = "/";
 const TOKEN_KEY = "pixelcrm_access_token";
@@ -7,51 +8,17 @@ const TOKEN_KEY = "pixelcrm_access_token";
 const API_BASE = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
 const REFRESH_URL = `${API_BASE}/auth/refresh`;
 
-function parseRole(token: string): Role | null {
-  try {
-    const payload = token.split(".")[1];
-    if (!payload) return null;
-    const decoded = JSON.parse(atob(payload.replace(/-/g, "+").replace(/_/g, "/")));
-    return (decoded.role as Role) ?? null;
-  } catch {
-    return null;
-  }
-}
-
-function getTokenMaxAge(token: string): number {
-  try {
-    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
-    return typeof payload.exp === "number"
-      ? Math.max(0, payload.exp - Math.floor(Date.now() / 1000))
-      : 900;
-  } catch {
-    return 900;
-  }
-}
-
 async function tryRefresh(request: NextRequest): Promise<{ accessToken: string; setCookie: string | null } | null> {
-  const cookieHeader = request.headers.get("cookie") ?? "";
-  const hasRefreshCookie = cookieHeader.includes("refreshToken=");
-  console.log("[middleware tryRefresh] URL:", REFRESH_URL, "| hasRefreshCookie:", hasRefreshCookie);
   try {
     const res = await fetch(REFRESH_URL, {
       method: "GET",
-      headers: { cookie: cookieHeader },
+      headers: { cookie: request.headers.get("cookie") ?? "" },
     });
-    if (!res.ok) {
-      const body = await res.text().catch(() => "(unreadable)");
-      console.log("[middleware tryRefresh] FAIL status:", res.status, "body:", body);
-      return null;
-    }
+    if (!res.ok) return null;
     const { accessToken } = await res.json();
-    if (!accessToken) {
-      console.log("[middleware tryRefresh] FAIL: no accessToken in response");
-      return null;
-    }
-    console.log("[middleware tryRefresh] SUCCESS");
+    if (!accessToken) return null;
     return { accessToken, setCookie: res.headers.get("set-cookie") };
-  } catch (e) {
-    console.log("[middleware tryRefresh] EXCEPTION:", e);
+  } catch {
     return null;
   }
 }
@@ -60,9 +27,6 @@ export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl;
   let token = request.cookies.get(TOKEN_KEY)?.value;
   let refreshedCookie: string | null = null;
-
-  const cookieHeader = request.headers.get("cookie") ?? "";
-  console.log(`[middleware] ${pathname} | accessToken: ${!!token} | refreshToken: ${cookieHeader.includes("refreshToken=")} | full cookie: ${cookieHeader.slice(0, 200)}`);
 
   // Если нет access token — пробуем тихий refresh перед редиректом
   if (!token && pathname !== PUBLIC_PATH) {

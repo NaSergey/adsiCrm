@@ -1,5 +1,3 @@
-export const usersQueryKey = ["users"] as const;
-
 export const PARTNERS_DISPLAY_OPTIONS = [
   { value: "all", labelKey: "partnersDisplayAll" },
   { value: "own", labelKey: "partnersDisplayOwn" },
