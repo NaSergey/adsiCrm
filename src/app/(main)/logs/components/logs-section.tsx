@@ -1,16 +1,12 @@
 ﻿"use client";
 
 import { useState, useEffect } from "react";
-import { useTranslations } from "next-intl";
-import { Download } from "lucide-react";
-import { Button } from "@/shared/ui/button";
 import { fetchClient } from "@/shared/api";
 import { LogsFiltersBar, EMPTY_LOGS_FILTERS, type LogsFilters } from "./logs-filters";
 import { LogsTable, type LogItem } from "./logs-table";
 
 
 export function LogsSection() {
-  const t = useTranslations("logs");
   const [filters, setFilters] = useState<LogsFilters>(EMPTY_LOGS_FILTERS);
   const [logs, setLogs] = useState<LogItem[]>([]);
   const [rawText, setRawText] = useState<string | null>(null);
@@ -33,10 +29,11 @@ export function LogsSection() {
       return;
     }
 
-    setFileName(data.downloadUrl);
+    const fileNameOnly = data.downloadUrl.split("/").pop()!;
+    setFileName(fileNameOnly);
 
     const res = await fetchClient.GET("/logs/download/{category}/{fileName}", {
-      params: { path: { category: filters.category, fileName: data.downloadUrl } },
+      params: { path: { category: filters.category, fileName: fileNameOnly } },
       parseAs: "text",
     });
 
@@ -74,20 +71,32 @@ export function LogsSection() {
 
   return (
     <div className="space-y-4">
-      <LogsFiltersBar filters={filters} onChange={setFilters} onSearch={search} isLoading={isLoading} />
+      <LogsFiltersBar
+        filters={filters}
+        onChange={setFilters}
+        onSearch={search}
+        onDownload={handleDownload}
+        canDownload={!!rawText}
+        isLoading={isLoading}
+      />
 
       <div className="rounded-lg border border-gray-200 dark:border-gray-1000 bg-white dark:bg-gray-1100 overflow-hidden">
-        <div className="flex items-center justify-between px-4 py-3 border-b border-gray-200 dark:border-gray-1000">
-          <span className="text-sm text-gray-500">{filters.category} / {filters.date}</span>
-          {rawText && (
-            <Button size="md" variant="blue" onClick={handleDownload}>
-              <Download className="size-4" />
-              {t("download")}
-            </Button>
-          )}
-        </div>
         <LogsTable data={logs} isLoading={isLoading} />
       </div>
+      
+      {rawText && (
+        <pre className="rounded-lg border border-gray-200 dark:border-gray-1000 bg-gray-50 dark:bg-gray-1100 p-4 overflow-auto max-h-[60vh] font-mono text-xs leading-relaxed text-gray-900 dark:text-gray-200 whitespace-pre-wrap break-all">
+          {(() => {
+            try {
+              return JSON.stringify(JSON.parse(rawText), null, 2);
+            } catch {
+              return rawText;
+            }
+          })()}
+        </pre>
+      )}
+      
+
     </div>
   );
 }

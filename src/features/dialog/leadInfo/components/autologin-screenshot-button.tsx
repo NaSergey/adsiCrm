@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { Dialog, DialogContent, DialogTitle } from "@/shared/ui/dialog";
 import { Button } from "@/shared/ui/button";
 import { API_ENDPOINTS } from "@/shared/api/config";
+import { getAccessToken } from "@/shared/lib/auth-token";
 
 interface AutologinScreenshotButtonProps {
   leadId: number;
@@ -22,8 +23,10 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
     setImageUrl(null);
     setError(null);
     try {
+      const token = getAccessToken();
       const res = await fetch(API_ENDPOINTS.leads.autologinImage(leadId), {
         credentials: "include",
+        headers: token ? { Authorization: `Bearer ${token}` } : undefined,
       });
       if (!res.ok) {
         setError(t("noAutologinImage"));
@@ -50,7 +53,7 @@ export function AutologinScreenshotButton({ leadId }: AutologinScreenshotButtonP
           {loading && <p className="text-sm text-gray-500">{t("loading")}</p>}
           {error && <p className="text-sm text-red-400">{error}</p>}
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          {imageUrl && <img src={imageUrl} alt={t("autologinScreenshot")} className="w-full rounded-md" />}
+          {imageUrl && <img src={imageUrl} alt={t("autologinScreenshot")} className="w-full rounded-md p-4" />}
         </DialogContent>
       </Dialog>
     </>

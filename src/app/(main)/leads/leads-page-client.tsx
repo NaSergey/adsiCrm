@@ -30,6 +30,7 @@ export function LeadsPageClient({ canDeleteLeads, canImport, canExport }: LeadsP
       <div className="">
         <LeadsOverview
           filters={effectiveFilters}
+          onFiltersChange={setFilters}
           canDeleteLeads={canDeleteLeads}
           activeTab={tab}
           onTabChange={setTab}

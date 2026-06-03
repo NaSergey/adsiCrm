@@ -3,7 +3,7 @@ import type { components } from "@/shared/api/schema";
 
 export type Lead = components["schemas"]["FilteredResponseLeadDto"]["items"][number];
 
-export type FilterType = "input" | "select" | "date";
+export type FilterType = "input" | "select" | "date" | "datetime";
 
 export interface FilterConfig {
   id: string;
@@ -29,12 +29,14 @@ export interface LeadsFiltersState {
   date_from: string;
   date_to: string;
   language: string;
+  statisticsGroup: "rejected" | "invalid" | "";
 }
 
 export const EMPTY_LEADS_FILTERS: LeadsFiltersState = {
   lead_id: "", broker_lead_id: "", user_ip: "", campaign: "",
   ftd: "", ftdPending: "", partner: "", broker: "", funnel: "", email: "",
   phone: "", country: "", status: "", date_from: "", date_to: "", language: "",
+  statisticsGroup: "",
 };
 
 /** Which table view is active on the leads page (one table, two views). */
@@ -55,8 +57,9 @@ export function filtersToApiBody(filters: LeadsFiltersState) {
     phone:        filters.phone          || undefined,
     country:      filters.country        || undefined,
     status:       filters.status         || undefined,
-    fromDate:     filters.date_from      || undefined,
-    toDate:       filters.date_to        || undefined,
-    language:     filters.language       || undefined,
+    fromDate:        filters.date_from       ? new Date(filters.date_from).toISOString() : undefined,
+    toDate:          filters.date_to         ? new Date(filters.date_to).toISOString()   : undefined,
+    language:        filters.language        || undefined,
+    statisticsGroup: (filters.statisticsGroup || undefined) as "rejected" | "invalid" | undefined,
   };
 }

@@ -4,7 +4,7 @@ import { BACKEND_URL } from "@/shared/api/server-config";
 export async function POST(request: NextRequest) {
   const body = await request.json();
 
-  const res = await fetch(`${BACKEND_URL}/auth/login`, {
+  const res = await fetch(`${BACKEND_URL}/api/auth/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),

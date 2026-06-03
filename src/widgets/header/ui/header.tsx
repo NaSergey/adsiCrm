@@ -1,7 +1,5 @@
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
-import { formatGMTOffset } from "@/shared/lib/format-gmt-offset";
-import { IconClock } from "@/shared/ui/icon";
 import { ThemeSwitch } from "./theme-switch";
 import { UserMenu } from "./user-menu";
 import { navItems } from "../model/nav-items";
@@ -9,6 +7,7 @@ import { getServerPermissions } from "@/shared/lib/get-server-permissions";
 import { NavLink } from "./nav-link";
 import { Logo } from "@/shared/ui/logo";
 import { MobileMenu } from "./mobile-menu";
+import { LiveClock } from "./live-clock";
 // ... ваши импорты
 
 export async function Header() {
@@ -42,19 +41,7 @@ export async function Header() {
           <div className="hidden items-center sm:flex">
             <ThemeSwitch />
           </div>
-          <div className="hidden items-center space-x-2 sm:flex">
-            <IconClock size={16} className="text-gray-400 mr-4" />
-            <span suppressHydrationWarning className="text-xs font-bold sm:text-sm">
-              {new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
-            </span>
-            <span suppressHydrationWarning className="hidden text-xs font-medium text-gray-400 md:inline">
-              {new Date().toLocaleDateString()}
-            </span>
-            <span suppressHydrationWarning className="hidden text-xs font-medium text-gray-400 lg:inline">
-              {`(GMT${formatGMTOffset()})`}
-            </span>
-          </div>
-
+          <LiveClock />
           <div className="md:hidden">
             <MobileMenu navItems={mobileNavItems} />
           </div>

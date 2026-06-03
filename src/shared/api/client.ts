@@ -7,20 +7,27 @@ const fetchClient = createFetchClient<paths>({
   baseUrl: API_URL,
 });
 
-// Mutex: гарантирует что refresh выполняется только один раз при параллельных 401
 let refreshPromise: Promise<boolean> | null = null;
+
+const retryClones = new Map<string, Request>();
 
 if (typeof window !== "undefined") {
   // Attach Bearer token to every request
   fetchClient.use({
-    onRequest({ request }) {
+    onRequest({ request, id }) {
       const headers = new Headers(request.headers);
       const token = getAccessToken();
       if (token) headers.set("Authorization", `Bearer ${token}`);
-      return new Request(request, { credentials: "include", headers });
+      const finalRequest = new Request(request, { credentials: "include", headers });
+      // Нетронутый клон с целым телом — на случай повтора при 401
+      retryClones.set(id, finalRequest.clone());
+      return finalRequest;
     },
 
-    async onResponse({ response, request }) {
+    async onResponse({ response, request, id }) {
+      const retrySource = retryClones.get(id);
+      retryClones.delete(id);
+
       if (
           response.status !== 401 ||
           request.url.includes("/auth/refresh") ||
@@ -45,13 +52,18 @@ if (typeof window !== "undefined") {
           return response;
         }
 
-      // Retry original request with new token
-      const headers = new Headers(request.headers);
+      // Повторяем запрос с новым токеном из нетронутого клона (тело цело)
+      const base = retrySource ?? request;
+      const headers = new Headers(base.headers);
       const newToken = getAccessToken();
       if (newToken) {
         headers.set("Authorization", `Bearer ${newToken}`);
       }
-      return fetch(new Request(request, { credentials: "include", headers }));
+      return fetch(new Request(base, { credentials: "include", headers }));
+    },
+
+    onError({ id }) {
+      retryClones.delete(id);
     },
   });
 }

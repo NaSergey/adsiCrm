@@ -288,7 +288,9 @@
     "autologinScreenshot": "Скриншот автологина",
     "loading": "Загрузка...",
     "noAutologinImage": "Скриншот автологина недоступен",
-    "failedToLoadImage": "Не удалось загрузить изображение"
+    "failedToLoadImage": "Не удалось загрузить изображение",
+    "noFingerprint": "Данные fingerprint недоступны",
+    "failedToLoadFingerprint": "Не удалось загрузить fingerprint"
   },
   "editModals": {
     "saving": "Сохраняем...",

@@ -29,7 +29,7 @@ type Tab = "lead_info" | "error_status";
 export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalProps) {
   const t = useTranslations("leadDetail");
   const format = useFormatter();
-  const fmtDate = (iso: string) => format.dateTime(new Date(iso), { day: "2-digit", month: "2-digit", year: "numeric" });
+  const fmtDate = (iso: string) => format.dateTime(new Date(iso), { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit", second: "2-digit" });
   const { hasFeature } = usePermissions();
   const [activeTab, setActiveTab] = useState<Tab>("lead_info");
   const tabRef = useRef<LeadInfoTabRef>(null);
@@ -92,7 +92,7 @@ export function LeadDetailModal({ lead, open, onOpenChange }: LeadDetailModalPro
               </span>
               <div className="flex flex-col sm:flex-row gap-1 sm:gap-2">
                 <AutologinScreenshotButton leadId={lead.id} />
-                <FingerprintButton fingerprint={fullLead?.fingerprint} />
+                <FingerprintButton leadId={lead.id} />
               </div>
             </div>
           </div>

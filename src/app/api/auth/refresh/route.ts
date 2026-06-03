@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { BACKEND_URL } from "@/shared/api/server-config";
 
 export async function GET(request: NextRequest) {
-  const res = await fetch(`${BACKEND_URL}/auth/refresh`, {
+  const res = await fetch(`${BACKEND_URL}/api/auth/refresh`, {
     method: "GET",
     headers: { cookie: request.headers.get("cookie") ?? "" },
   });

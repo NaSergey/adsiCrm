@@ -288,7 +288,9 @@
     "autologinScreenshot": "Autologin screenshot",
     "loading": "Loading...",
     "noAutologinImage": "No autologin image available",
-    "failedToLoadImage": "Failed to load image"
+    "failedToLoadImage": "Failed to load image",
+    "noFingerprint": "No fingerprint data available",
+    "failedToLoadFingerprint": "Failed to load fingerprint"
   },
   "editModals": {
     "saving": "Saving...",

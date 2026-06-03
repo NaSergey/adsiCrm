@@ -87,7 +87,7 @@ export function LeadsTable({
       return cn(
         "cursor-pointer group",
         isDuplicate
-          ? "bg-green-1000/10 hover:bg-green-1000/1"
+          ? "bg-yellow-100/20 hover:bg-yellow-400"
           : "hover:bg-gray-1000/30"
       );
     }
@@ -96,7 +96,7 @@ export function LeadsTable({
       "cursor-pointer select-none group",
       selectedIds.has(row.id)
         ? "!bg-red-900"
-        : cn("hover:!bg-red-900/70", isDuplicate && "bg-amber-500/10"),
+        : cn("hover:!bg-red-900/70", isDuplicate && "bg-yellow-100/20"),
     );
   }
 

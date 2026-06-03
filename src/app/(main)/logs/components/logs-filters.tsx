@@ -4,6 +4,7 @@ import { useTranslations } from "next-intl";
 import { Select, type SelectOption } from "@/shared/ui/select";
 import { DateInput } from "@/shared/ui/date-input";
 import { Button } from "@/shared/ui/button";
+import { Search, Download } from "lucide-react";
 
 export interface LogsFilters {
   date: string;
@@ -19,10 +20,12 @@ interface LogsFiltersBarProps {
   filters: LogsFilters;
   onChange: (filters: LogsFilters) => void;
   onSearch: () => void;
+  onDownload?: () => void;
+  canDownload?: boolean;
   isLoading: boolean;
 }
 
-export function LogsFiltersBar({ filters, onChange, onSearch, isLoading }: LogsFiltersBarProps) {
+export function LogsFiltersBar({ filters, onChange, onSearch, onDownload, canDownload, isLoading }: LogsFiltersBarProps) {
   const t = useTranslations("logs");
 
   const categoryOptions: SelectOption[] = [
@@ -44,6 +47,18 @@ export function LogsFiltersBar({ filters, onChange, onSearch, isLoading }: LogsF
           onChange={(v) => onChange({ ...filters, category: v as LogsFilters["category"] })}
           className="w-full"
         />
+      </div>
+      <div className="flex items-center gap-2 shrink-0">
+        {canDownload && (
+          <Button variant="outline" size="md" onClick={onDownload} className="shrink-0">
+            <Download className="size-4" />
+            {t("download")}
+          </Button>
+        )}
+        <Button variant="blue" size="md" onClick={onSearch} disabled={isLoading} className="shrink-0">
+          <Search className="size-4" />
+          {t("search")}
+        </Button>
       </div>
     </section>
   );

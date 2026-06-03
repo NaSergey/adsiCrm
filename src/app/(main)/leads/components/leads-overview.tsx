@@ -16,12 +16,13 @@ import { LeadsFiltersSettings } from "./header/leads-filters-settings";
 
 interface LeadsOverviewProps {
   filters: LeadsFiltersState;
+  onFiltersChange: (f: LeadsFiltersState) => void;
   canDeleteLeads: boolean;
   activeTab: LeadsTab;
   onTabChange: (tab: LeadsTab) => void;
 }
 
-export function LeadsOverview({ filters, canDeleteLeads, activeTab, onTabChange }: LeadsOverviewProps) {
+export function LeadsOverview({ filters, onFiltersChange, canDeleteLeads, activeTab, onTabChange }: LeadsOverviewProps) {
   const t = useTranslations("leads");
   const { isSelecting, selectedIds, isDeleting, startSelect, exitSelect, deleteSelected } = useLeadsSelection();
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -38,14 +39,20 @@ export function LeadsOverview({ filters, canDeleteLeads, activeTab, onTabChange 
     },
   });
 
+  const activeGroup = filters.statisticsGroup;
+
+  const toggleGroup = (group: "rejected" | "invalid") => {
+    onFiltersChange({ ...filters, statisticsGroup: activeGroup === group ? "" : group });
+  };
+
   const stats = [
     { label: t("stats.total"),    value: data?.total     ?? 0, icon: Users },
     { label: t("stats.accepted"), value: data?.accepted  ?? 0, icon: CheckCircle },
-    { label: t("stats.rejected"), value: data?.rejected  ?? 0, icon: XCircle },
+    { label: t("stats.rejected"), value: data?.rejected  ?? 0, icon: XCircle,     group: "rejected" as const },
     { label: t("stats.deposits"), value: data?.deposits  ?? 0, icon: Banknote },
     { label: t("stats.noAnswer"), value: data?.noAnswer  ?? 0, icon: PhoneMissed, subValue: `${data?.noAnswerPercentage ?? 0}%` },
     { label: t("stats.cr"),       value: `${data?.cr     ?? 0}%`, icon: TrendingUp },
-    { label: t("stats.invalid"),  value: data?.invalid   ?? 0, icon: AlertCircle },
+    { label: t("stats.invalid"),  value: data?.invalid   ?? 0, icon: AlertCircle, group: "invalid" as const },
   ];
 
   return (
@@ -88,7 +95,15 @@ export function LeadsOverview({ filters, canDeleteLeads, activeTab, onTabChange 
               <Skeleton key={i} className="h-11 rounded-xl" />
             ))
           : stats.map((s) => (
-              <Card key={s.label} label={s.label} value={s.value} subValue={s.subValue} icon={s.icon} />
+              <Card
+                key={s.label}
+                label={s.label}
+                value={s.value}
+                subValue={s.subValue}
+                icon={s.icon}
+                onClick={s.group ? () => toggleGroup(s.group!) : undefined}
+                active={!!s.group && activeGroup === s.group}
+              />
             ))
         }
       </div>

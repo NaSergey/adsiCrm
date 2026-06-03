@@ -13,8 +13,8 @@ export const INITIAL_FILTERS: FilterConfig[] = [
   { id: "phone",          label: "Phone",          type: "input" },
   { id: "country",        label: "Country",        type: "select" },
   { id: "status",         label: "Status",         type: "select" },
-  { id: "date_from",      label: "Date from",      type: "date" },
-  { id: "date_to",        label: "Date to",        type: "date" },
+  { id: "date_from",      label: "Date from",      type: "datetime" },
+  { id: "date_to",        label: "Date to",        type: "datetime" },
   { id: "language",       label: "Language",       type: "select" },
 ];
 

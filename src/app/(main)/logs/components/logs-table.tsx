@@ -22,6 +22,7 @@ export interface LogItemData {
   requestBody?: Record<string, unknown>;
   response?: unknown;
   error?: string;
+  [key: string]: unknown;
 }
 
 export interface LogItem {
@@ -35,6 +36,17 @@ function fmt(val: unknown): string {
   if (val === undefined || val === null) return "";
   if (typeof val === "string") return val;
   return JSON.stringify(val, null, 2);
+}
+
+function fmtTimestamp(iso: string): string {
+  try {
+    const d = new Date(iso);
+    const date = d.toLocaleDateString("ru-RU", { day: "2-digit", month: "2-digit", year: "numeric" });
+    const time = d.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    return `${date} ${time}`;
+  } catch {
+    return iso;
+  }
 }
 
 const LEVEL_CLS: Record<string, string> = {
@@ -93,7 +105,7 @@ export function LogsTable({ data, isLoading }: { data: LogItem[]; isLoading?: bo
                       ? <ChevronDown className="size-4 text-gray-400 transition-transform duration-200" />
                       : <ChevronRight className="size-4 text-gray-400 transition-transform duration-200" />}
                   </TableCell>
-                  <TableCell className="px-3 py-2.5 whitespace-nowrap text-xs text-gray-500 font-mono">{item.timestamp}</TableCell>
+                  <TableCell className="px-3 py-2.5 whitespace-nowrap text-xs text-gray-500 font-mono">{fmtTimestamp(item.timestamp)}</TableCell>
                   <TableCell className="px-3 py-2.5">
                     <span className={cn("inline-flex items-center rounded px-2 py-0.5 text-xs font-medium", levelCls)}>
                       {item.level}
@@ -115,24 +127,34 @@ export function LogsTable({ data, isLoading }: { data: LogItem[]; isLoading?: bo
                       isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"
                     )}>
                       <div className="overflow-hidden">
-                        <div className="px-4 py-4 bg-gray-50 dark:bg-gray-1100 grid grid-cols-1 md:grid-cols-3 gap-3">
-                          <div className="space-y-1">
-                            <span className="text-xs text-gray-500">{t("headers")}</span>
-                            <Textarea readOnly value={fmt(item.data?.headers)} className="text-xs min-h-24 font-mono" />
+                        {item.data?.method ? (
+                          <div className="px-4 py-4 bg-gray-50 dark:bg-gray-1100 grid grid-cols-1 md:grid-cols-3 gap-3">
+                            <div className="space-y-1">
+                              <span className="text-xs text-gray-500">{t("headers")}</span>
+                              <Textarea readOnly value={fmt(item.data?.headers)} className="text-xs min-h-46 font-mono" />
+                            </div>
+                            <div className="space-y-1">
+                              <span className="text-xs text-gray-500">{t("body")}</span>
+                              <Textarea readOnly value={fmt(item.data?.requestBody)} className="text-xs min-h-46 font-mono" />
+                            </div>
+                            <div className="space-y-1">
+                              <span className="text-xs text-gray-500">{t("answer")}</span>
+                              <Textarea
+                                readOnly
+                                value={item.data?.error ? fmt(item.data.error) : fmt(item.data?.response)}
+                                className={cn("text-xs min-h-46 font-mono", item.data?.error && "text-red-400")}
+                              />
+                            </div>
                           </div>
-                          <div className="space-y-1">
-                            <span className="text-xs text-gray-500">{t("body")}</span>
-                            <Textarea readOnly value={fmt(item.data?.requestBody)} className="text-xs min-h-24 font-mono" />
-                          </div>
-                          <div className="space-y-1">
-                            <span className="text-xs text-gray-500">{t("answer")}</span>
+                        ) : (
+                          <div className="px-4 py-4 bg-gray-50 dark:bg-gray-1100">
                             <Textarea
                               readOnly
-                              value={item.data?.error ? fmt(item.data.error) : fmt(item.data?.response)}
-                              className={cn("text-xs min-h-24 font-mono", item.data?.error && "text-red-400")}
+                              value={item.data ? fmt(item.data) : ""}
+                              className="text-xs min-h-32 font-mono w-full"
                             />
                           </div>
-                        </div>
+                        )}
                       </div>
                     </div>
                   </TableCell>

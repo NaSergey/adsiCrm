@@ -97,7 +97,7 @@ export function ErrorStatusTab({ lead }: ErrorStatusTabProps) {
             {[
               {
                 label: t("campaign"),
-                value: lead.campaign?.name ?? lead.funnel ?? "—",
+                value: lead.campaign?.name ?? "—",
                 href: lead.campaign?.id ? `/campaign?editCampaign=${lead.campaign.id}` : null,
               },
               {
