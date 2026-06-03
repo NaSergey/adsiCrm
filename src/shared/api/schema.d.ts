@@ -942,16 +942,10 @@ export interface components {
              * @example 1
              */
             campaignId?: number | null;
-            /**
-             * @description Lead FTD
-             * @default false
-             */
-            ftd: boolean;
-            /**
-             * @description Lead FTD pending
-             * @default false
-             */
-            ftdPending: boolean;
+            /** @description Lead FTD */
+            ftd?: boolean;
+            /** @description Lead FTD pending */
+            ftdPending?: boolean;
             /**
              * Format: date-time
              * @description Sampling start date

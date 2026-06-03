@@ -120,6 +120,7 @@
   },
   "leads": {
     "overview": "Overview",
+    "tabs": { "all": "All leads", "ftdPending": "Pending FTD" },
     "clearAll": "Clear All",
     "search": "Search",
     "export": "Export",

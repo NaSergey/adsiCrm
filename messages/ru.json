@@ -120,6 +120,7 @@
   },
   "leads": {
     "overview": "Обзор",
+    "tabs": { "all": "Все лиды", "ftdPending": "Ожидают FTD" },
     "clearAll": "Сбросить всё",
     "search": "Найти",
     "export": "Экспорт",

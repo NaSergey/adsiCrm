@@ -119,6 +119,7 @@
   },
   "leads": {
     "overview": "Огляд",
+    "tabs": { "all": "Усі ліди", "ftdPending": "Очікують FTD" },
     "clearAll": "Скинути все",
     "search": "Знайти",
     "export": "Експорт",

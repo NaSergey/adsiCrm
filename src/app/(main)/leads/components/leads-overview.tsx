@@ -5,11 +5,11 @@ import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useTranslations } from "next-intl";
 import { fetchClient } from "@/shared/api";
 import { Card } from "./card";
-import { SectionHeading } from "@/shared/ui/section-heading";
+import { TabSwitcher } from "@/shared/ui/tab-switcher";
 import { Skeleton } from "@/shared/ui/skeleton";
 import { Button } from "@/shared/ui/button";
 import { ConfirmDialog } from "@/shared/ui/confirm-dialog";
-import { type LeadsFiltersState, filtersToApiBody } from "../../../../shared/types/lead";
+import { type LeadsFiltersState, type LeadsTab, filtersToApiBody } from "../../../../shared/types/lead";
 import { useLeadsSelection } from "../selection-context";
 import { Users, CheckCircle, XCircle, Banknote, PhoneMissed, TrendingUp, AlertCircle, MousePointerClick, X, Trash2 } from "lucide-react";
 import { LeadsFiltersSettings } from "./header/leads-filters-settings";
@@ -17,9 +17,11 @@ import { LeadsFiltersSettings } from "./header/leads-filters-settings";
 interface LeadsOverviewProps {
   filters: LeadsFiltersState;
   canDeleteLeads: boolean;
+  activeTab: LeadsTab;
+  onTabChange: (tab: LeadsTab) => void;
 }
 
-export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
+export function LeadsOverview({ filters, canDeleteLeads, activeTab, onTabChange }: LeadsOverviewProps) {
   const t = useTranslations("leads");
   const { isSelecting, selectedIds, isDeleting, startSelect, exitSelect, deleteSelected } = useLeadsSelection();
   const [confirmDeleteOpen, setConfirmDeleteOpen] = useState(false);
@@ -49,7 +51,14 @@ export function LeadsOverview({ filters, canDeleteLeads }: LeadsOverviewProps) {
   return (
     <section className="mb-8">
       <div className="mb-4 flex flex-wrap items-center justify-between gap-2">
-        <SectionHeading title={t("overview")} />
+        <TabSwitcher<LeadsTab>
+          tabs={[
+            { id: "all", label: t("tabs.all") },
+            { id: "ftdPending", label: t("tabs.ftdPending") },
+          ]}
+          activeTab={activeTab}
+          onTabChange={onTabChange}
+        />
         <div className="flex items-center gap-2">
           {canDeleteLeads && (
             <>
