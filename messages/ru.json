@@ -149,7 +149,6 @@
     "yes": "Да",
     "no": "Нет",
     "ftdConfirmTitle": "Подтвердить депозит",
-    "ftdConfirmedTitle": "Депозит подтверждён",
     "filterSettings": "Настройки фильтров",
     "hideFilter": "Скрыть фильтр",
     "stats": {
@@ -252,7 +251,6 @@
     "confirmDeleteDescription": "Это действие нельзя отменить.",
     "firstName": "Имя",
     "lastName": "Фамилия",
-    "email": "Email",
     "ftd": "FTD",
     "ftdDate": "Дата FTD",
     "status": "Статус",
@@ -293,15 +291,7 @@
     "noAutologinImage": "Скриншот автологина недоступен",
     "failedToLoadImage": "Не удалось загрузить изображение",
     "noFingerprint": "Данные fingerprint недоступны",
-    "failedToLoadFingerprint": "Не удалось загрузить fingerprint",
-    "ftdConfirmed": "Депозит подтверждён",
-    "ftdPendingTitle": "Депозит ожидает подтверждения",
-    "ftdPendingDescription": "У этого лида есть депозит, ожидающий подтверждения.",
-    "noFtd": "Депозита пока нет",
-    "confirmFtd": "Подтвердить депозит",
-    "confirmingFtd": "Подтверждаем...",
-    "confirmFtdTitle": "Подтвердить депозит?",
-    "confirmFtdDescription": "Депозит лида будет отмечен как подтверждённый."
+    "failedToLoadFingerprint": "Не удалось загрузить fingerprint"
   },
   "editModals": {
     "saving": "Сохраняем...",
