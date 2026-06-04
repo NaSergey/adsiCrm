@@ -15,6 +15,8 @@ import { EditPartnerModal, type PartnerData } from "@/features/dialog/edit/edit-
 import { EditBrokerModal, type BrokerData } from "@/features/dialog/edit/edit-broker-modal";
 import { usePartners } from "@/entities/api/use-partners";
 import { useBrokers } from "@/entities/api/use-brokers";
+import { useConfirmFtd } from "@/entities/api/use-confirm-ftd";
+import { useAppToast } from "@/shared/lib/use-app-toast";
 import { type LeadsFiltersState, filtersToApiBody } from "../../../../../shared/types/lead";
 import { useLeadsSelection } from "../../selection-context";
 
@@ -23,11 +25,14 @@ export type { Lead };
 export interface LeadsTableProps {
   filters: LeadsFiltersState;
   className?: string;
+  /** When true, the FTD column shows an interactive deposit-confirm checkbox. */
+  ftdConfirmMode?: boolean;
 }
 
 export function LeadsTable({
   filters,
   className = "",
+  ftdConfirmMode = false,
 }: LeadsTableProps) {
   const t = useTranslations("leads");
   const [page, setPage] = useState(1);
@@ -35,7 +40,9 @@ export function LeadsTable({
   const [selectedLead, setSelectedLead] = useState<Lead | null>(null);
   const [openPartnerId, setOpenPartnerId] = useState<number | null>(null);
   const [openBrokerId, setOpenBrokerId] = useState<number | null>(null);
+  const [confirmingId, setConfirmingId] = useState<number | null>(null);
   const { isSelecting, selectedIds, toggleId } = useLeadsSelection();
+  const appToast = useAppToast();
 
   if (prevFilters !== filters) {
     setPrevFilters(filters);
@@ -60,12 +67,19 @@ export function LeadsTable({
   const handleOpenPartner = useCallback((id: number) => setOpenPartnerId(id), []);
   const handleOpenBroker = useCallback((id: number) => setOpenBrokerId(id), []);
 
+  const { confirmFtd } = useConfirmFtd({ onSuccess: () => appToast.updated("lead") });
+  const handleConfirmFtd = useCallback((id: number) => {
+    setConfirmingId(id);
+    confirmFtd(id, { onSettled: () => setConfirmingId(null) });
+  }, [confirmFtd]);
+
   const columns = useMemo(
     () => getLeadsColumns(t as (key: string) => string, {
       onOpenPartner: handleOpenPartner,
       onOpenBroker: handleOpenBroker,
+      ftdConfirm: { active: ftdConfirmMode, confirmingId, onConfirm: handleConfirmFtd },
     }),
-    [t, handleOpenPartner, handleOpenBroker],
+    [t, handleOpenPartner, handleOpenBroker, ftdConfirmMode, confirmingId, handleConfirmFtd],
   );
 
   const items = data?.items ?? [];

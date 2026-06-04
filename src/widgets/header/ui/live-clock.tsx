@@ -1,19 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { IconClock } from "@/shared/ui/icon";
 import { formatGMTOffset } from "@/shared/lib/format-gmt-offset";
 
+function subscribe(onChange: () => void) {
+  const id = setInterval(onChange, 1000);
+  return () => clearInterval(id);
+}
+
+// Bucket to whole seconds so React only re-renders once per tick.
+const getSnapshot = () => Math.floor(Date.now() / 1000);
+const getServerSnapshot = (): number | null => null;
+
 export function LiveClock() {
-  const [now, setNow] = useState<Date | null>(null);
+  const seconds = useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
 
-  useEffect(() => {
-    setNow(new Date());
-    const id = setInterval(() => setNow(new Date()), 1000);
-    return () => clearInterval(id);
-  }, []);
+  if (seconds === null) return null;
 
-  if (!now) return null;
+  const now = new Date(seconds * 1000);
 
   return (
     <div className="hidden items-center space-x-2 sm:flex">

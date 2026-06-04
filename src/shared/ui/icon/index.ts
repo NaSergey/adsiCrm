@@ -2,6 +2,7 @@ export { IconHome } from "./navigation/icon-home";
 export { IconUsers } from "./navigation/icon-users";
 export { IconShieldHeart } from "./navigation/icon-shield-heart";
 export { IconInbox } from "./navigation/icon-inbox";
+export { IconSend } from "./navigation/icon-send";
 export { IconCalendarCheck } from "./navigation/icon-calendar-check";
 export { IconCrown } from "./navigation/icon-crown";
 export { IconChartBar } from "./navigation/icon-chart-bar";

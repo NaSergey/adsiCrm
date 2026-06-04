@@ -148,6 +148,8 @@
     "confirmDeleteDescription": "This action cannot be undone.",
     "yes": "Yes",
     "no": "No",
+    "ftdConfirmTitle": "Confirm deposit",
+    "ftdConfirmedTitle": "Deposit confirmed",
     "filterSettings": "Filter settings",
     "hideFilter": "Hide filter",
     "stats": {
@@ -250,6 +252,7 @@
     "confirmDeleteDescription": "This action cannot be undone.",
     "firstName": "First Name",
     "lastName": "Last Name",
+    "email": "Email",
     "ftd": "FTD",
     "ftdDate": "FTD Date",
     "status": "Status",
@@ -290,7 +293,15 @@
     "noAutologinImage": "No autologin image available",
     "failedToLoadImage": "Failed to load image",
     "noFingerprint": "No fingerprint data available",
-    "failedToLoadFingerprint": "Failed to load fingerprint"
+    "failedToLoadFingerprint": "Failed to load fingerprint",
+    "ftdConfirmed": "Deposit confirmed",
+    "ftdPendingTitle": "Deposit awaiting confirmation",
+    "ftdPendingDescription": "This lead has a pending deposit that needs to be confirmed.",
+    "noFtd": "No deposit yet",
+    "confirmFtd": "Confirm deposit",
+    "confirmingFtd": "Confirming...",
+    "confirmFtdTitle": "Confirm deposit?",
+    "confirmFtdDescription": "This will mark the lead's deposit as confirmed."
   },
   "editModals": {
     "saving": "Saving...",

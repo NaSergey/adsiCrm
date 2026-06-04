@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useTransition } from "react";
 import Link from "next/link";
-import { User, Settings, LogOut, Shield } from "lucide-react";
+import { User, Settings, LogOut, ScrollText } from "lucide-react";
 import { useLocale } from "next-intl";
 import { useRouter } from "next/navigation";
 import { clearAccessToken, getAccessToken, getTokenUser } from "@/shared/lib/auth-token";
@@ -16,8 +16,8 @@ const LOCALES = [
 ];
 
 const menuItems = [
-  { icon: User, label: "Profile", href: "/profile" },
-  { icon: Shield, label: "Security", href: "/security" },
+  // { icon: User, label: "Profile", href: "/profile" },
+  { icon: ScrollText, label: "Logs", href: "/logs" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 

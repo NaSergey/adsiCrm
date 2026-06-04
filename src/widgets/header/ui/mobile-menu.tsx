@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useTransition } from "react";
 import Link from "next/link";
-import { Menu, X, User, Settings, LogOut, Shield } from "lucide-react";
+import { Menu, X, User, Settings, LogOut, Shield, ScrollText } from "lucide-react";
 import type { ReactNode } from "react";
 import { useLocale } from "next-intl";
 import { usePathname, useRouter } from "next/navigation";
@@ -24,8 +24,7 @@ interface MobileNavItem {
 }
 
 const userMenuItems = [
-  { icon: User, label: "Profile", href: "/profile" },
-  { icon: Shield, label: "Security", href: "/security" },
+  { icon: ScrollText, label: "Logs", href: "/logs" },
   { icon: Settings, label: "Settings", href: "/settings" },
 ];
 

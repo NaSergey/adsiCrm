@@ -17,11 +17,12 @@ export function LeadsPageClient({ canDeleteLeads, canImport, canExport }: LeadsP
   const [filters, setFilters] = useState<LeadsFiltersState>(EMPTY_LEADS_FILTERS);
   const [tab, setTab] = useState<LeadsTab>("all");
 
-  // "FTD pending" tab = the same table with ftdPending forced on, layered on top
-  // of the user's manual filters. Memoized so the table keeps a stable filters
-  // reference (it resets pagination on identity change).
+  // The second tab = the same table with ftd forced on, layered on top of the
+  // user's manual filters. (ftdPending is a separate concept — deposit-confirmation
+  // flow — and is NOT used for this tab's display.) Memoized so the table keeps a
+  // stable filters reference (it resets pagination on identity change).
   const effectiveFilters = useMemo<LeadsFiltersState>(
-    () => (tab === "ftdPending" ? { ...filters, ftdPending: "true" } : filters),
+    () => (tab === "ftdPending" ? { ...filters, ftd: "true" } : filters),
     [tab, filters],
   );
 
@@ -37,7 +38,7 @@ export function LeadsPageClient({ canDeleteLeads, canImport, canExport }: LeadsP
         />
         <LeadsHeader filters={filters} onFiltersChange={setFilters} canImport={canImport} canExport={canExport} />
         <div className="mt-6">
-          <LeadsTable filters={effectiveFilters} />
+          <LeadsTable filters={effectiveFilters} ftdConfirmMode={tab === "ftdPending"} />
         </div>
       </div>
     </LeadsSelectionProvider>

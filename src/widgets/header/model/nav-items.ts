@@ -9,7 +9,7 @@ import {
   IconUserCircle,
   IconCompass,
   IconShieldHeart,
-  IconInbox,
+  IconSend,
 } from "@/shared/ui/icon";
 
 export interface NavItem {
@@ -23,8 +23,8 @@ export const navItems: NavItem[] = [
   { href: "/campaign", icon: IconUsers, label: "campaign" },
   { href: "/leads", icon: IconShieldHeart, label: "leads" },
   { href: "/affiliates", icon: IconArmchair, label: "affiliates" },
-  { href: "/senderLead", icon: IconInbox, label: "senderLead" },
-  { href: "/logs", icon: IconChartBar, label: "logs" },
+  { href: "/senderLead", icon: IconSend, label: "senderLead" },
+  // { href: "/logs", icon: IconChartBar, label: "logs" },
   // { href: "/report", icon: IconCalendarCheck, label: "report" },
   // { href: "/service", icon: IconCrown, label: "service" },
   { href: "/users", icon: IconUserCircle, label: "users" },

@@ -14,23 +14,11 @@ import { SelectCountry } from "@/entities/ui/select-country";
 import { SelectLang } from "@/entities/ui/select-lang";
 import { SelectBroker } from "@/entities/ui/select-broker";
 import { SelectPartner } from "@/entities/ui/select-partner";
-import type { ProgramFilter } from "../types";
+import type { ProgramFilter, CampaignFiltersState } from "../types";
+import { EMPTY_CAMPAIGN_FILTERS } from "../types";
 
-export interface CampaignFiltersState {
-  partnerId: string;
-  brokerId: string;
-  country: string;
-  lang: string;
-  name: string;
-}
-
-export const EMPTY_CAMPAIGN_FILTERS: CampaignFiltersState = {
-  partnerId: "",
-  brokerId: "",
-  country: "",
-  lang: "",
-  name: "",
-};
+export { EMPTY_CAMPAIGN_FILTERS };
+export type { CampaignFiltersState };
 
 export interface CampaignSelectionActions {
   isActive: boolean;

@@ -84,7 +84,8 @@
     "value": "Значення",
     "key": "Ключ",
     "run": "Запустити",
-    "sending": "Надсилаємо..."
+    "sending": "Надсилаємо...",
+    "remove": "Видалити"
   },
   "affiliates": {
     "partners": "Партнери",
@@ -147,6 +148,10 @@
     "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "yes": "Так",
     "no": "Ні",
+    "ftdConfirmTitle": "Підтвердити депозит",
+    "ftdConfirmedTitle": "Депозит підтверджено",
+    "filterSettings": "Налаштування фільтрів",
+    "hideFilter": "Сховати фільтр",
     "stats": {
       "total": "Всього",
       "accepted": "Прийнято",
@@ -247,6 +252,7 @@
     "confirmDeleteDescription": "Цю дію не можна скасувати.",
     "firstName": "Ім'я",
     "lastName": "Прізвище",
+    "email": "Email",
     "ftd": "FTD",
     "ftdDate": "Дата FTD",
     "status": "Статус",
@@ -287,7 +293,15 @@
     "noAutologinImage": "Скриншот автологіну недоступний",
     "failedToLoadImage": "Не вдалося завантажити зображення",
     "noFingerprint": "Дані fingerprint недоступні",
-    "failedToLoadFingerprint": "Не вдалося завантажити fingerprint"
+    "failedToLoadFingerprint": "Не вдалося завантажити fingerprint",
+    "ftdConfirmed": "Депозит підтверджено",
+    "ftdPendingTitle": "Депозит очікує підтвердження",
+    "ftdPendingDescription": "У цього ліда є депозит, що очікує підтвердження.",
+    "noFtd": "Депозиту поки немає",
+    "confirmFtd": "Підтвердити депозит",
+    "confirmingFtd": "Підтверджуємо...",
+    "confirmFtdTitle": "Підтвердити депозит?",
+    "confirmFtdDescription": "Депозит ліда буде позначено як підтверджений."
   },
   "editModals": {
     "saving": "Зберігаємо...",

@@ -2,6 +2,7 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import { useFormatter } from "next-intl";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/shared/lib/css";
 import { type Lead } from "../../../../../shared/types/lead";
 
@@ -35,6 +36,12 @@ type T = (key: string) => string;
 export interface LeadsColumnsOptions {
   onOpenPartner: (id: number) => void;
   onOpenBroker: (id: number) => void;
+  /** When active, the FTD column becomes an interactive deposit-confirm checkbox. */
+  ftdConfirm?: {
+    active: boolean;
+    confirmingId: number | null;
+    onConfirm: (id: number) => void;
+  };
 }
 
 export const getLeadsColumns = (t: T, opts: LeadsColumnsOptions): ColumnDef<Lead>[] => [
@@ -53,9 +60,27 @@ export const getLeadsColumns = (t: T, opts: LeadsColumnsOptions): ColumnDef<Lead
   {
     accessorKey: "ftd",
     header: t("columns.ftd"),
-    cell: ({ row }) => (
-      <span className="text-gray-400">{row.original.ftd ? t("yes") : t("no")}</span>
-    ),
+    cell: ({ row }) => {
+      const fc = opts.ftdConfirm;
+      if (!fc?.active) {
+        return <span className="text-gray-400">{row.original.ftd ? t("yes") : t("no")}</span>;
+      }
+      const confirming = fc.confirmingId === row.original.id;
+      return (
+        <button
+          type="button"
+          disabled={confirming}
+          onClick={(e) => { e.stopPropagation(); fc.onConfirm(row.original.id); }}
+          className={cn(
+            "relative inline-flex items-center justify-center rounded bg-green-600 px-2.5 py-1 text-xs font-medium text-white transition-colors hover:bg-green-500",
+            confirming && "cursor-wait",
+          )}
+        >
+          <span className={cn(confirming && "opacity-0")}>{t("ftdConfirmTitle")}</span>
+          {confirming && <Loader2 className="absolute size-3.5 animate-spin" />}
+        </button>
+      );
+    },
   },
   {
     accessorKey: "createdAt",

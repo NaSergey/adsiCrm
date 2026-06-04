@@ -47,7 +47,7 @@ export function LeadsSelectionProvider({ children }: { children: ReactNode }) {
 
   const deleteSelected = useCallback(() => {
     remove(Array.from(selectedIds));
-  }, [remove]);
+  }, [remove, selectedIds]);
 
   return (
     <LeadsSelectionContext.Provider
