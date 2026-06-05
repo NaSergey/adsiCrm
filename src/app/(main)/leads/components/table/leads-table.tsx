@@ -59,6 +59,10 @@ export function LeadsTable({
       if (error) throw error;
       return data;
     },
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnMount: "always",
+    refetchOnWindowFocus: true,
   });
 
   const { data: partners } = usePartners();
