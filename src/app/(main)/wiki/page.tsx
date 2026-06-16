@@ -8,29 +8,30 @@ import { Button } from "@/shared/ui/button";
 import { Textarea } from "@/shared/ui/textarea";
 import { getApiDomain } from "@/shared/api/utils";
 
-const DOMAIN = getApiDomain();
+const DOMAIN = getApiDomain().replace(/\/+$/, "");
 const PARTNER_TOKEN = "YOUR_PARTNER_TOKEN";
 
 const ADD_LEAD_CODE = `<?php
 $headers = [
     'Content-Type: application/json',
-    'Partner-Token: ${PARTNER_TOKEN}'
+    'Partner-Token: ${PARTNER_TOKEN}',
+    'User-Agent: Mozilla/5.0'
 ];
 
 $j_data = array(
-    'first_name'  => 'test_lead',
-    'last_name'   => 'test_lead',
-    'email'       => 'testlead@testlead.com',
-    'phone'       => '+19185789789',
-    'country'     => 'US',
-    'lang'        => 'en',
-    'user_ip'     => '111.111.111.111',
-    'funnel'      => 'funnel',
-    'utm_comment' => 'utm comment'
+    'firstName'  => 'test_lead',
+    'lastName'   => 'test_lead',
+    'email'      => 'testlead@testlead.com',
+    'phone'      => '+19185789789',
+    'country'    => 'US',
+    'language'   => 'en',
+    'ip'         => '111.111.111.111',
+    'funnel'     => 'funnel',
+    'utmComment' => 'utm comment'
 );
 
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, '${DOMAIN}/leads/add_lead/');
+curl_setopt($ch, CURLOPT_URL, '${DOMAIN}/leads');
 curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -40,7 +41,7 @@ echo curl_exec($ch);`;
 
 const GET_LEADS_CODE = `<?php
 $leads = json_decode(
-    file_get_contents('${DOMAIN}/leads/get_leads_partner/?partner_token=${PARTNER_TOKEN}&leads_per_page=100'),
+    file_get_contents('${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}&page=1'),
     true
 );
 echo $leads;`;
@@ -106,48 +107,46 @@ export default function WikiPage() {
         </div>
 
         <Section label="Request URL">
-          <CodeBlock>{`POST ${DOMAIN}/leads/add_lead/`}</CodeBlock>
+          <CodeBlock>{`POST ${DOMAIN}/leads`}</CodeBlock>
         </Section>
 
         <Section label="Request headers">
           <CodeBlock>{`{
   "Content-Type": "application/json",
-  "Partner-Token": "${PARTNER_TOKEN}"
+  "Partner-Token": "${PARTNER_TOKEN}",
+  "User-Agent": "<client user agent>"
 }`}</CodeBlock>
         </Section>
 
         <Section label="Request body">
           <CodeBlock>{`{
-  "first_name":  "test",
-  "last_name":   "test",
-  "email":       "test@test.com",
-  "phone":       "+123123123",
-  "country":     "RU",
-  "lang":        "ru",
-  "campaign_id": 15,           // optional
-  "password":    "123123",
-  "user_ip":     "111.111.111.111",
-  "funnel":      "test funnel",
-  "utm_content": "content",    // optional
-  "utm_comment": "comment"     // optional
+  "firstName":  "test",
+  "lastName":   "test",
+  "email":      "test@test.com",
+  "phone":      "+123123123",
+  "country":    "RU",
+  "language":   "ru",
+  "password":   "123123",      // optional
+  "ip":         "111.111.111.111",
+  "funnel":     "test funnel", // optional
+  "utmContent": "content",     // optional
+  "utmComment": "comment"      // optional
 }`}</CodeBlock>
         </Section>
 
         <Section label="Successful response">
           <CodeBlock>{`{
-  "success":       true,
-  "lead_id":       214,
-  "status":        "New",
-  "autologin_url": "https://autologin_url.com"
+  "id":           214,
+  "status":       "New",
+  "autoLoginUrl": "https://autologin_url.com",
+  "ftd":          false
 }`}</CodeBlock>
         </Section>
 
         <Section label="Error examples">
-          <CodeBlock>{`{"success": false, "error": 4, "info": "Email format is invalid"}
-{"success": false, "info": "Partner-Token is missing or incorrect"}
-{"success": false, "error": 5, "info": "Unknown partner token"}
-{"success": false, "error": 5, "info": "No matching campaign"}
-{"success": false, "info": "Failed to send lead to broker"}`}</CodeBlock>
+          <CodeBlock>{`{"statusCode": 400, "message": "Validation failed", "errors": [...]}
+{"statusCode": 400, "message": "Partner token not found", "error": "Bad Request"}
+{"statusCode": 404, "message": "Partner not found", "error": "Not Found"}`}</CodeBlock>
         </Section>
       </div>
 
@@ -163,36 +162,32 @@ export default function WikiPage() {
         </div>
 
         <Section label="Request URL">
-          <CodeBlock>{`GET ${DOMAIN}/leads/get_leads_partner/?partner_token=${PARTNER_TOKEN}`}</CodeBlock>
+          <CodeBlock>{`GET ${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}`}</CodeBlock>
         </Section>
 
         <Section label="Request URL with filters">
-          <CodeBlock>{`GET ${DOMAIN}/leads/get_leads_partner/?partner_token=${PARTNER_TOKEN}&from=2023-04-07&to=2023-04-20&leads_per_page=100&page=2`}</CodeBlock>
+          <CodeBlock>{`GET ${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}&from=2023-04-07&to=2023-04-20&page=2`}</CodeBlock>
         </Section>
 
         <Section label="Successful response">
           <CodeBlock>{`{
-  "success":      true,
-  "total_leads":  "9",
-  "pages":        1,
-  "current_page": 1,
-  "data": [
-    { "id": "27", "status": "New", "ftd": false },
-    { "id": "28", "status": "New", "ftd": false }
-  ]
+  "items": [
+    { "id": 27, "status": "New", "ftd": false },
+    { "id": 28, "status": "New", "ftd": false }
+  ],
+  "meta": {
+    "totalItems":   9,
+    "itemCount":    9,
+    "itemsPerPage": 10,
+    "totalPages":   1,
+    "currentPage":  1
+  }
 }`}</CodeBlock>
         </Section>
 
         <Section label="Error examples">
-          <CodeBlock>{`{"success": false, "error": 5, "info": "Partner-Token undefined!"}
-{
-  "success":      true,
-  "total_leads":  "9",
-  "pages":        1,
-  "current_page": 10,
-  "error":        "Page is out of range, data array is empty",
-  "data":         []
-}`}</CodeBlock>
+          <CodeBlock>{`{"statusCode": 400, "message": "Partner token not found", "error": "Bad Request"}
+{"statusCode": 404, "message": "Partner not found", "error": "Not Found"}`}</CodeBlock>
         </Section>
       </div>
     </div>

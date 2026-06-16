@@ -8,7 +8,7 @@
 // API_ENDPOINTS ниже рассчитывают на префикс /api/.
 // (BACKEND_URL/proxy используют отдельный INTERNAL_API_URL = origin и дописывают
 // /api сами — их это не касается.)
-const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000/api/");
+const API_ORIGIN = (process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000");
 
 export const API_URL = `${API_ORIGIN}/api/`;
 
