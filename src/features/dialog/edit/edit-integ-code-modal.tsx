@@ -167,8 +167,11 @@ export function EditIntegCodeModal({
   const { data: fileData } = useBrokerFile(brokerIdNum, type, open);
 
   useEffect(() => {
+    if (open) setAnswer("");
+  }, [open]);
+
+  useEffect(() => {
     if (!open) return;
-    setAnswer("");
     const example = type === "add" ? ADD_LEAD_EXAMPLE : UPDATE_LEAD_EXAMPLE;
     const loaded = fileData?.phpCode || example;
     setCode(loaded);
