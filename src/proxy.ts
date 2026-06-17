@@ -83,6 +83,6 @@ export { proxy as middleware };
 
 export const config = {
   matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|pdf|woff2?|css|js)$).*)',
+    '/((?!api|backend|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|pdf|woff2?|css|js)$).*)',
   ],
 };

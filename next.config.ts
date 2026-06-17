@@ -10,15 +10,9 @@ const nextConfig: NextConfig = {
   turbopack: {
     root: __dirname,
   },
-  async rewrites() {
-    const backendUrl = process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:3000";
-    return [
-      {
-        source: '/backend/:path*',
-        destination: `${backendUrl}/:path*`,
-      },
-    ];
-  },
+  // Прокси на бэкенд реализован рантайм-роутом src/app/backend/[...slug]/route.ts,
+  // а НЕ через rewrites() — последние «запекают» адрес на этапе сборки и не видят
+  // INTERNAL_API_URL, переданный при запуске контейнера.
 };
 
 export default withBundleAnalyzer(withNextIntl(nextConfig));
