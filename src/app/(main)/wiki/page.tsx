@@ -1,17 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Button } from "@/shared/ui/button";
 import { Textarea } from "@/shared/ui/textarea";
-import { getApiDomain } from "@/shared/api/utils";
+import { API_URL } from "@/shared/api/config";
 
-const DOMAIN = getApiDomain().replace(/\/+$/, "");
 const PARTNER_TOKEN = "YOUR_PARTNER_TOKEN";
 
-const ADD_LEAD_CODE = `<?php
+const addLeadCode = (domain: string) => `<?php
 $headers = [
     'Content-Type: application/json',
     'Partner-Token: ${PARTNER_TOKEN}',
@@ -31,7 +30,7 @@ $j_data = array(
 );
 
 $ch = curl_init();
-curl_setopt($ch, CURLOPT_URL, '${DOMAIN}/leads');
+curl_setopt($ch, CURLOPT_URL, '${domain}/leads');
 curl_setopt($ch, CURLOPT_HEADER, 0);
 curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
 curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
@@ -39,9 +38,9 @@ curl_setopt($ch, CURLOPT_POST, true);
 curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($j_data));
 echo curl_exec($ch);`;
 
-const GET_LEADS_CODE = `<?php
+const getLeadsCode = (domain: string) => `<?php
 $leads = json_decode(
-    file_get_contents('${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}&page=1'),
+    file_get_contents('${domain}/leads?partner-token=${PARTNER_TOKEN}&page=1'),
     true
 );
 echo $leads;`;
@@ -65,12 +64,22 @@ function Section({ label, children }: { label: string; children: React.ReactNode
 
 export default function WikiPage() {
   const t = useTranslations("wiki");
+
+  // Resolve the public lead endpoint at runtime from the current origin (same
+  // value as the app's proxy path) so it shows the real domain on any deploy.
+  // Relative fallback keeps SSR/first render in sync (no hydration mismatch).
+  const [domain, setDomain] = useState(API_URL.replace(/\/+$/, ""));
+  useEffect(() => {
+    setDomain((window.location.origin + API_URL).replace(/\/+$/, ""));
+  }, []);
+
   const [view, setView] = useState<"docs" | "code">("docs");
-  const [code, setCode] = useState(ADD_LEAD_CODE);
-  const showExample = (exampleCode: string) => {
-    setCode(exampleCode);
+  const [example, setExample] = useState<"add" | "get">("add");
+  const showExample = (ex: "add" | "get") => {
+    setExample(ex);
     setView("code");
   };
+  const code = example === "get" ? getLeadsCode(domain) : addLeadCode(domain);
 
   if (view === "code") {
     return (
@@ -101,13 +110,13 @@ export default function WikiPage() {
       <div className="space-y-4 w-full">
         <div className="flex items-center gap-3">
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">{t("addLead")}</h2>
-          <Button variant="secondary" size="sm" onClick={() => showExample(ADD_LEAD_CODE)}>
+          <Button variant="secondary" size="sm" onClick={() => showExample("add")}>
             {t("showPhpExample")}
           </Button>
         </div>
 
         <Section label="Request URL">
-          <CodeBlock>{`POST ${DOMAIN}/leads`}</CodeBlock>
+          <CodeBlock>{`POST ${domain}/leads`}</CodeBlock>
         </Section>
 
         <Section label="Request headers">
@@ -156,17 +165,17 @@ export default function WikiPage() {
       <div className="space-y-4">
         <div className="flex items-center gap-3">
           <h2 className="text-base font-semibold text-gray-900 dark:text-white">{t("getLeads")}</h2>
-          <Button variant="secondary" size="sm" onClick={() => showExample(GET_LEADS_CODE)}>
+          <Button variant="secondary" size="sm" onClick={() => showExample("get")}>
             {t("showPhpExample")}
           </Button>
         </div>
 
         <Section label="Request URL">
-          <CodeBlock>{`GET ${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}`}</CodeBlock>
+          <CodeBlock>{`GET ${domain}/leads?partner-token=${PARTNER_TOKEN}`}</CodeBlock>
         </Section>
 
         <Section label="Request URL with filters">
-          <CodeBlock>{`GET ${DOMAIN}/leads?partner-token=${PARTNER_TOKEN}&from=2023-04-07&to=2023-04-20&page=2`}</CodeBlock>
+          <CodeBlock>{`GET ${domain}/leads?partner-token=${PARTNER_TOKEN}&from=2023-04-07&to=2023-04-20&page=2`}</CodeBlock>
         </Section>
 
         <Section label="Successful response">

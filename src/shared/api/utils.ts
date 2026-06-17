@@ -1,11 +1,4 @@
 import { setAccessToken } from "@/shared/lib/auth-token";
-import { PUBLIC_API_URL } from "./config";
-
-
-/** Публичный адрес API для показа в примерах кода (страница /wiki). */
-export function getApiDomain(): string {
-  return PUBLIC_API_URL;
-}
 
 /** Returns true if the string is valid JSON */
 export function isJson(str: string): boolean {
