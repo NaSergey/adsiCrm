@@ -13,6 +13,11 @@
 // И baseUrl клиента, и API_ENDPOINTS ниже рассчитывают на хвостовой /.
 export const API_URL = "/backend/api/";
 
+// Direct backend address for code examples and direct calls (wiki, Sender Lead).
+// Taken from NEXT_PUBLIC_API_URL (baked at build); falls back to the relative proxy path.
+const PUBLIC_API_ORIGIN = process.env.NEXT_PUBLIC_API_URL?.replace(/\/+$/, "");
+export const PUBLIC_API_URL = PUBLIC_API_ORIGIN ? `${PUBLIC_API_ORIGIN}/api/` : API_URL;
+
 export const API_ENDPOINTS = {
   auth: {
     refresh: `${API_URL}auth/refresh`,

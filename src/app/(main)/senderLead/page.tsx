@@ -1,6 +1,6 @@
 "use client";
-import { API_URL } from "@/shared/api/config";
-import { useState, useEffect } from "react";
+import { PUBLIC_API_URL } from "@/shared/api/config";
+import { useState } from "react";
 import { useTranslations } from "next-intl";
 import { Plus, X, Play, Code, List } from "lucide-react";
 import { Button } from "@/shared/ui/button";
@@ -31,7 +31,7 @@ interface Header { id: number; name: string; value: string }
 export default function SenderLeadPage() {
   const t = useTranslations("senderLead");
   const [method, setMethod]   = useState("POST");
-  const [url, setUrl]         = useState(API_URL + "leads");
+  const [url, setUrl]         = useState(PUBLIC_API_URL + "leads");
   const [loading, setLoading] = useState(false);
   const [answer, setAnswer]   = useState("");
   const [bodyType, setBodyType] = useState<"list" | "code">("list");
@@ -56,12 +56,6 @@ export default function SenderLeadPage() {
   });
 
   const [bodyCode, setBodyCode] = useState(() => JSON.stringify(body, null, 2));
-
-  // Build an absolute URL at runtime from the current origin so prod shows the
-  // real domain. Stays same-origin, so the request still goes through the proxy.
-  useEffect(() => {
-    setUrl(window.location.origin + API_URL + "leads");
-  }, []);
 
   // --- headers ---
   const addHeader = () =>

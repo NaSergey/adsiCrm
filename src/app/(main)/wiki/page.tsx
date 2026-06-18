@@ -1,12 +1,12 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { ChevronLeft } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { SectionHeading } from "@/shared/ui/section-heading";
 import { Button } from "@/shared/ui/button";
 import { Textarea } from "@/shared/ui/textarea";
-import { API_URL } from "@/shared/api/config";
+import { PUBLIC_API_URL } from "@/shared/api/config";
 
 const PARTNER_TOKEN = "YOUR_PARTNER_TOKEN";
 
@@ -65,13 +65,8 @@ function Section({ label, children }: { label: string; children: React.ReactNode
 export default function WikiPage() {
   const t = useTranslations("wiki");
 
-  // Resolve the public lead endpoint at runtime from the current origin (same
-  // value as the app's proxy path) so it shows the real domain on any deploy.
-  // Relative fallback keeps SSR/first render in sync (no hydration mismatch).
-  const [domain, setDomain] = useState(API_URL.replace(/\/+$/, ""));
-  useEffect(() => {
-    setDomain((window.location.origin + API_URL).replace(/\/+$/, ""));
-  }, []);
+  // Direct backend address (NEXT_PUBLIC_API_URL), shown in the partner examples.
+  const domain = PUBLIC_API_URL.replace(/\/+$/, "");
 
   const [view, setView] = useState<"docs" | "code">("docs");
   const [example, setExample] = useState<"add" | "get">("add");
